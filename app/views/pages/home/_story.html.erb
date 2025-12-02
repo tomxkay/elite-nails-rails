@@ -1,6 +1,6 @@
 <!-- ===== OUR STORY SECTION ===== -->
 <section id="story" class="py-24 lg:py-28 bg-gradient-to-b from-white via-sage-50/50 to-white">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
     <div class="order-2 lg:order-1">
       <%= render 'shared/section_header',
                  eyebrow: 'Family-Owned & Local',
@@ -25,12 +25,11 @@
     </div>
 
     <div class="order-1 lg:order-2 relative">
-      <div class="aspect-[4/5] rounded-3xl overflow-hidden bg-gradient-to-br from-[#f8f8f8] to-sage-50 flex items-center justify-center shadow-lg shadow-sage-100">
-        <div class="text-center px-8">
-          <%= icon 'photo', classes: 'w-20 h-20 text-sage-300 mx-auto mb-3' %>
-          <p class="text-sage-500 font-medium">Replace with team photo</p>
-          <p class="text-sage-400 text-sm mt-1">Family-owned | Cramerton, NC</p>
-        </div>
+      <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-lg shadow-sage-100">
+        <img src="<%= unsplash_image(width: 800, height: 1000, keywords: ['spa', 'interior', 'salon', 'luxury'], featured: true) %>"
+             alt="Elite Nails Salon Interior"
+             class="w-full h-full object-cover"
+             loading="lazy" />
       </div>
       <div class="absolute -bottom-6 -left-4 bg-white rounded-2xl shadow-md px-6 py-4 border border-[#eee]">
         <p class="font-script text-lg text-sage-700">Since 2003</p>

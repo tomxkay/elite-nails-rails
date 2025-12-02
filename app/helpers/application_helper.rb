@@ -24,6 +24,23 @@ module ApplicationHelper
     ENV["BOOKING_URL"].presence || "tel:+17048249032"
   end
 
+  # Unsplash placeholder image helper
+  # Returns a URL to an Unsplash Source image with specified dimensions and keywords
+  #
+  # Examples:
+  #   <%= unsplash_image(width: 800, height: 600, keywords: ['spa', 'nails']) %>
+  #   <%= unsplash_image(width: 1920, height: 1080, keywords: ['luxury', 'salon'], featured: true) %>
+  #
+  def unsplash_image(width:, height:, keywords: [], featured: false)
+    size = "#{width}x#{height}"
+    if featured
+      "https://source.unsplash.com/featured/#{size}/#{keywords.join(',')}"
+    else
+      query = keywords.join(',')
+      "https://source.unsplash.com/random/#{size}/?#{query}"
+    end
+  end
+
   private
 
   def render_custom_quote_icon(classes, options)

@@ -7,9 +7,27 @@
                subtitle: 'Small team, big heart. We listen first, recommend honestly, and care about every detail.' %>
 
     <% team = [
-      { name: "Linh Tran", role: "Owner & Lead Nail Artist", bio: "Specializes in gel, dip, and fine-line nail art. Known for a gentle touch and calming demeanor.", specialties: ["Gel Art", "Dip Powder", "Fine Line"] },
-      { name: "Maya Lopez", role: "Senior Technician", bio: "Loves creative color palettes and spa pedicures. Guests rave about her relaxing massages.", specialties: ["Spa Pedicure", "Color Pairing", "Massage"] },
-      { name: "Kim Nguyen", role: "Nail Technician", bio: "Precise shaping and durable acrylics with a friendly, welcoming vibe.", specialties: ["Acrylics", "Nail Shaping", "Natural Looks"] }
+      {
+        name: "Linh Tran",
+        role: "Owner & Lead Nail Artist",
+        bio: "Specializes in gel, dip, and fine-line nail art. Known for a gentle touch and calming demeanor.",
+        specialties: ["Gel Art", "Dip Powder", "Fine Line"],
+        image_url: unsplash_image(width: 400, height: 400, keywords: ['portrait', 'woman', 'professional', 'asian'])
+      },
+      {
+        name: "Maya Lopez",
+        role: "Senior Technician",
+        bio: "Loves creative color palettes and spa pedicures. Guests rave about her relaxing massages.",
+        specialties: ["Spa Pedicure", "Color Pairing", "Massage"],
+        image_url: unsplash_image(width: 400, height: 400, keywords: ['portrait', 'woman', 'professional', 'latina'])
+      },
+      {
+        name: "Kim Nguyen",
+        role: "Nail Technician",
+        bio: "Precise shaping and durable acrylics with a friendly, welcoming vibe.",
+        specialties: ["Acrylics", "Nail Shaping", "Natural Looks"],
+        image_url: unsplash_image(width: 400, height: 400, keywords: ['portrait', 'woman', 'professional', 'asian'])
+      }
     ] %>
 
     <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">

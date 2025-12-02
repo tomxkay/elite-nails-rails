@@ -4,16 +4,27 @@
     - role: string
     - bio: string
     - specialties: array of strings (optional)
+    - image_url: string (optional)
 %>
 <% name = local_assigns[:name] %>
 <% role = local_assigns[:role] %>
 <% bio = local_assigns[:bio] %>
 <% specialties = local_assigns[:specialties] || [] %>
+<% image_url = local_assigns[:image_url] %>
 
 <div class="bg-white rounded-2xl p-6 shadow-sm border border-[#eee] hover:shadow-md transition-shadow duration-300">
-  <div class="w-16 h-16 rounded-full bg-gradient-to-br from-sage-100 to-[#eee] flex items-center justify-center mb-4 mx-auto">
-    <%= icon 'user-circle', classes: 'w-10 h-10 text-sage-500' %>
-  </div>
+  <% if image_url.present? %>
+    <div class="w-24 h-24 rounded-full overflow-hidden mb-4 mx-auto border-4 border-sage-50">
+      <img src="<%= image_url %>"
+           alt="<%= name %>"
+           class="w-full h-full object-cover"
+           loading="lazy" />
+    </div>
+  <% else %>
+    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-sage-100 to-[#eee] flex items-center justify-center mb-4 mx-auto">
+      <%= icon 'user-circle', classes: 'w-10 h-10 text-sage-500' %>
+    </div>
+  <% end %>
   <h3 class="text-center font-serif text-xl text-[#444]"><%= name %></h3>
   <p class="text-center text-sage-600 text-sm font-medium mt-1"><%= role %></p>
   <p class="text-[#666] text-sm leading-relaxed mt-3"><%= bio %></p>

@@ -16,15 +16,11 @@
       <div class="relative w-full max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto">
         <div class="absolute inset-0 hero-glow scale-110"></div>
         <div class="relative aspect-[3/4] rounded-full overflow-hidden">
-          <div class="absolute inset-0 bg-gradient-to-b from-[#f5f5f5] via-white to-[#fafafa] flex items-center justify-center">
-            <div class="text-center px-8">
-              <div class="w-48 h-48 mx-auto mb-6 rounded-full bg-gradient-to-br from-sage-100 to-[#eee] flex items-center justify-center">
-                <%= icon 'hand-raised', classes: 'w-24 h-24 text-sage-400' %>
-              </div>
-              <p class="text-sage-400 text-sm font-light tracking-wider">Hero Image</p>
-              <p class="text-sage-300 text-xs mt-1">Replace with elegant hands photo</p>
-            </div>
-          </div>
+          <img src="<%= unsplash_image(width: 800, height: 1000, keywords: ['spa', 'nails', 'luxury', 'manicure'], featured: true) %>"
+               alt="Luxury Nail Spa Experience"
+               class="w-full h-full object-cover"
+               loading="eager" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
         </div>
 
         <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pt-16">
