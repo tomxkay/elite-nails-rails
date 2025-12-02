@@ -24,21 +24,32 @@ module ApplicationHelper
     ENV["BOOKING_URL"].presence || "tel:+17048249032"
   end
 
-  # Unsplash placeholder image helper
-  # Returns a URL to an Unsplash Source image with specified dimensions and keywords
+  # Placeholder image helper using Lorem Picsum
+  # Returns a URL to a Lorem Picsum image with specified dimensions
+  # Uses seed parameter to ensure consistent images across page loads
   #
   # Examples:
-  #   <%= unsplash_image(width: 800, height: 600, keywords: ['spa', 'nails']) %>
-  #   <%= unsplash_image(width: 1920, height: 1080, keywords: ['luxury', 'salon'], featured: true) %>
+  #   <%= placeholder_image(width: 800, height: 600, seed: 'hero') %>
+  #   <%= placeholder_image(width: 1920, height: 1080, seed: 'spa-luxury', grayscale: false) %>
   #
-  def unsplash_image(width:, height:, keywords: [], featured: false)
-    size = "#{width}x#{height}"
-    if featured
-      "https://source.unsplash.com/featured/#{size}/#{keywords.join(',')}"
+  def placeholder_image(width:, height:, seed: nil, grayscale: false, blur: 0)
+    base_url = "https://picsum.photos"
+
+    # Use seed if provided for consistent images, otherwise use ID-based approach
+    if seed.present?
+      url = "#{base_url}/seed/#{seed}/#{width}/#{height}"
     else
-      query = keywords.join(',')
-      "https://source.unsplash.com/random/#{size}/?#{query}"
+      # Generate a stable ID based on dimensions for consistency
+      url = "#{base_url}/#{width}/#{height}"
     end
+
+    # Add optional effects
+    params = []
+    params << "grayscale" if grayscale
+    params << "blur=#{blur}" if blur > 0
+
+    url += "?#{params.join('&')}" if params.any?
+    url
   end
 
   private

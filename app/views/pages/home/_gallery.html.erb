@@ -8,18 +8,18 @@
 
     <div class="mt-16 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
       <% gallery_items = [
-        { label: 'Manicure Art', keywords: ['nails', 'manicure'] },
-        { label: 'Nail Design', keywords: ['nail-art', 'design'] },
-        { label: 'Spa Treatment', keywords: ['hands', 'beauty', 'spa'] },
-        { label: 'Pedicure Service', keywords: ['pedicure', 'spa'] },
-        { label: 'Gel Nails', keywords: ['gel-nails', 'color'] },
-        { label: 'French Manicure', keywords: ['french-manicure', 'classic'] }
+        { label: 'Manicure Art', seed: 'gallery-manicure-1' },
+        { label: 'Nail Design', seed: 'gallery-nail-art-2' },
+        { label: 'Spa Treatment', seed: 'gallery-spa-hands-3' },
+        { label: 'Pedicure Service', seed: 'gallery-pedicure-4' },
+        { label: 'Gel Nails', seed: 'gallery-gel-nails-5' },
+        { label: 'French Manicure', seed: 'gallery-french-6' }
       ] %>
 
       <% gallery_items.each do |item| %>
         <%= render 'shared/gallery_item',
                    label: item[:label],
-                   image_url: unsplash_image(width: 600, height: 600, keywords: item[:keywords]) %>
+                   image_url: placeholder_image(width: 600, height: 600, seed: item[:seed]) %>
       <% end %>
     </div>
 
