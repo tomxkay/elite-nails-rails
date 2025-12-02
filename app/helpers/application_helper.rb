@@ -24,32 +24,15 @@ module ApplicationHelper
     ENV["BOOKING_URL"].presence || "tel:+17048249032"
   end
 
-  # Placeholder image helper using Lorem Picsum
-  # Returns a URL to a Lorem Picsum image with specified dimensions
-  # Uses seed parameter to ensure consistent images across page loads
+  # Placeholder image helper (currently disabled - returns nil)
+  # Kept for future use when actual images are added
   #
   # Examples:
   #   <%= placeholder_image(width: 800, height: 600, seed: 'hero') %>
-  #   <%= placeholder_image(width: 1920, height: 1080, seed: 'spa-luxury', grayscale: false) %>
   #
-  def placeholder_image(width:, height:, seed: nil, grayscale: false, blur: 0)
-    base_url = "https://picsum.photos"
-
-    # Use seed if provided for consistent images, otherwise use ID-based approach
-    if seed.present?
-      url = "#{base_url}/seed/#{seed}/#{width}/#{height}"
-    else
-      # Generate a stable ID based on dimensions for consistency
-      url = "#{base_url}/#{width}/#{height}"
-    end
-
-    # Add optional effects
-    params = []
-    params << "grayscale" if grayscale
-    params << "blur=#{blur}" if blur > 0
-
-    url += "?#{params.join('&')}" if params.any?
-    url
+  def placeholder_image(width: nil, height: nil, seed: nil, grayscale: false, blur: 0)
+    # Return nil to show placeholder backgrounds instead of images
+    nil
   end
 
   private
