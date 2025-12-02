@@ -1,0 +1,27 @@
+<%# Stat card for metrics
+  Locals:
+    - value: primary metric (string/number, optional if icon_name provided)
+    - label: supporting text
+    - icon_name: icon helper name (optional)
+    - icon_variant: :outline or :solid (default :outline)
+    - icon_classes: custom icon classes
+%>
+<% icon_variant ||= :outline %>
+<% icon_classes ||= "w-10 h-10 text-sage-600 mx-auto mb-2" %>
+<% icon_name = local_assigns[:icon_name] %>
+<% value = local_assigns[:value] %>
+<% label = local_assigns[:label] %>
+
+<div class="bg-[#fafafa] rounded-2xl p-6 text-center border border-[#eee]">
+  <% if icon_name.present? %>
+    <div class="flex justify-center mb-3">
+      <%= icon icon_name, variant: icon_variant, classes: icon_classes %>
+    </div>
+  <% end %>
+
+  <% if value.present? %>
+    <div class="font-serif text-4xl text-sage-600 mb-2"><%= value %></div>
+  <% end %>
+
+  <div class="text-[#666] text-sm"><%= label %></div>
+</div>

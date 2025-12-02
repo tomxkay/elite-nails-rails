@@ -1,0 +1,28 @@
+<!-- ===== SERVICES SECTION ===== -->
+<section id="services" class="py-24 lg:py-32 marble-texture">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <%= render 'shared/section_header',
+               eyebrow: 'What We Offer',
+               title: 'Our Services',
+               subtitle: 'From classic care to creative artistry, we offer a full range of nail and spa services' %>
+
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <% services = [
+        { emoji: '💅', title: 'Manicures', description: 'Classic and spa manicures featuring premium products, cuticle care, nail shaping, and your choice of polish.', price: '$20' },
+        { emoji: '🦶', title: 'Pedicures', description: 'Relax with our signature pedicures including foot soak, exfoliation, massage, and polish.', price: '$30' },
+        { emoji: '✨', title: 'Gel & Dip Powder', description: 'Long-lasting, chip-resistant color with gel polish or dip powder systems. Up to 3 weeks of gorgeous nails.', price: '$35' },
+        { emoji: '💎', title: 'Acrylic & Extensions', description: 'Custom acrylic nail enhancements, tips, and sculpted extensions for length and strength.', price: '$40' },
+        { emoji: '🎨', title: 'Nail Art & Design', description: 'Express yourself with custom nail art, hand-painted designs, gems, foils, and trending styles.', price: '$5+' },
+        { emoji: '🌸', title: 'Waxing Services', description: 'Professional waxing services for brows, lip, chin, and more with gentle techniques.', price: '$10' }
+      ] %>
+
+      <% services.each do |service| %>
+        <%= render 'shared/service_card', **service %>
+      <% end %>
+    </div>
+
+    <p class="mt-12 text-center text-[#666] text-sm">
+      Prices may vary. Call <a href="tel:+17048249032" class="text-sage-600 hover:underline">(704) 824-9032</a> for current pricing and availability.
+    </p>
+  </div>
+</section>

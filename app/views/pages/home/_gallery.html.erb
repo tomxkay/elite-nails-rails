@@ -1,0 +1,31 @@
+<!-- ===== GALLERY SECTION ===== -->
+<section id="gallery" class="py-24 lg:py-32 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <%= render 'shared/section_header',
+               eyebrow: 'Our Work',
+               title: 'Gallery',
+               subtitle: 'A glimpse of our nail artistry and salon atmosphere' %>
+
+    <div class="mt-16 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+      <% gallery_items = [
+        { label: 'Nail Art 1' },
+        { label: 'Nail Art 2' },
+        { label: 'Nail Art 3' },
+        { label: 'Nail Art 4' },
+        { label: 'Nail Art 5' },
+        { label: 'Nail Art 6' }
+      ] %>
+
+      <% gallery_items.each do |item| %>
+        <%= render 'shared/gallery_item', **item %>
+      <% end %>
+    </div>
+
+    <div class="mt-12 text-center">
+      <a href="#" class="text-sage-600 hover:text-sage-700 font-medium inline-flex items-center gap-2 group">
+        Follow us on Instagram for more
+        <%= icon 'instagram', classes: 'w-5 h-5 transition-transform group-hover:translate-x-1' %>
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,28 @@
+<!-- ===== CTA BANNER ===== -->
+<section class="py-20 bg-sage-600">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl text-white mb-4">Ready to Be Pampered?</h2>
+    <p class="text-sage-100 text-lg mb-8 max-w-2xl mx-auto">
+      Book your appointment today and experience the Elite Nails difference. Walk-ins are always welcome!
+    </p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <%= render 'shared/cta_button',
+                 text: 'Call (704) 824-9032',
+                 href: 'tel:+17048249032',
+                 style: :light,
+                 size: :lg,
+                 icon: 'phone',
+                 icon_classes: 'mr-1' %>
+      <%= render 'shared/cta_button',
+                 text: 'Get Directions',
+                 href: 'https://maps.google.com/?q=202+Market+St+F,+Cramerton,+NC+28032',
+                 target: '_blank',
+                 rel: 'noopener',
+                 style: :ghost,
+                 size: :md,
+                 icon: 'map-pin',
+                 icon_classes: 'mr-1',
+                 classes: 'text-white hover:text-sage-100 no-underline' %>
+    </div>
+  </div>
+</section>

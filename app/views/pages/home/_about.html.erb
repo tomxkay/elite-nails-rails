@@ -1,0 +1,44 @@
+<!-- ===== ABOUT SECTION ===== -->
+<section id="about" class="py-24 lg:py-32 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div>
+        <%= render 'shared/section_header',
+                   eyebrow: 'Welcome to Elite Nails',
+                   title: 'Your Neighborhood',
+                   title_accent: 'Nail Sanctuary',
+                   align: :left %>
+
+        <div class="mt-6 space-y-4 text-[#666] leading-relaxed">
+          <p>
+            Since 2003, Elite Nails has been a beloved fixture on Market Street in downtown Cramerton. Our cozy salon offers a welcoming escape from the everyday, where skilled technicians transform your nails into works of art.
+          </p>
+          <p>
+            Whether you're seeking a classic manicure, a luxurious spa pedicure, or the latest in gel and acrylic designs, our dedicated team brings precision, creativity, and genuine care to every service.
+          </p>
+        </div>
+
+        <div class="mt-8">
+          <%= render 'shared/cta_button',
+                     text: 'Schedule Your Visit',
+                     href: 'tel:+17048249032',
+                     style: :outline,
+                     size: :md %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6">
+        <% stats = [
+          { value: '20+', label: 'Years of Excellence' },
+          { value: '3+', label: 'Expert Technicians' },
+          { value: '★', label: '5-Star Reviews' },
+          { icon_name: 'map-pin', label: 'Market St, Cramerton' }
+        ] %>
+
+        <% stats.each do |stat| %>
+          <%= render 'shared/stat_card', **stat %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

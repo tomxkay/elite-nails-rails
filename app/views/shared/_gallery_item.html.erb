@@ -1,0 +1,15 @@
+<%# Gallery placeholder tile with hover zoom overlay
+  Locals:
+    - label: caption text
+%>
+<div class="group relative aspect-square rounded-2xl overflow-hidden bg-[#eee] cursor-pointer">
+  <div class="absolute inset-0 bg-gradient-to-br from-sage-100 via-[#f5f5f5] to-sage-50 flex items-center justify-center">
+    <div class="text-center">
+      <%= icon 'photo', classes: 'w-12 h-12 text-sage-300 mx-auto mb-2' %>
+      <span class="text-sage-400 text-sm"><%= label %></span>
+    </div>
+  </div>
+  <div class="absolute inset-0 bg-sage-700/0 group-hover:bg-sage-700/40 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+    <%= icon 'magnifying-glass-plus', classes: 'w-10 h-10 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300' %>
+  </div>
+</div>

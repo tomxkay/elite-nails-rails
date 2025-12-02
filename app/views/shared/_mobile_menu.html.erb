@@ -21,9 +21,12 @@
       </ul>
     </nav>
     <div class="p-6 border-t border-[#eee] bg-[#fafafa]">
-      <a href="tel:+17048249032" class="inline-flex items-center justify-center w-full px-8 py-4 bg-sage-500 text-white font-medium rounded-full transition-all duration-300 hover:bg-sage-600 hover:shadow-lg">
-        Book Appointment
-      </a>
+      <%= render 'shared/cta_button',
+                 text: 'Book Appointment',
+                 href: 'tel:+17048249032',
+                 style: :solid,
+                 size: :md,
+                 classes: 'w-full justify-center' %>
       <p class="mt-4 text-center text-sm text-[#666]">
         <a href="tel:+17048249032" class="hover:text-sage-600 transition-colors">(704) 824-9032</a>
       </p>

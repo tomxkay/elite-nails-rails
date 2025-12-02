@@ -1,0 +1,46 @@
+<%# Versatile CTA button
+  Required locals:
+    - text: button label
+    - href: target URL
+  Optional locals:
+    - style: :solid, :outline, :light, :ghost (default :solid)
+    - size: :md, :sm, :lg (default :md)
+    - icon: Heroicon/custom name (optional, alias: icon_name)
+    - icon_classes: override icon sizing (defaults per size)
+    - classes: extra classes to append
+    - **options: passed to link_to (e.g., target:)
+%>
+<% style ||= :solid %>
+<% size ||= :md %>
+<% icon_classes ||= nil %>
+<% icon_name = local_assigns[:icon] || local_assigns[:icon_name] %>
+<% classes = local_assigns[:classes] %>
+<% options = local_assigns.except(:text, :href, :style, :size, :icon, :icon_name, :icon_classes, :classes) %>
+
+<% size_classes = {
+  sm: "px-4 py-2 text-sm",
+  md: "px-6 py-3 text-sm md:text-base",
+  lg: "px-8 py-4 text-base md:text-lg"
+} %>
+
+<% style_classes = {
+  solid: "bg-sage-500 text-white border border-sage-500 hover:bg-sage-600 hover:shadow-lg hover:shadow-sage-500/30",
+  outline: "border-2 border-sage-500 text-sage-600 hover:bg-sage-500 hover:text-white",
+  light: "bg-white text-sage-700 border border-transparent hover:bg-[#fafafa] hover:shadow-lg",
+  ghost: "text-[#666] underline underline-offset-4 decoration-sage-300 hover:text-sage-600 hover:decoration-sage-500"
+} %>
+
+<% icon_size = { sm: "w-4 h-4", md: "w-5 h-5", lg: "w-5 h-5" }[size] %>
+<% composed_classes = [
+  "inline-flex items-center justify-center rounded-full font-medium transition-all duration-300 gap-2",
+  size_classes[size],
+  style_classes[style],
+  classes
+].compact.join(" ") %>
+
+<%= link_to href, class: composed_classes, **options do %>
+  <% if icon_name.present? %>
+    <%= icon(icon_name, classes: "#{icon_size} #{icon_classes}".strip.presence || icon_size) %>
+  <% end %>
+  <span><%= text %></span>
+<% end %>

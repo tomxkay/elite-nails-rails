@@ -1,0 +1,21 @@
+<!-- ===== TESTIMONIALS SECTION ===== -->
+<section id="testimonials" class="py-24 lg:py-32 bg-sage-50/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <%= render 'shared/section_header',
+               eyebrow: 'What Our Guests Say',
+               title: 'Kind Words',
+               subtitle: 'See why our clients keep coming back' %>
+
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <% testimonials = [
+        { quote: "The staff here is incredibly friendly and talented! They always take their time to make sure every detail is perfect. My go-to spot for special occasions.", name: "Sarah M.", rating: 5 },
+        { quote: "Best nail salon in the area! Great prices and the quality is amazing. They're so gentle with cuticle work - I never feel rushed or uncomfortable.", name: "Jennifer L.", rating: 5 },
+        { quote: "I've been coming here for years and the consistency is unmatched. Clean salon, professional service, and my gel manicures last for weeks!", name: "Michelle R.", rating: 5 }
+      ] %>
+
+      <% testimonials.each do |testimonial| %>
+        <%= render 'shared/testimonial_card', **testimonial %>
+      <% end %>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,28 @@
+<%# Testimonial card with rating stars
+  Locals:
+    - quote: review text
+    - name: reviewer name
+    - rating: integer (default 5)
+%>
+<% rating ||= 5 %>
+<% initial = name.to_s.strip.first || "?" %>
+
+<div class="bg-white rounded-2xl p-8 shadow-sm border border-[#eee] hover:shadow-lg transition-shadow duration-300">
+  <div class="mb-4">
+    <%= icon 'quote', classes: 'w-8 h-8 text-sage-300' %>
+  </div>
+  <div class="flex mb-4">
+    <% rating.to_i.times do %>
+      <%= icon 'star', variant: :solid, classes: 'w-5 h-5 text-amber-400' %>
+    <% end %>
+  </div>
+  <blockquote class="text-[#444] leading-relaxed mb-6 italic">
+    "<%= quote %>"
+  </blockquote>
+  <div class="flex items-center">
+    <div class="w-10 h-10 rounded-full bg-sage-100 flex items-center justify-center mr-3">
+      <span class="text-sage-600 font-medium text-sm"><%= initial %></span>
+    </div>
+    <span class="text-[#444] font-medium"><%= name %></span>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<%# Section header with eyebrow, title, optional accent, and subtitle
+  Locals:
+    - eyebrow: small uppercase label (optional)
+    - title: main title text (required)
+    - title_accent: italic/light secondary part of the title (optional)
+    - subtitle: supporting copy (optional)
+    - align: :center or :left (default :center)
+    - classes: additional container classes
+%>
+<% align ||= :center %>
+<% classes = local_assigns[:classes] %>
+<% eyebrow = local_assigns[:eyebrow] %>
+<% title = local_assigns[:title] %>
+<% title_accent = local_assigns[:title_accent] %>
+<% subtitle = local_assigns[:subtitle] %>
+<% container_classes = [
+  (align == :center ? "text-center max-w-2xl mx-auto" : "text-left"),
+  classes
+].compact.join(" ") %>
+
+<div class="<%= container_classes %>">
+  <% if eyebrow.present? %>
+    <span class="text-sage-500 font-medium text-sm tracking-widest uppercase"><%= eyebrow %></span>
+  <% end %>
+
+<% if title.present? %>
+  <h2 class="mt-4 font-serif text-4xl md:text-5xl text-[#444] tracking-wide">
+    <%= title %>
+    <% if title_accent.present? %>
+      <span class="italic font-light"><%= title_accent %></span>
+    <% end %>
+  </h2>
+<% end %>
+
+<% if subtitle.present? %>
+  <p class="mt-4 text-[#666] font-light text-lg tracking-wide"><%= subtitle %></p>
+<% end %>
+</div>
