@@ -1,0 +1,32 @@
+<!-- Mobile Menu Overlay -->
+<div id="mobileOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300 lg:hidden"></div>
+
+<!-- Mobile Menu Drawer -->
+<div id="mobileMenu" class="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-out lg:hidden">
+  <div class="flex flex-col h-full">
+    <div class="flex items-center justify-between p-6 border-b border-[#eee]">
+      <span class="font-script text-lg text-[#444]">Menu</span>
+      <button type="button" id="closeMenuBtn" class="p-2 -mr-2 text-[#444] hover:text-sage-600 transition-colors" aria-label="Close menu">
+        <%= icon 'x-mark', classes: 'w-6 h-6' %>
+      </button>
+    </div>
+    <nav class="flex-1 px-6 py-8 overflow-y-auto">
+      <ul class="space-y-1">
+        <li><a href="#home" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">Home</a></li>
+        <li><a href="#services" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">Services</a></li>
+        <li><a href="#gallery" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">Gallery</a></li>
+        <li><a href="#about" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">About</a></li>
+        <li><a href="#testimonials" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">Reviews</a></li>
+        <li><a href="#contact" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="p-6 border-t border-[#eee] bg-[#fafafa]">
+      <a href="tel:+17048249032" class="inline-flex items-center justify-center w-full px-8 py-4 bg-sage-500 text-white font-medium rounded-full transition-all duration-300 hover:bg-sage-600 hover:shadow-lg">
+        Book Appointment
+      </a>
+      <p class="mt-4 text-center text-sm text-[#666]">
+        <a href="tel:+17048249032" class="hover:text-sage-600 transition-colors">(704) 824-9032</a>
+      </p>
+    </div>
+  </div>
+</div>

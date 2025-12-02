@@ -1,0 +1,32 @@
+<%# Logo component with EN badge and Elite Nails text
+  Parameters:
+    - size: :small, :medium, :large (default: :medium)
+    - linkable: boolean (default: true)
+    - link_target: string (default: '#home')
+%>
+<% size ||= :medium %>
+<% linkable = local_assigns.fetch(:linkable, true) %>
+<% link_target ||= '#home' %>
+
+<% sizes = {
+  small: { badge: 'w-12 h-12', text_badge: 'text-sm', script: 'text-sm', badge_mb: 'mb-1' },
+  medium: { badge: 'w-14 h-14', text_badge: 'text-lg', script: 'text-xl', badge_mb: 'mb-3' },
+  large: { badge: 'w-16 h-16', text_badge: 'text-xl', script: 'text-xl', badge_mb: 'mb-2' }
+} %>
+<% size_classes = sizes[size] %>
+
+<% if linkable %>
+  <a href="<%= link_target %>" class="inline-flex flex-col items-center group">
+    <div class="<%= size_classes[:badge] %> rounded-full bg-[#444] flex items-center justify-center <%= size_classes[:badge_mb] %> transition-transform duration-300 group-hover:scale-105">
+      <span class="text-white font-serif <%= size_classes[:text_badge] %> font-medium tracking-wide">EN</span>
+    </div>
+    <span class="font-script <%= size_classes[:script] %> text-[#444] tracking-wide">Elite Nails</span>
+  </a>
+<% else %>
+  <div class="inline-flex flex-col items-center">
+    <div class="<%= size_classes[:badge] %> rounded-full bg-[#444] flex items-center justify-center <%= size_classes[:badge_mb] %>">
+      <span class="text-white font-serif <%= size_classes[:text_badge] %> font-medium tracking-wide">EN</span>
+    </div>
+    <span class="font-script <%= size_classes[:script] %> text-[#444] tracking-wide">Elite Nails</span>
+  </div>
+<% end %>
