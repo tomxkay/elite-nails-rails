@@ -30,7 +30,7 @@
       }
     ] %>
 
-    <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6" data-controller="stagger" data-stagger-amount-value="0.15" data-stagger-from-value="bottom">
       <% team.each do |member| %>
         <%= render 'shared/team_member', **member %>
       <% end %>

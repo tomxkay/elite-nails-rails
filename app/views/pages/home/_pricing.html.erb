@@ -36,7 +36,7 @@
       }
     ] %>
 
-    <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6" data-controller="stagger" data-stagger-amount-value="0.15" data-stagger-from-value="scale">
       <% categories.each do |category| %>
         <div class="bg-[#fafafa] border border-[#eee] rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
           <h3 class="font-serif text-xl text-[#444] mb-4"><%= category[:title] %></h3>

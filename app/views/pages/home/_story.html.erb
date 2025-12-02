@@ -1,7 +1,7 @@
 <!-- ===== OUR STORY SECTION ===== -->
 <section id="story" class="py-24 lg:py-28 bg-gradient-to-b from-white via-sage-50/50 to-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-    <div class="order-2 lg:order-1">
+    <div class="order-2 lg:order-1" data-controller="scroll-reveal" data-scroll-reveal-animation-value="fadeInLeft">
       <%= render 'shared/section_header',
                  eyebrow: 'Family-Owned & Local',
                  title: 'Our Story',
@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <div class="order-1 lg:order-2 relative">
+    <div class="order-1 lg:order-2 relative" data-controller="scroll-reveal" data-scroll-reveal-animation-value="fadeInRight" data-scroll-reveal-delay-value="0.2">
       <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-lg shadow-sage-100">
         <img src="<%= placeholder_image(width: 800, height: 1000, seed: 'elite-nails-story') %>"
              alt="Elite Nails Salon Interior"
