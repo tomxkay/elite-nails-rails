@@ -37,10 +37,11 @@
           </p>
           <div class="mt-8 md:mt-10 flex flex-col sm:flex-row items-center gap-4 opacity-0 animate-fade-in-up animation-delay-400">
             <%= render 'shared/cta_button',
-                        text: 'Book Appointment',
-                        href: 'tel:+17048249032',
+                        text: 'Book Now',
+                        href: booking_link,
                         style: :solid,
-                        size: :lg %>
+                        size: :lg,
+                        icon: 'calendar-days' %>
             <%= render 'shared/cta_button',
                         text: 'View Services',
                         href: '#services',

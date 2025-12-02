@@ -19,6 +19,11 @@ module ApplicationHelper
     end
   end
 
+  # Centralized booking URL with sensible fallback to phone
+  def booking_link
+    ENV["BOOKING_URL"].presence || "tel:+17048249032"
+  end
+
   private
 
   def render_custom_quote_icon(classes, options)

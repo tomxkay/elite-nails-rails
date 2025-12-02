@@ -1,0 +1,76 @@
+<!-- ===== PRICING SECTION ===== -->
+<section id="pricing" class="py-24 lg:py-28 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <%= render 'shared/section_header',
+               eyebrow: 'Transparent Pricing',
+               title: 'Services & Rates',
+               subtitle: 'Clear, honest pricing for hands, feet, and add-ons. Call for full menu and seasonal specials.' %>
+
+    <% categories = [
+      {
+        title: "Hands",
+        items: [
+          ["Classic Manicure", "$20"],
+          ["Gel Manicure", "$35"],
+          ["Dip Powder", "$40"],
+          ["French Add-On", "+$5"]
+        ]
+      },
+      {
+        title: "Feet",
+        items: [
+          ["Signature Pedicure", "$35"],
+          ["Spa Pedicure", "$45"],
+          ["Gel Pedicure", "$55"],
+          ["Callus Care Upgrade", "+$8"]
+        ]
+      },
+      {
+        title: "Add-Ons",
+        items: [
+          ["Nail Art (per nail)", "$5+"],
+          ["Acrylic Full Set", "$40+"],
+          ["Acrylic Fill", "$30+"],
+          ["Waxing (brows/lip/chin)", "$10+"]
+        ]
+      }
+    ] %>
+
+    <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <% categories.each do |category| %>
+        <div class="bg-[#fafafa] border border-[#eee] rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+          <h3 class="font-serif text-xl text-[#444] mb-4"><%= category[:title] %></h3>
+          <ul class="divide-y divide-[#eee] text-sm text-[#555]">
+            <% category[:items].each do |name, price| %>
+              <li class="flex justify-between py-3">
+                <span><%= name %></span>
+                <span class="text-sage-700 font-medium"><%= price %></span>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-sage-50 border border-sage-100 rounded-2xl px-6 py-5">
+      <div>
+        <p class="text-[#444] font-medium">Questions or custom requests?</p>
+        <p class="text-[#666] text-sm">Call us or book online — we’re happy to recommend the right service.</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <%= render 'shared/cta_button',
+                   text: 'Book Online',
+                   href: booking_link,
+                   style: :solid,
+                   size: :md,
+                   icon: 'calendar-days' %>
+        <%= render 'shared/cta_button',
+                   text: 'Call the Salon',
+                   href: 'tel:+17048249032',
+                   style: :outline,
+                   size: :sm,
+                   icon: 'phone' %>
+      </div>
+    </div>
+  </div>
+</section>

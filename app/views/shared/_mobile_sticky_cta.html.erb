@@ -1,0 +1,13 @@
+<div class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[92vw] max-w-md lg:hidden z-40 drop-shadow-lg">
+  <div class="rounded-full bg-white/90 backdrop-blur-md border border-sage-100 px-4 py-3 flex items-center justify-between">
+    <div class="text-sm text-[#444]">
+      <span class="font-serif text-base text-sage-700 block">Ready to book?</span>
+      <span class="text-[#666]">Family-owned in Cramerton</span>
+    </div>
+    <%= render 'shared/cta_button',
+               text: 'Book Now',
+               href: booking_link,
+               style: :solid,
+               size: :sm %>
+  </div>
+</div>

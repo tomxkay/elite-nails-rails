@@ -6,8 +6,8 @@
     - icon_variant: :outline or :solid (default :outline)
     - icon_classes: custom icon classes
 %>
-<% icon_variant ||= :outline %>
-<% icon_classes ||= "w-10 h-10 text-sage-600 mx-auto mb-2" %>
+<% icon_variant = local_assigns.fetch(:icon_variant, :outline) %>
+<% icon_classes = local_assigns.fetch(:icon_classes, "w-10 h-10 text-sage-600 mx-auto mb-2") %>
 <% icon_name = local_assigns[:icon_name] %>
 <% value = local_assigns[:value] %>
 <% label = local_assigns[:label] %>

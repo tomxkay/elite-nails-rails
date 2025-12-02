@@ -23,16 +23,16 @@
     <span class="text-sage-500 font-medium text-sm tracking-widest uppercase"><%= eyebrow %></span>
   <% end %>
 
-<% if title.present? %>
-  <h2 class="mt-4 font-serif text-4xl md:text-5xl text-[#444] tracking-wide">
-    <%= title %>
-    <% if title_accent.present? %>
-      <span class="italic font-light"><%= title_accent %></span>
-    <% end %>
-  </h2>
-<% end %>
+  <% if title.present? %>
+    <h2 class="mt-4 font-serif text-4xl md:text-5xl text-[#444] tracking-wide">
+      <%= title %>
+      <% if title_accent.present? %>
+        <span class="italic font-light"><%= title_accent %></span>
+      <% end %>
+    </h2>
+  <% end %>
 
-<% if subtitle.present? %>
-  <p class="mt-4 text-[#666] font-light text-lg tracking-wide"><%= subtitle %></p>
-<% end %>
+  <% if subtitle.present? %>
+    <p class="mt-4 text-[#666] font-light text-lg tracking-wide"><%= subtitle %></p>
+  <% end %>
 </div>

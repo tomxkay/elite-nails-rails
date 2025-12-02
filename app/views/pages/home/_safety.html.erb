@@ -1,0 +1,46 @@
+<!-- ===== SAFETY & CLEANLINESS SECTION ===== -->
+<section class="py-16 bg-gradient-to-r from-sage-50 via-white to-sage-50">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 rounded-3xl border border-sage-100 shadow-sm bg-white/80 backdrop-blur">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center px-6 py-10">
+      <div class="md:col-span-2">
+        <%= render 'shared/section_header',
+                   eyebrow: 'Cleanliness & Care',
+                   title: 'Your Safety Comes First',
+                   subtitle: 'Sanitized tools, hospital-grade disinfectants, and fresh liners for every service. We go beyond the basics so you can relax.' ,
+                   align: :left %>
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm text-[#555]">
+          <div class="flex items-start gap-2">
+            <%= icon 'check-badge', classes: 'w-5 h-5 text-sage-600 mt-0.5' %>
+            <span>Fresh liners and sanitized bowls every guest</span>
+          </div>
+          <div class="flex items-start gap-2">
+            <%= icon 'shield-check', classes: 'w-5 h-5 text-sage-600 mt-0.5' %>
+            <span>Hospital-grade disinfectants for tools & stations</span>
+          </div>
+          <div class="flex items-start gap-2">
+            <%= icon 'heart', classes: 'w-5 h-5 text-sage-600 mt-0.5' %>
+            <span>Friendly technicians trained for gentle, hygienic care</span>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gradient-to-br from-sage-100 to-white rounded-2xl p-6 text-center border border-sage-100 shadow-inner">
+        <p class="text-sage-700 font-medium mb-2">Family-owned in Cramerton</p>
+        <p class="text-sm text-[#555]">Next to Market Street favorites — walk in or book online.</p>
+        <div class="mt-4 flex flex-col gap-2">
+          <%= render 'shared/cta_button',
+                     text: 'Book Now',
+                     href: booking_link,
+                     style: :solid,
+                     size: :md,
+                     icon: 'calendar-days' %>
+          <%= render 'shared/cta_button',
+                     text: 'Call the Salon',
+                     href: 'tel:+17048249032',
+                     style: :outline,
+                     size: :sm,
+                     icon: 'phone' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

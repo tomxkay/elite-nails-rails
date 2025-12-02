@@ -13,17 +13,20 @@
     <nav class="flex-1 px-6 py-8 overflow-y-auto">
       <ul class="space-y-1">
         <li><a href="#home" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">Home</a></li>
+        <li><a href="#story" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">Our Story</a></li>
         <li><a href="#services" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">Services</a></li>
+        <li><a href="#pricing" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">Pricing</a></li>
         <li><a href="#gallery" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">Gallery</a></li>
         <li><a href="#about" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">About</a></li>
+        <li><a href="#team" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">Team</a></li>
         <li><a href="#testimonials" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">Reviews</a></li>
         <li><a href="#contact" class="mobile-link block py-3 text-[#444] hover:text-sage-600 font-medium tracking-wide transition-colors">Contact</a></li>
       </ul>
     </nav>
     <div class="p-6 border-t border-[#eee] bg-[#fafafa]">
       <%= render 'shared/cta_button',
-                 text: 'Book Appointment',
-                 href: 'tel:+17048249032',
+                 text: 'Book Now',
+                 href: booking_link,
                  style: :solid,
                  size: :md,
                  classes: 'w-full justify-center' %>
