@@ -6,3 +6,22 @@ import { application } from "./application"
 
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+// GSAP Animation Controllers
+import CardHoverController from "./card_hover_controller"
+application.register("card-hover", CardHoverController)
+
+import HeroController from "./hero_controller"
+application.register("hero", HeroController)
+
+import ParallaxController from "./parallax_controller"
+application.register("parallax", ParallaxController)
+
+import ScrollRevealController from "./scroll_reveal_controller"
+application.register("scroll-reveal", ScrollRevealController)
+
+import SmoothScrollController from "./smooth_scroll_controller"
+application.register("smooth-scroll", SmoothScrollController)
+
+import StaggerController from "./stagger_controller"
+application.register("stagger", StaggerController)

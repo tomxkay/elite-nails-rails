@@ -6,7 +6,7 @@
                title: 'Gallery',
                subtitle: 'A glimpse of our nail artistry and salon atmosphere' %>
 
-    <div class="mt-16 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+    <div class="mt-16 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6" data-controller="stagger" data-stagger-amount-value="0.12" data-stagger-from-value="scale">
       <% gallery_items = [
         { label: 'Manicure Art', seed: 'gallery-manicure-1' },
         { label: 'Nail Design', seed: 'gallery-nail-art-2' },

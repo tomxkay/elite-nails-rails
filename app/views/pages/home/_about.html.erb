@@ -2,7 +2,7 @@
 <section id="about" class="py-24 lg:py-32 bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-      <div>
+      <div data-controller="scroll-reveal" data-scroll-reveal-animation-value="fadeInUp">
         <%= render 'shared/section_header',
                    eyebrow: 'Welcome to Elite Nails',
                    title: 'Your Neighborhood',
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-6">
+      <div class="grid grid-cols-2 gap-6" data-controller="stagger" data-stagger-amount-value="0.15" data-stagger-from-value="scale">
         <% stats = [
           { value: '20+', label: 'Years of Excellence' },
           { value: '3+', label: 'Expert Technicians' },
