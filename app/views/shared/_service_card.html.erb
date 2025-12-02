@@ -5,8 +5,8 @@
     - description: short description
     - price: price string
 %>
-<div class="group bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-500 border border-[#eee] hover:border-sage-200">
-  <div class="w-16 h-16 rounded-xl bg-sage-50 flex items-center justify-center mb-6 group-hover:bg-sage-100 transition-colors duration-300">
+<div class="group bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-500 border border-[#eee] hover:border-sage-200" data-controller="card-hover">
+  <div class="w-16 h-16 rounded-xl bg-sage-50 flex items-center justify-center mb-6 group-hover:bg-sage-100 transition-colors duration-300" data-card-hover-target="icon">
     <span class="text-3xl"><%= emoji %></span>
   </div>
   <h3 class="font-serif text-xl text-[#444] mb-3 group-hover:text-sage-700 transition-colors duration-300"><%= title %></h3>

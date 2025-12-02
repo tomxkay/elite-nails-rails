@@ -29,38 +29,6 @@
   --color-charcoal-light: #666666;
   --color-charcoal-dark: #333333;
 
-  /* Custom Animations */
-  --animate-fade-in: fadeIn 1s ease-out forwards;
-  --animate-fade-in-up: fadeInUp 1s ease-out forwards;
-  --animate-fade-in-down: fadeInDown 0.8s ease-out forwards;
-}
-
-/* Keyframe Animations */
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInDown {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* Custom Utility Classes */
@@ -101,14 +69,27 @@
   width: 100%;
 }
 
-.animation-delay-200 {
-  animation-delay: 200ms;
+/* GSAP Animation Utilities */
+[data-controller*="scroll-reveal"] {
+  opacity: 0;
+  visibility: hidden;
 }
 
-.animation-delay-400 {
-  animation-delay: 400ms;
+[data-controller*="scroll-reveal"].animated {
+  opacity: 1;
+  visibility: visible;
 }
 
-.animation-delay-600 {
-  animation-delay: 600ms;
+/* GPU acceleration hints for animated elements */
+.will-animate {
+  will-change: transform, opacity;
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
