@@ -1,4 +1,4 @@
-<header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-cream-50/80 backdrop-blur-md border-b border-cream-200/70 shadow-warm-sm">
+<header id="navbar" data-controller="navbar" data-action="scroll@window->navbar#toggleLabel" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-cream-50/80 backdrop-blur-md border-b border-cream-200/70 shadow-warm-sm">
   <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Desktop Navigation -->
     <div class="hidden lg:flex items-center justify-center py-4 relative">
@@ -10,7 +10,7 @@
         <a href="#gallery" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">Gallery</a>
       </div>
       <!-- Centered Logo -->
-      <%= render 'shared/logo', size: :large %>
+      <%= render 'shared/logo', size: :large, collapsible_text: true %>
       <!-- Right Nav Links -->
       <div class="flex items-center space-x-8 absolute right-0">
         <a href="#about" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">About</a>
@@ -31,7 +31,7 @@
       <button type="button" id="mobileMenuBtn" class="p-2 -ml-2 text-warm-gray-700 hover:text-terracotta-600 transition-colors" aria-label="Toggle menu">
         <%= icon 'bars-3', classes: 'w-6 h-6' %>
       </button>
-      <%= render 'shared/logo', size: :small %>
+      <%= render 'shared/logo', size: :small, collapsible_text: true %>
       <%= render 'shared/cta_button',
                  text: 'Book',
                  href: booking_link,

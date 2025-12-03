@@ -25,3 +25,6 @@ application.register("smooth-scroll", SmoothScrollController)
 
 import StaggerController from "./stagger_controller"
 application.register("stagger", StaggerController)
+
+import NavbarController from "./navbar_controller"
+application.register("navbar", NavbarController)

@@ -7,6 +7,7 @@
 <% size ||= :medium %>
 <% linkable = local_assigns.fetch(:linkable, true) %>
 <% link_target ||= '#home' %>
+<% collapsible_text = local_assigns.fetch(:collapsible_text, false) %>
 
 <% sizes = {
   small: { badge: 'w-12 h-12', text_badge: 'text-sm', script: 'text-sm', badge_mb: 'mb-1' },
@@ -14,19 +15,30 @@
   large: { badge: 'w-16 h-16', text_badge: 'text-xl', script: 'text-xl', badge_mb: 'mb-2' }
 } %>
 <% size_classes = sizes[size] %>
+<% text_classes = ["font-script", size_classes[:script], "text-[#444]", "tracking-wide"] %>
+
+<% if collapsible_text %>
+  <% text_classes += %w[block overflow-hidden transition-all duration-300 ease-out origin-top max-h-10] %>
+<% end %>
 
 <% if linkable %>
   <a href="<%= link_target %>" class="inline-flex flex-col items-center group">
     <div class="<%= size_classes[:badge] %> rounded-full bg-[#444] flex items-center justify-center <%= size_classes[:badge_mb] %> transition-transform duration-300 group-hover:scale-105">
       <span class="text-white font-serif <%= size_classes[:text_badge] %> font-medium tracking-wide">EN</span>
     </div>
-    <span class="font-script <%= size_classes[:script] %> text-[#444] tracking-wide">Elite Nails</span>
+    <%= content_tag :span,
+                    'Elite Nails',
+                    class: text_classes.join(' '),
+                    data: (collapsible_text ? { navbar_target: 'label' } : nil) %>
   </a>
 <% else %>
   <div class="inline-flex flex-col items-center">
     <div class="<%= size_classes[:badge] %> rounded-full bg-[#444] flex items-center justify-center <%= size_classes[:badge_mb] %>">
       <span class="text-white font-serif <%= size_classes[:text_badge] %> font-medium tracking-wide">EN</span>
     </div>
-    <span class="font-script <%= size_classes[:script] %> text-[#444] tracking-wide">Elite Nails</span>
+    <%= content_tag :span,
+                    'Elite Nails',
+                    class: text_classes.join(' '),
+                    data: (collapsible_text ? { navbar_target: 'label' } : nil) %>
   </div>
 <% end %>
