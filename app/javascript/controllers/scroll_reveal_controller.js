@@ -40,7 +40,8 @@ export default class extends Controller {
     }
 
     const initialState = animations[this.animationValue] || animations.fadeInUp
-    gsap.set(this.element, initialState)
+    gsap.set(this.element, { ...initialState, autoAlpha: 0 })
+    this.element.classList.remove("animated")
   }
 
   createAnimation() {
@@ -62,11 +63,13 @@ export default class extends Controller {
       start: this.startValue,
       once: this.onceValue,
       onEnter: () => {
+        this.element.classList.add("animated")
         gsap.to(this.element, {
           ...toState,
           duration: this.durationValue,
           delay: this.delayValue,
-          ease: "power2.out"
+          ease: "power2.out",
+          autoAlpha: 1
         })
       },
       onLeaveBack: () => {
