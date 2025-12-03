@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Hides the logo label once scrolling starts to shrink the navbar height
+// Hides the logo label once scrolling starts to shrink the navbar height and tightens nav padding
 export default class extends Controller {
-  static targets = ["label"]
+  static targets = ["label", "navRow"]
 
   connect() {
     this.toggleLabel()
@@ -16,6 +16,11 @@ export default class extends Controller {
       label.classList.toggle("max-h-0", scrolled)
       label.classList.toggle("scale-95", scrolled)
       label.classList.toggle("max-h-10", !scrolled)
+    })
+
+    this.navRowTargets.forEach((row) => {
+      row.classList.toggle("py-2", scrolled)
+      row.classList.toggle("py-4", !scrolled)
     })
   }
 }
