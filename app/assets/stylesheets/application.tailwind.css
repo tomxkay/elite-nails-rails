@@ -2,8 +2,8 @@
 
 @theme {
   /* Custom Font Families */
-  --font-serif: 'Playfair Display', serif;
-  --font-sans: 'Nunito', sans-serif;
+  --font-serif: 'Fraunces', serif;
+  --font-sans: 'Manrope', sans-serif;
   --font-script: 'Cormorant Garamond', serif;
 
   /* Warm Sage Color Palette (Updated) */
@@ -160,6 +160,35 @@
     radial-gradient(ellipse at 80% 20%, rgba(125, 158, 134, 0.24), transparent 40%),
     linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.55) 100%);
   pointer-events: none;
+}
+
+.hero-ambient {
+  background:
+    radial-gradient(900px circle at 8% 14%, rgba(244, 195, 184, 0.42), transparent 40%),
+    radial-gradient(1100px circle at 88% 12%, rgba(125, 158, 134, 0.3), transparent 44%),
+    linear-gradient(125deg, #fefbf7 0%, #f8eee5 45%, #fefbf8 100%);
+}
+
+.hero-grid-lines {
+  background-image:
+    linear-gradient(rgba(212, 154, 138, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 154, 138, 0.08) 1px, transparent 1px);
+  background-size: 160px 160px;
+}
+
+.hero-orb-terra {
+  background: radial-gradient(circle, rgba(212, 154, 138, 0.34) 0%, rgba(212, 154, 138, 0.08) 50%, transparent 70%);
+}
+
+.hero-orb-sage {
+  background: radial-gradient(circle, rgba(125, 158, 134, 0.28) 0%, rgba(125, 158, 134, 0.1) 50%, transparent 70%);
+}
+
+.hero-photo-overlay {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.3) 100%),
+    radial-gradient(100% 60% at 15% 20%, rgba(244, 195, 184, 0.2) 0%, transparent 60%);
+  mix-blend-mode: multiply;
 }
 
 /* Text Shadows */

@@ -1,68 +1,96 @@
 <!-- ===== HERO SECTION ===== -->
-<section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-cream-100" data-controller="hero">
-  <!-- Full-screen background image -->
-  <div class="absolute inset-0">
-    <%= image_tag "hero.png",
-                  alt: "Elite Nails Salon",
-                  class: "w-full h-full object-cover brightness-[0.9]",
-                  loading: "eager" %>
+<section id="home" class="relative overflow-hidden bg-cream-50 min-h-screen" data-controller="hero">
+  <div class="absolute inset-0 hero-ambient"></div>
+  <div class="absolute inset-0 hero-grid-lines pointer-events-none"></div>
+  <div class="absolute -left-12 -top-12 h-72 w-72 rounded-full hero-orb-terra blur-3xl"></div>
+  <div class="absolute -right-16 top-10 h-80 w-80 rounded-full hero-orb-sage blur-3xl"></div>
 
-    <!-- Warm gradient overlays for text visibility -->
-    <div class="absolute inset-0 hero-gradient-overlay"></div>
-    <div class="absolute inset-0 hero-warm-filter"></div>
-    <div class="hero-warm-vignette"></div>
-  </div>
-
-  <!-- Content -->
-  <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28">
-    <div class="flex flex-col items-center lg:items-start justify-center text-center lg:text-left gap-8">
-      <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-warm text-terracotta-700 uppercase tracking-[0.25em] text-xs font-semibold" data-hero-target="cta">
-        <span class="w-2 h-2 rounded-full bg-terracotta-500"></span>
-        Warm & Welcoming Since 2003
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-24 lg:py-32 grid lg:grid-cols-[1.05fr_0.95fr] items-center gap-14">
+    <div class="space-y-8">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-terracotta-200/60 bg-white/80 backdrop-blur text-terracotta-700 uppercase tracking-[0.22em] text-[0.7rem] font-semibold shadow-warm-sm" data-hero-target="cta">
+        <span class="h-2 w-2 rounded-full bg-terracotta-500 shadow-warm-sm"></span>
+        Modern Nail Atelier • Cramerton
       </div>
 
-      <!-- Headline -->
-      <h1 class="font-serif text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-white font-semibold leading-[0.95] text-shadow-soft drop-shadow-xl" data-hero-target="heading">
-        Luxury Nail Care
-        <span class="block text-cream-100 font-light italic">With Heart & Artistry</span>
-      </h1>
+      <div class="space-y-4">
+        <p class="text-sm uppercase tracking-[0.32em] text-terracotta-600/80 font-semibold">Radiant hands, refined</p>
+        <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl text-warm-gray-900 leading-[0.98] tracking-tight" data-hero-target="heading">
+          Luxury nail rituals
+          <span class="block text-warm-gray-700 font-normal">for the modern routine</span>
+        </h1>
+      </div>
 
-      <!-- Subtitle -->
-      <p class="text-cream-50 text-lg md:text-xl lg:text-2xl font-light tracking-wide max-w-3xl text-shadow-soft" data-hero-target="subtitle">
-        Full-service manicures, pedicures, and nail artistry in downtown Cramerton. Step into warmth, leave feeling polished.
+      <p class="text-lg md:text-xl text-warm-gray-700 leading-relaxed max-w-2xl" data-hero-target="subtitle">
+        Tailored manicures, restorative pedicures, and gallery-level nail art crafted with clean products and meticulous care.
       </p>
 
-      <!-- CTAs -->
-      <div class="flex flex-col sm:flex-row items-center lg:items-start gap-4" data-hero-target="cta">
+      <div class="flex flex-col sm:flex-row gap-4" data-hero-target="cta">
         <%= render 'shared/cta_button',
-                    text: 'Book Appointment',
+                    text: 'Book An Appointment',
                     href: booking_link,
                     style: :solid,
                     size: :lg,
                     icon: 'calendar-days',
-                    classes: 'shadow-warm-xl' %>
+                    classes: 'shadow-warm-lg text-base px-6 py-3 bg-terracotta-700 hover:bg-terracotta-800' %>
         <%= render 'shared/cta_button',
-                    text: 'View Services',
+                    text: 'View The Menu',
                     href: '#services',
                     style: :light,
                     size: :lg,
                     icon: 'sparkles',
-                    classes: 'bg-white/20 backdrop-blur text-cream-50 border border-cream-200/60 hover:bg-cream-50 hover:text-terracotta-600' %>
+                    classes: 'text-base px-6 py-3 border border-warm-gray-200/80 bg-white/70 backdrop-blur text-warm-gray-800 hover:text-terracotta-700 hover:border-terracotta-200 shadow-warm-sm' %>
       </div>
 
-      <div class="flex flex-wrap items-center gap-3 text-sm uppercase tracking-[0.15em] text-cream-100/80">
-        <span class="px-3 py-1 rounded-full bg-white/10 border border-white/30">Family-Owned</span>
-        <span class="px-3 py-1 rounded-full bg-white/10 border border-white/30">Luxury Pedicures</span>
-        <span class="px-3 py-1 rounded-full bg-white/10 border border-white/30">Nail Artistry</span>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-3xl">
+        <div class="rounded-2xl border border-warm-gray-200/80 bg-white/80 backdrop-blur px-5 py-6 shadow-warm-md">
+          <p class="text-xs uppercase tracking-[0.18em] text-warm-gray-500">Signature Finishes</p>
+          <p class="font-serif text-3xl text-warm-gray-900 mt-2">200+ hues</p>
+          <p class="text-sm text-warm-gray-600">Gel, dip, and custom art curated seasonally.</p>
+        </div>
+        <div class="rounded-2xl border border-warm-gray-200/80 bg-white/80 backdrop-blur px-5 py-6 shadow-warm-md">
+          <p class="text-xs uppercase tracking-[0.18em] text-warm-gray-500">Wellness First</p>
+          <p class="font-serif text-3xl text-warm-gray-900 mt-2">Clean formulas</p>
+          <p class="text-sm text-warm-gray-600">Breathable polishes, gentle scrubs, mindful aromas.</p>
+        </div>
+        <div class="rounded-2xl border border-warm-gray-200/80 bg-white/80 backdrop-blur px-5 py-6 shadow-warm-md">
+          <p class="text-xs uppercase tracking-[0.18em] text-warm-gray-500">By Appointment</p>
+          <p class="font-serif text-3xl text-warm-gray-900 mt-2">Zero rush</p>
+          <p class="text-sm text-warm-gray-600">Private seating and attentive, unhurried service.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative" data-hero-target="image">
+      <div class="absolute -left-6 -top-6 h-14 w-14 rounded-full border border-terracotta-200/80 bg-white/80 backdrop-blur shadow-warm-sm hidden sm:flex items-center justify-center text-terracotta-700 uppercase tracking-[0.2em] text-[0.68rem]">est.2003</div>
+      <div class="relative overflow-hidden rounded-[28px] shadow-[0_30px_80px_-40px_rgba(104,72,57,0.6)] ring-1 ring-cream-200 bg-warm-gray-900/5">
+        <%= image_tag "hero.png",
+                      alt: "Elite Nails Salon interior",
+                      class: "w-full h-full object-cover brightness-95 contrast-105",
+                      loading: "eager" %>
+        <div class="absolute inset-0 hero-photo-overlay pointer-events-none"></div>
+      </div>
+
+      <div class="absolute -bottom-10 left-10 w-[280px] glass-warm rounded-2xl px-5 py-4 shadow-warm-lg" data-hero-target="cta">
+        <p class="text-xs uppercase tracking-[0.18em] text-terracotta-700 mb-2">Next availability</p>
+        <div class="flex items-center justify-between text-warm-gray-900">
+          <div>
+            <p class="font-serif text-2xl leading-tight">This Week</p>
+            <p class="text-sm text-warm-gray-600">Reserve by phone or online</p>
+          </div>
+          <div class="h-12 w-12 rounded-full bg-terracotta-700 text-cream-50 flex items-center justify-center shadow-warm-md">
+            <%= icon 'phone', classes: 'w-5 h-5' %>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Scroll indicator -->
-  <div class="absolute bottom-8 left-0 right-0 flex justify-center animate-bounce" data-hero-target="scroll">
-    <a href="#about" class="flex flex-col items-center text-white/80 hover:text-white transition-colors" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">
-      <span class="text-xs tracking-widest uppercase mb-2">Scroll to Explore</span>
-      <%= icon 'chevron-down', classes: 'w-5 h-5' %>
+  <div class="absolute bottom-8 left-0 right-0 flex justify-center" data-hero-target="scroll">
+    <a href="#about" class="flex items-center gap-3 text-warm-gray-700 hover:text-terracotta-700 transition-colors" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">
+      <span class="h-11 w-11 rounded-full border border-warm-gray-200/80 bg-white/70 backdrop-blur flex items-center justify-center shadow-warm-sm">
+        <%= icon 'chevron-down', classes: 'w-5 h-5' %>
+      </span>
+      <span class="text-xs uppercase tracking-[0.26em]">Scroll to explore</span>
     </a>
   </div>
 </section>
