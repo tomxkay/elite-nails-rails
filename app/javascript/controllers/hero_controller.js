@@ -4,7 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 // Connects to data-controller="hero"
 export default class extends Controller {
-  static targets = ["branch", "image", "heading", "subtitle", "cta", "scroll"]
+  static targets = ["branch", "image", "hand", "heading", "subtitle", "cta", "scroll"]
 
   connect() {
     // Create entrance timeline
@@ -49,6 +49,15 @@ export default class extends Controller {
         scale: 0.9,
         duration: 1.2
       }, 0.3)
+    }
+
+    // Floating hand accent
+    if (this.hasHandTarget) {
+      this.timeline.from(this.handTarget, {
+        opacity: 0,
+        y: 120,
+        duration: 1.1
+      }, ">")
     }
 
     // Main headline

@@ -61,7 +61,10 @@
     </div>
 
     <div class="relative" data-hero-target="image">
-      <div class="absolute -left-6 -top-6 h-14 w-14 rounded-full border border-terracotta-200/80 bg-white/80 backdrop-blur shadow-warm-sm hidden sm:flex items-center justify-center text-terracotta-700 uppercase tracking-[0.2em] text-[0.68rem]">est.2003</div>
+      <div class="absolute right-4 top-4 px-4 py-2 rounded-full border border-terracotta-200/80 bg-white/85 backdrop-blur shadow-warm-sm hidden sm:flex items-center gap-2 text-terracotta-700 uppercase tracking-[0.22em] text-[0.7rem] z-20">
+        <span class="h-1.5 w-1.5 rounded-full bg-terracotta-500 shadow-warm-sm"></span>
+        est. 2003
+      </div>
       <div class="relative overflow-hidden rounded-[28px] shadow-[0_30px_80px_-40px_rgba(104,72,57,0.6)] ring-1 ring-cream-200 bg-warm-gray-900/5">
         <%= image_tag "hero.png",
                       alt: "Elite Nails Salon interior",
@@ -92,5 +95,14 @@
       </span>
       <span class="text-xs uppercase tracking-[0.26em]">Scroll to explore</span>
     </a>
+  </div>
+
+  <div class="pointer-events-none hidden md:block absolute bottom-0 right-0 translate-y-[12%] translate-x-[8%] z-10" aria-hidden="true" data-hero-target="hand">
+    <div class="relative">
+      <div class="absolute -top-6 -left-6 h-24 w-24 rounded-full hero-orb-terra blur-3xl opacity-70"></div>
+      <%= image_tag "nails-hand.png",
+                    alt: "Polished hand with manicure",
+                    class: "relative w-[85rem] max-w-none object-contain drop-shadow-[0_25px_80px_-40px_rgba(104,72,57,0.55)]" %>
+    </div>
   </div>
 </section>
