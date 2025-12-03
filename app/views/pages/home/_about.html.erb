@@ -1,6 +1,11 @@
 <!-- ===== ABOUT SECTION ===== -->
-<section id="about" class="py-24 lg:py-32 bg-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section id="about" class="relative py-24 lg:py-32 warm-gradient-cream overflow-hidden">
+  <div class="absolute inset-0 pointer-events-none opacity-40" aria-hidden="true">
+    <div class="absolute -top-40 -left-20 w-96 h-96 rounded-full bg-peach-100 blur-3xl"></div>
+    <div class="absolute -bottom-40 -right-10 w-[28rem] h-[28rem] rounded-full bg-sage-100 blur-3xl"></div>
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
       <div data-controller="scroll-reveal" data-scroll-reveal-animation-value="fadeInUp">
         <%= render 'shared/section_header',
@@ -9,7 +14,7 @@
                    title_accent: 'Nail Sanctuary',
                    align: :left %>
 
-        <div class="mt-6 space-y-4 text-[#666] leading-relaxed">
+        <div class="mt-6 space-y-4 text-warm-gray-700 leading-relaxed">
           <p>
             Since 2003, Elite Nails has been a beloved fixture on Market Street in downtown Cramerton. Our cozy salon offers a welcoming escape from the everyday, where skilled technicians transform your nails into works of art.
           </p>
@@ -22,7 +27,7 @@
           <%= render 'shared/cta_button',
                      text: 'Schedule Your Visit',
                      href: 'tel:+17048249032',
-                     style: :outline,
+                     style: :solid,
                      size: :md %>
         </div>
       </div>

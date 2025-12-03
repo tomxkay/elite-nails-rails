@@ -4,12 +4,27 @@
     - title: service name
     - description: short description
     - price: price string
+    - featured: highlights the card
 %>
-<div class="group bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-500 border border-[#eee] hover:border-sage-200" data-controller="card-hover">
-  <div class="w-16 h-16 rounded-xl bg-sage-50 flex items-center justify-center mb-6 group-hover:bg-sage-100 transition-colors duration-300" data-card-hover-target="icon">
-    <span class="text-3xl"><%= emoji %></span>
+<% featured = local_assigns[:featured] %>
+
+<div class="group relative card-surface-warm rounded-2xl p-8 shadow-warm-sm hover:shadow-warm-xl transition-all duration-500 overflow-hidden" data-controller="card-hover">
+  <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-peach-50/60 via-cream-100/40 to-terracotta-50/30"></div>
+  <div class="relative flex items-start justify-between gap-4 mb-6">
+    <div class="w-16 h-16 rounded-2xl bg-peach-100 flex items-center justify-center shadow-warm-sm group-hover:-translate-y-1 transition-transform duration-300" data-card-hover-target="icon">
+      <span class="text-3xl"><%= emoji %></span>
+    </div>
+    <% if featured %>
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-terracotta-100 text-terracotta-700 text-xs font-semibold uppercase tracking-[0.08em] shadow-warm-sm">
+        <span class="w-1.5 h-1.5 rounded-full bg-terracotta-500"></span>
+        Featured
+      </span>
+    <% end %>
   </div>
-  <h3 class="font-serif text-xl text-[#444] mb-3 group-hover:text-sage-700 transition-colors duration-300"><%= title %></h3>
-  <p class="text-[#666] text-sm leading-relaxed mb-4"><%= description %></p>
-  <p class="text-sage-600 font-medium">Starting at <span class="font-serif text-lg"><%= price %></span></p>
+  <h3 class="font-serif text-2xl text-warm-gray-900 mb-3 group-hover:text-terracotta-700 transition-colors duration-300"><%= title %></h3>
+  <p class="text-warm-gray-700 text-sm leading-relaxed mb-6"><%= description %></p>
+  <div class="flex items-center justify-between pt-4 border-t border-cream-200">
+    <p class="text-terracotta-700 font-semibold">Starting at <span class="font-serif text-xl"><%= price %></span></p>
+    <%= icon 'chevron-right', classes: 'w-5 h-5 text-terracotta-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300' %>
+  </div>
 </div>

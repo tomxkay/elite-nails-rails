@@ -1,65 +1,67 @@
 <!-- ===== HERO SECTION ===== -->
-<section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden marble-texture" data-controller="hero">
+<section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-cream-100" data-controller="hero">
+  <!-- Full-screen background image -->
   <div class="absolute inset-0">
-    <div class="absolute inset-0 opacity-30">
-      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-[#e0e0e0]/40 to-transparent rounded-full blur-3xl"></div>
-      <div class="absolute bottom-1/3 right-1/4 w-80 h-80 bg-gradient-to-tl from-[#e0e0e0]/30 to-transparent rounded-full blur-3xl"></div>
+    <%= image_tag "hero.png",
+                  alt: "Elite Nails Salon",
+                  class: "w-full h-full object-cover brightness-[0.9]",
+                  loading: "eager" %>
+
+    <!-- Warm gradient overlays for text visibility -->
+    <div class="absolute inset-0 hero-gradient-overlay"></div>
+    <div class="absolute inset-0 hero-warm-filter"></div>
+    <div class="hero-warm-vignette"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28">
+    <div class="flex flex-col items-center lg:items-start justify-center text-center lg:text-left gap-8">
+      <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-warm text-terracotta-700 uppercase tracking-[0.25em] text-xs font-semibold" data-hero-target="cta">
+        <span class="w-2 h-2 rounded-full bg-terracotta-500"></span>
+        Warm & Welcoming Since 2003
+      </div>
+
+      <!-- Headline -->
+      <h1 class="font-serif text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-white font-semibold leading-[0.95] text-shadow-soft drop-shadow-xl" data-hero-target="heading">
+        Luxury Nail Care
+        <span class="block text-cream-100 font-light italic">With Heart & Artistry</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-cream-50 text-lg md:text-xl lg:text-2xl font-light tracking-wide max-w-3xl text-shadow-soft" data-hero-target="subtitle">
+        Full-service manicures, pedicures, and nail artistry in downtown Cramerton. Step into warmth, leave feeling polished.
+      </p>
+
+      <!-- CTAs -->
+      <div class="flex flex-col sm:flex-row items-center lg:items-start gap-4" data-hero-target="cta">
+        <%= render 'shared/cta_button',
+                    text: 'Book Appointment',
+                    href: booking_link,
+                    style: :solid,
+                    size: :lg,
+                    icon: 'calendar-days',
+                    classes: 'shadow-warm-xl' %>
+        <%= render 'shared/cta_button',
+                    text: 'View Services',
+                    href: '#services',
+                    style: :light,
+                    size: :lg,
+                    icon: 'sparkles',
+                    classes: 'bg-white/20 backdrop-blur text-cream-50 border border-cream-200/60 hover:bg-cream-50 hover:text-terracotta-600' %>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3 text-sm uppercase tracking-[0.15em] text-cream-100/80">
+        <span class="px-3 py-1 rounded-full bg-white/10 border border-white/30">Family-Owned</span>
+        <span class="px-3 py-1 rounded-full bg-white/10 border border-white/30">Luxury Pedicures</span>
+        <span class="px-3 py-1 rounded-full bg-white/10 border border-white/30">Nail Artistry</span>
+      </div>
     </div>
   </div>
 
-  <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-0">
-    <div class="flex flex-col items-center justify-center">
-      <div class="hidden lg:block absolute left-0 top-1/3 w-32 opacity-20" data-hero-target="branch">
-        <%= icon 'branch', classes: 'text-[#444]' %>
-      </div>
-
-      <div class="relative w-full max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto">
-        <div class="absolute inset-0 hero-glow scale-110"></div>
-        <div class="relative aspect-[3/4] rounded-full overflow-hidden" data-hero-target="image">
-          <img src="<%= placeholder_image(width: 800, height: 1000, seed: 'elite-nails-hero') %>"
-               alt="Luxury Nail Spa Experience"
-               class="w-full h-full object-cover"
-               loading="eager" />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-        </div>
-
-        <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pt-16">
-          <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#444] tracking-wide leading-tight text-shadow-soft" data-hero-target="heading">
-            Full-Service<br>
-            <span class="italic font-light">Nail Salon & Spa</span>
-          </h1>
-          <p class="mt-4 md:mt-6 text-[#666] text-base md:text-lg font-light tracking-wide max-w-md text-shadow-soft" data-hero-target="subtitle">
-            Luxury manicures & pedicures in the heart of Cramerton, NC
-          </p>
-          <div class="mt-8 md:mt-10 flex flex-col sm:flex-row items-center gap-4">
-            <div data-hero-target="cta">
-              <%= render 'shared/cta_button',
-                          text: 'Book Now',
-                          href: booking_link,
-                          style: :solid,
-                          size: :lg,
-                          icon: 'calendar-days' %>
-            </div>
-            <div data-hero-target="cta">
-              <%= render 'shared/cta_button',
-                          text: 'View Services',
-                          href: '#services',
-                          style: :ghost,
-                          size: :md %>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="hidden lg:block absolute right-0 top-1/3 w-32 opacity-20 transform scale-x-[-1]" data-hero-target="branch">
-        <%= icon 'branch', classes: 'text-[#444]' %>
-      </div>
-    </div>
-  </div>
-
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2" data-hero-target="scroll">
-    <a href="#about" class="flex flex-col items-center text-[#666] hover:text-sage-600 transition-colors">
-      <span class="text-xs tracking-widest uppercase mb-2">Scroll</span>
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce" data-hero-target="scroll">
+    <a href="#about" class="flex flex-col items-center text-white/80 hover:text-white transition-colors" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">
+      <span class="text-xs tracking-widest uppercase mb-2">Scroll to Explore</span>
       <%= icon 'chevron-down', classes: 'w-5 h-5' %>
     </a>
   </div>

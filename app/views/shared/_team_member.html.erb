@@ -12,28 +12,33 @@
 <% specialties = local_assigns[:specialties] || [] %>
 <% image_url = local_assigns[:image_url] %>
 
-<div class="bg-white rounded-2xl p-6 shadow-sm border border-[#eee] hover:shadow-md transition-shadow duration-300" data-controller="card-hover">
-  <% if image_url.present? %>
-    <div class="w-24 h-24 rounded-full overflow-hidden mb-4 mx-auto border-4 border-sage-50">
+<div class="group card-surface-warm rounded-3xl overflow-hidden shadow-warm-sm hover:shadow-warm-xl transition-all duration-300" data-controller="card-hover">
+  <div class="relative aspect-[4/5] overflow-hidden">
+    <% if image_url.present? %>
       <img src="<%= image_url %>"
            alt="<%= name %>"
-           class="w-full h-full object-cover transition-transform duration-500"
+           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
            data-card-hover-target="icon"
            loading="lazy" />
+    <% else %>
+      <div class="absolute inset-0 bg-gradient-to-br from-peach-100 via-cream-100 to-sage-100 flex items-center justify-center">
+        <%= icon 'user-circle', classes: 'w-14 h-14 text-terracotta-400' %>
+      </div>
+    <% end %>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/15 to-transparent"></div>
+  </div>
+  <div class="p-6 space-y-3">
+    <div>
+      <h3 class="font-serif text-2xl text-warm-gray-900"><%= name %></h3>
+      <p class="text-terracotta-600 text-sm font-semibold uppercase tracking-[0.12em] mt-1"><%= role %></p>
     </div>
-  <% else %>
-    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-sage-100 to-[#eee] flex items-center justify-center mb-4 mx-auto">
-      <%= icon 'user-circle', classes: 'w-10 h-10 text-sage-500' %>
-    </div>
-  <% end %>
-  <h3 class="text-center font-serif text-xl text-[#444]"><%= name %></h3>
-  <p class="text-center text-sage-600 text-sm font-medium mt-1"><%= role %></p>
-  <p class="text-[#666] text-sm leading-relaxed mt-3"><%= bio %></p>
-  <% if specialties.any? %>
-    <div class="flex flex-wrap gap-2 mt-4">
-      <% specialties.each do |spec| %>
-        <span class="px-3 py-1 rounded-full bg-sage-50 text-sage-700 text-xs font-medium border border-sage-100"><%= spec %></span>
-      <% end %>
-    </div>
-  <% end %>
+    <p class="text-warm-gray-700 text-sm leading-relaxed"><%= bio %></p>
+    <% if specialties.any? %>
+      <div class="flex flex-wrap gap-2">
+        <% specialties.each do |spec| %>
+          <span class="px-3 py-1 rounded-full bg-peach-100 text-terracotta-700 text-xs font-semibold border border-cream-200 shadow-warm-sm"><%= spec %></span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 </div>

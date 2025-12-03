@@ -1,30 +1,39 @@
 <!-- ===== GALLERY SECTION ===== -->
-<section id="gallery" class="py-24 lg:py-32 bg-white">
+<section id="gallery" class="py-24 lg:py-32 bg-cream-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <%= render 'shared/section_header',
                eyebrow: 'Our Work',
                title: 'Gallery',
                subtitle: 'A glimpse of our nail artistry and salon atmosphere' %>
 
-    <div class="mt-16 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6" data-controller="stagger" data-stagger-amount-value="0.12" data-stagger-from-value="scale">
-      <% gallery_items = [
-        { label: 'Manicure Art', seed: 'gallery-manicure-1' },
-        { label: 'Nail Design', seed: 'gallery-nail-art-2' },
-        { label: 'Spa Treatment', seed: 'gallery-spa-hands-3' },
-        { label: 'Pedicure Service', seed: 'gallery-pedicure-4' },
-        { label: 'Gel Nails', seed: 'gallery-gel-nails-5' },
-        { label: 'French Manicure', seed: 'gallery-french-6' }
-      ] %>
+    <% gallery_items = [
+      { label: 'Signature Nail Art', seed: 'gallery-hero' },
+      { label: 'Spa Treatment', seed: 'gallery-spa-hands-3' },
+      { label: 'Pedicure Glow', seed: 'gallery-pedicure-4' },
+      { label: 'Gel Perfection', seed: 'gallery-gel-nails-5' },
+      { label: 'French Manicure', seed: 'gallery-french-6' }
+    ] %>
 
-      <% gallery_items.each do |item| %>
+    <% hero_item, *grid_items = gallery_items %>
+
+    <div class="mt-16 space-y-6 md:space-y-0 md:grid md:grid-cols-1 lg:grid-cols-3 gap-6" data-controller="stagger" data-stagger-amount-value="0.12" data-stagger-from-value="scale">
+      <div class="lg:col-span-2">
         <%= render 'shared/gallery_item',
-                   label: item[:label],
-                   image_url: placeholder_image(width: 600, height: 600, seed: item[:seed]) %>
-      <% end %>
+                   layout: :hero,
+                   label: hero_item[:label],
+                   image_url: placeholder_image(width: 1200, height: 700, seed: hero_item[:seed]) %>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-4 lg:gap-6">
+        <% grid_items.each do |item| %>
+          <%= render 'shared/gallery_item',
+                     label: item[:label],
+                     image_url: placeholder_image(width: 700, height: 700, seed: item[:seed]) %>
+        <% end %>
+      </div>
     </div>
 
     <div class="mt-12 text-center">
-      <a href="#" class="text-sage-600 hover:text-sage-700 font-medium inline-flex items-center gap-2 group">
+      <a href="#" class="text-terracotta-600 hover:text-terracotta-700 font-medium inline-flex items-center gap-2 group">
         Follow us on Instagram for more
         <%= icon 'instagram', classes: 'w-5 h-5 transition-transform group-hover:translate-x-1' %>
       </a>

@@ -20,19 +20,19 @@
 
 <div class="<%= container_classes %>">
   <% if eyebrow.present? %>
-    <span class="text-sage-500 font-medium text-sm tracking-widest uppercase"><%= eyebrow %></span>
+    <span class="text-terracotta-600 font-semibold text-sm tracking-[0.24em] uppercase"><%= eyebrow %></span>
   <% end %>
 
   <% if title.present? %>
-    <h2 class="mt-4 font-serif text-4xl md:text-5xl text-[#444] tracking-wide">
+    <h2 class="mt-4 font-serif text-4xl md:text-5xl text-warm-gray-900 tracking-wide">
       <%= title %>
       <% if title_accent.present? %>
-        <span class="italic font-light"><%= title_accent %></span>
+        <span class="italic font-light text-terracotta-600"><%= title_accent %></span>
       <% end %>
     </h2>
   <% end %>
 
   <% if subtitle.present? %>
-    <p class="mt-4 text-[#666] font-light text-lg tracking-wide"><%= subtitle %></p>
+    <p class="mt-4 text-warm-gray-700 font-light text-lg tracking-wide"><%= subtitle %></p>
   <% end %>
 </div>

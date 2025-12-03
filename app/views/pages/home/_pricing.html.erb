@@ -1,5 +1,5 @@
 <!-- ===== PRICING SECTION ===== -->
-<section id="pricing" class="py-24 lg:py-28 bg-white">
+<section id="pricing" class="py-24 lg:py-28 bg-cream-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <%= render 'shared/section_header',
                eyebrow: 'Transparent Pricing',
@@ -38,13 +38,13 @@
 
     <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6" data-controller="stagger" data-stagger-amount-value="0.15" data-stagger-from-value="scale">
       <% categories.each do |category| %>
-        <div class="bg-[#fafafa] border border-[#eee] rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
-          <h3 class="font-serif text-xl text-[#444] mb-4"><%= category[:title] %></h3>
-          <ul class="divide-y divide-[#eee] text-sm text-[#555]">
+        <div class="card-surface-warm rounded-2xl p-6 shadow-warm-sm hover:shadow-warm-xl transition-shadow duration-300">
+          <h3 class="font-serif text-xl text-warm-gray-900 mb-4"><%= category[:title] %></h3>
+          <ul class="divide-y divide-cream-200 text-sm text-warm-gray-700">
             <% category[:items].each do |name, price| %>
               <li class="flex justify-between py-3">
                 <span><%= name %></span>
-                <span class="text-sage-700 font-medium"><%= price %></span>
+                <span class="text-terracotta-600 font-semibold"><%= price %></span>
               </li>
             <% end %>
           </ul>
@@ -52,10 +52,10 @@
       <% end %>
     </div>
 
-    <div class="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-sage-50 border border-sage-100 rounded-2xl px-6 py-5">
+    <div class="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-peach-50 border border-cream-200 rounded-2xl px-6 py-5 shadow-warm-sm">
       <div>
-        <p class="text-[#444] font-medium">Questions or custom requests?</p>
-        <p class="text-[#666] text-sm">Call us or book online — we’re happy to recommend the right service.</p>
+        <p class="text-warm-gray-900 font-semibold">Questions or custom requests?</p>
+        <p class="text-warm-gray-700 text-sm">Call us or book online — we’re happy to recommend the right service.</p>
       </div>
       <div class="flex items-center gap-3">
         <%= render 'shared/cta_button',

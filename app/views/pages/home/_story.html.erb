@@ -1,5 +1,5 @@
 <!-- ===== OUR STORY SECTION ===== -->
-<section id="story" class="py-24 lg:py-28 bg-gradient-to-b from-white via-sage-50/50 to-white">
+<section id="story" class="py-24 lg:py-28 bg-gradient-to-b from-cream-50 via-peach-50 to-cream-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
     <div class="order-2 lg:order-1" data-controller="scroll-reveal" data-scroll-reveal-animation-value="fadeInLeft">
       <%= render 'shared/section_header',
@@ -8,32 +8,32 @@
                  subtitle: 'Serving Cramerton, Belmont, and Gaston County since 2003 with a focus on warmth, cleanliness, and meticulous care.',
                  align: :left %>
 
-      <div class="mt-6 space-y-4 text-[#555] leading-relaxed">
+      <div class="mt-6 space-y-4 text-warm-gray-700 leading-relaxed">
         <p>We’re a family-owned salon that believes nail care should feel personal, calming, and a little luxurious. Every guest is greeted by name, offered a cozy seat, and treated with the same attention we’d give our own family.</p>
         <p>Our promise: spotless cleanliness, honest recommendations, and technicians who listen first. We’re proud to be the neighborhood favorite just off Market Street.</p>
       </div>
 
       <div class="mt-6 flex items-center gap-4">
-        <div class="h-12 w-12 rounded-full bg-gradient-to-br from-sage-100 to-[#eee] flex items-center justify-center">
-          <%= icon 'hand-raised', classes: 'w-7 h-7 text-sage-500' %>
+        <div class="h-12 w-12 rounded-full bg-gradient-to-br from-peach-200 to-cream-100 flex items-center justify-center shadow-warm-sm">
+          <%= icon 'hand-raised', classes: 'w-7 h-7 text-terracotta-600' %>
         </div>
         <div>
-          <p class="text-[#444] font-medium">“Come as you are. Leave feeling polished and cared for.”</p>
-          <p class="text-sage-600 text-sm">— The Elite Nails Family</p>
+          <p class="text-warm-gray-900 font-medium">“Come as you are. Leave feeling polished and cared for.”</p>
+          <p class="text-terracotta-600 text-sm">— The Elite Nails Family</p>
         </div>
       </div>
     </div>
 
     <div class="order-1 lg:order-2 relative" data-controller="scroll-reveal" data-scroll-reveal-animation-value="fadeInRight" data-scroll-reveal-delay-value="0.2">
-      <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-lg shadow-sage-100">
+      <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-warm-lg">
         <img src="<%= placeholder_image(width: 800, height: 1000, seed: 'elite-nails-story') %>"
              alt="Elite Nails Salon Interior"
-             class="w-full h-full object-cover"
+             class="w-full h-full object-cover saturate-110"
              loading="lazy" />
       </div>
-      <div class="absolute -bottom-6 -left-4 bg-white rounded-2xl shadow-md px-6 py-4 border border-[#eee]">
-        <p class="font-script text-lg text-sage-700">Since 2003</p>
-        <p class="text-xs text-[#666]">Rooted in Cramerton community</p>
+      <div class="absolute -bottom-6 -left-4 bg-cream-50 rounded-2xl shadow-warm px-6 py-4 border border-cream-200">
+        <p class="font-script text-lg text-terracotta-700">Since 2003</p>
+        <p class="text-xs text-warm-gray-700">Rooted in Cramerton community</p>
       </div>
     </div>
   </div>

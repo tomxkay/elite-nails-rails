@@ -2,24 +2,28 @@
   Locals:
     - label: caption text
     - image_url: (optional) URL for the image
+    - layout: :hero for wide hero tile
 %>
 <% image_url ||= nil %>
+<% layout = local_assigns[:layout] %>
+<% shape_class = layout == :hero ? "aspect-[16/9] md:aspect-[21/9]" : "aspect-square" %>
 
-<div class="group relative aspect-square rounded-2xl overflow-hidden bg-[#eee] cursor-pointer" data-controller="card-hover">
+<div class="group relative <%= shape_class %> rounded-3xl overflow-hidden bg-cream-200 cursor-pointer shadow-warm-sm hover:shadow-warm-xl transition-all duration-500" data-controller="card-hover">
   <% if image_url.present? %>
     <img src="<%= image_url %>"
          alt="<%= label %>"
-         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
          loading="lazy" />
   <% else %>
-    <div class="absolute inset-0 bg-gradient-to-br from-sage-100 via-[#f5f5f5] to-sage-50 flex items-center justify-center">
+    <div class="absolute inset-0 bg-gradient-to-br from-peach-100 via-cream-100 to-sage-50 flex items-center justify-center">
       <div class="text-center">
-        <%= icon 'photo', classes: 'w-12 h-12 text-sage-300 mx-auto mb-2' %>
-        <span class="text-sage-400 text-sm"><%= label %></span>
+        <%= icon 'photo', classes: 'w-12 h-12 text-terracotta-300 mx-auto mb-2' %>
+        <span class="text-warm-gray-600 text-sm"><%= label %></span>
       </div>
     </div>
   <% end %>
-  <div class="absolute inset-0 bg-sage-700/0 group-hover:bg-sage-700/40 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100" data-card-hover-target="content">
-    <%= icon 'magnifying-glass-plus', classes: 'w-10 h-10 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300' %>
+  <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/10 to-black/40 group-hover:from-terracotta-400/15 group-hover:via-terracotta-500/10 group-hover:to-black/55 transition-all duration-300 flex items-center justify-between px-4 py-4 opacity-0 group-hover:opacity-100" data-card-hover-target="content">
+    <div class="px-3 py-1 rounded-full bg-cream-50/90 text-terracotta-700 text-xs font-semibold uppercase tracking-[0.12em] shadow-warm-sm"><%= label %></div>
+    <%= icon 'magnifying-glass-plus', classes: 'w-9 h-9 text-cream-50 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300' %>
   </div>
 </div>
