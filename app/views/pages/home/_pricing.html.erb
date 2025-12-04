@@ -3,7 +3,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <%= render 'shared/section_header',
                eyebrow: 'Transparent Pricing',
-               title: 'Services & Rates',
+               title: 'Pricing',
                subtitle: 'Clear, honest pricing for hands, feet, and add-ons. Call for full menu and seasonal specials.' %>
 
     <% categories = [
@@ -38,7 +38,9 @@
 
     <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6" data-controller="stagger" data-stagger-amount-value="0.15" data-stagger-from-value="scale">
       <% categories.each do |category| %>
-        <div class="card-surface-warm rounded-2xl p-6 shadow-warm-sm hover:shadow-warm-xl transition-shadow duration-300">
+        <div class="card-surface-warm rounded-2xl p-6 shadow-warm-sm hover:shadow-warm-xl transition-shadow duration-300"
+             data-controller="pricing-highlight"
+             data-pricing-highlight-category-value="<%= category[:title].downcase %>">
           <h3 class="font-serif text-xl text-warm-gray-900 mb-4"><%= category[:title] %></h3>
           <ul class="divide-y divide-cream-200 text-sm text-warm-gray-700">
             <% category[:items].each do |name, price| %>

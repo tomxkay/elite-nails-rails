@@ -3,12 +3,13 @@
     - emoji: String (icon)
     - title: String
     - description: String
-    - price: String
     - featured: Boolean (optional)
     - image_url: String (for hover reveal)
+    - pricing_category: String (optional - for highlighting in pricing section)
 %>
 <% featured ||= false %>
 <% image_url ||= '' %>
+<% pricing_category ||= '' %>
 
 <div class="group relative card-surface-warm rounded-2xl p-8 shadow-warm-sm overflow-visible service-card-stack"
      data-controller="service-image-hover"
@@ -58,11 +59,17 @@
       <%= description %>
     </p>
 
-    <div class="flex items-center justify-between pt-4 border-t border-cream-200 group-hover:border-cream-50/30 transition-colors duration-300">
-      <span class="font-semibold text-terracotta-600 group-hover:text-cream-50 text-lg transition-colors duration-300"><%= price %></span>
-      <svg class="w-5 h-5 text-terracotta-600 group-hover:text-cream-50 opacity-0 group-hover:opacity-100 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-      </svg>
+    <div class="pt-4 border-t border-cream-200 group-hover:border-cream-50/30 transition-colors duration-300">
+      <a href="#pricing"
+         class="inline-flex items-center gap-2 text-terracotta-600 group-hover:text-cream-50 font-semibold transition-colors duration-300"
+         data-controller="smooth-scroll"
+         data-action="click->smooth-scroll#scroll"
+         data-pricing-category="<%= pricing_category %>">
+        <span class="text-sm uppercase tracking-wider">View Pricing</span>
+        <svg class="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </a>
     </div>
   </div>
 </div>

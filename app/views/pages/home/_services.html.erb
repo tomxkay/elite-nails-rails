@@ -8,12 +8,12 @@
 
     <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12" data-controller="stagger" data-stagger-amount-value="0.1" data-stagger-from-value="bottom" data-stagger-start-value="top 95%">
       <% services = [
-        { emoji: '✨', title: 'Gel & Dip Powder', description: 'Long-lasting, chip-resistant color with gel polish or dip powder systems. Up to 3 weeks of gorgeous nails.', price: '$35', featured: true, image_url: asset_path('manicure-service.jpg') },
-        { emoji: '💅', title: 'Manicures', description: 'Classic and spa manicures featuring premium products, cuticle care, nail shaping, and your choice of polish.', price: '$20', image_url: asset_path('manicure-service.jpg') },
-        { emoji: '🦶', title: 'Pedicures', description: 'Relax with our signature pedicures including foot soak, exfoliation, massage, and polish.', price: '$30', image_url: asset_path('pedicure-service.jpg') },
-        { emoji: '💎', title: 'Acrylic & Extensions', description: 'Custom acrylic nail enhancements, tips, and sculpted extensions for length and strength.', price: '$40', image_url: asset_path('manicure-service.jpg') },
-        { emoji: '🎨', title: 'Nail Art & Design', description: 'Express yourself with custom nail art, hand-painted designs, gems, foils, and trending styles.', price: '$5+', image_url: asset_path('nail-art-service.png') },
-        { emoji: '🌸', title: 'Waxing Services', description: 'Professional waxing services for brows, lip, chin, and more with gentle techniques.', price: '$10', image_url: asset_path('pedicure-service.jpg') }
+        { emoji: '✨', title: 'Gel & Dip Powder', description: 'Long-lasting, chip-resistant color with gel polish or dip powder systems. Up to 3 weeks of gorgeous nails.', featured: true, image_url: asset_path('manicure-service.jpg'), pricing_category: 'hands' },
+        { emoji: '💅', title: 'Manicures', description: 'Classic and spa manicures featuring premium products, cuticle care, nail shaping, and your choice of polish.', image_url: asset_path('manicure-service.jpg'), pricing_category: 'hands' },
+        { emoji: '🦶', title: 'Pedicures', description: 'Relax with our signature pedicures including foot soak, exfoliation, massage, and polish.', image_url: asset_path('pedicure-service.jpg'), pricing_category: 'feet' },
+        { emoji: '💎', title: 'Acrylic & Extensions', description: 'Custom acrylic nail enhancements, tips, and sculpted extensions for length and strength.', image_url: asset_path('manicure-service.jpg'), pricing_category: 'add-ons' },
+        { emoji: '🎨', title: 'Nail Art & Design', description: 'Express yourself with custom nail art, hand-painted designs, gems, foils, and trending styles.', image_url: asset_path('nail-art-service.png'), pricing_category: 'add-ons' },
+        { emoji: '🌸', title: 'Waxing Services', description: 'Professional waxing services for brows, lip, chin, and more with gentle techniques.', image_url: asset_path('pedicure-service.jpg'), pricing_category: 'add-ons' }
       ] %>
 
       <% services.each do |service| %>
@@ -22,7 +22,7 @@
     </div>
 
     <p class="mt-12 text-center text-warm-gray-700 text-sm">
-      Prices may vary. Call <a href="tel:+17048249032" class="text-terracotta-600 hover:underline">(704) 824-9032</a> for current pricing and availability.
+      See our <a href="#pricing" class="text-terracotta-600 hover:underline font-semibold" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">transparent pricing below</a> or call <a href="tel:+17048249032" class="text-terracotta-600 hover:underline">(704) 824-9032</a> for availability.
     </p>
   </div>
 </section>

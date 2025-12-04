@@ -2,6 +2,8 @@ import { Controller } from "@hotwired/stimulus"
 import { gsap } from "gsap"
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"
 
+gsap.registerPlugin(ScrollToPlugin)
+
 // Connects to data-controller="smooth-scroll"
 export default class extends Controller {
   static values = {
@@ -29,11 +31,15 @@ export default class extends Controller {
       return
     }
 
+    // Get pricing category if specified
+    const pricingCategory = this.element.getAttribute("data-pricing-category")
+
     // Close mobile menu if open (emit custom event for mobile menu controller)
     this.dispatch("scrolling", { detail: { target } })
 
-    // Calculate scroll position with offset
-    const targetPosition = targetElement.offsetTop - this.offsetValue
+    // Calculate scroll position with offset - use getBoundingClientRect for accurate positioning
+    const rect = targetElement.getBoundingClientRect()
+    const targetPosition = rect.top + window.pageYOffset - this.offsetValue
 
     // Smooth scroll with GSAP
     gsap.to(window, {
@@ -47,6 +53,28 @@ export default class extends Controller {
         // Update URL hash without jumping
         if (target.startsWith("#")) {
           history.pushState(null, null, target)
+        }
+
+        // Trigger highlight on matching pricing card
+        if (pricingCategory && target === "#pricing") {
+          // Small delay to ensure scroll is fully settled
+          setTimeout(() => {
+            const pricingCard = document.querySelector(
+              `[data-pricing-highlight-category-value="${pricingCategory}"]`
+            )
+
+            if (pricingCard) {
+              // Get the Stimulus controller instance and call highlight method
+              const controller = this.application.getControllerForElementAndIdentifier(
+                pricingCard,
+                "pricing-highlight"
+              )
+
+              if (controller && typeof controller.highlight === 'function') {
+                controller.highlight()
+              }
+            }
+          }, 100)
         }
       }
     })

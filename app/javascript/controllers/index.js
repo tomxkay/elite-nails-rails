@@ -14,6 +14,9 @@ application.register("card-hover", CardHoverController)
 import ServiceImageHoverController from "./service_image_hover_controller"
 application.register("service-image-hover", ServiceImageHoverController)
 
+import PricingHighlightController from "./pricing_highlight_controller"
+application.register("pricing-highlight", PricingHighlightController)
+
 import HeroController from "./hero_controller"
 application.register("hero", HeroController)
 
