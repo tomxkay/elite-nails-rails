@@ -10,8 +10,7 @@ export default class extends Controller {
     // Create entrance timeline
     this.createEntranceTimeline()
 
-    // Create scroll-based parallax effects
-    this.createParallaxEffects()
+    // Parallax disabled per design request
   }
 
   disconnect() {
@@ -109,27 +108,5 @@ export default class extends Controller {
     }
   }
 
-  createParallaxEffects() {
-    // Only create parallax on desktop (not performance-intensive on mobile)
-    if (window.innerWidth < 1024) return
-
-    // Parallax for decorative branches
-    if (this.hasBranchTarget) {
-      this.branchTargets.forEach((branch, index) => {
-        const direction = index % 2 === 0 ? -1 : 1
-        ScrollTrigger.create({
-          trigger: this.element,
-          start: "top top",
-          end: "bottom top",
-          scrub: 1,
-          onUpdate: (self) => {
-            gsap.to(branch, {
-              y: self.progress * 50 * direction,
-              duration: 0.3
-            })
-          }
-        })
-      })
-    }
-  }
+  createParallaxEffects() {}
 }
