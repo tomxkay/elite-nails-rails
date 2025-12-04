@@ -17,6 +17,11 @@
 <% classes = local_assigns[:classes] %>
 <% options = local_assigns.except(:text, :href, :style, :size, :icon, :icon_name, :icon_classes, :classes) %>
 
+<% if href == booking_link %>
+  <% options[:target] ||= "_blank" %>
+  <% options[:rel] = [options[:rel], "noopener"].compact.join(" ").presence %>
+<% end %>
+
 <% size_classes = {
   sm: "px-4 py-2 text-sm",
   md: "px-6 py-3 text-sm md:text-base",
