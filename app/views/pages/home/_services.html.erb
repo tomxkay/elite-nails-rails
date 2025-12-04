@@ -6,14 +6,14 @@
                title: 'Our Services',
                subtitle: 'From classic care to creative artistry, we offer a full range of nail and spa services' %>
 
-    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-controller="stagger" data-stagger-amount-value="0.1" data-stagger-from-value="bottom" data-stagger-start-value="top 95%">
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12" data-controller="stagger" data-stagger-amount-value="0.1" data-stagger-from-value="bottom" data-stagger-start-value="top 95%">
       <% services = [
-        { emoji: '✨', title: 'Gel & Dip Powder', description: 'Long-lasting, chip-resistant color with gel polish or dip powder systems. Up to 3 weeks of gorgeous nails.', price: '$35', featured: true },
-        { emoji: '💅', title: 'Manicures', description: 'Classic and spa manicures featuring premium products, cuticle care, nail shaping, and your choice of polish.', price: '$20' },
-        { emoji: '🦶', title: 'Pedicures', description: 'Relax with our signature pedicures including foot soak, exfoliation, massage, and polish.', price: '$30' },
-        { emoji: '💎', title: 'Acrylic & Extensions', description: 'Custom acrylic nail enhancements, tips, and sculpted extensions for length and strength.', price: '$40' },
-        { emoji: '🎨', title: 'Nail Art & Design', description: 'Express yourself with custom nail art, hand-painted designs, gems, foils, and trending styles.', price: '$5+' },
-        { emoji: '🌸', title: 'Waxing Services', description: 'Professional waxing services for brows, lip, chin, and more with gentle techniques.', price: '$10' }
+        { emoji: '✨', title: 'Gel & Dip Powder', description: 'Long-lasting, chip-resistant color with gel polish or dip powder systems. Up to 3 weeks of gorgeous nails.', price: '$35', featured: true, image_url: 'https://picsum.photos/seed/gel-nails-elite/600/800' },
+        { emoji: '💅', title: 'Manicures', description: 'Classic and spa manicures featuring premium products, cuticle care, nail shaping, and your choice of polish.', price: '$20', image_url: 'https://picsum.photos/seed/manicure-spa-elite/600/800' },
+        { emoji: '🦶', title: 'Pedicures', description: 'Relax with our signature pedicures including foot soak, exfoliation, massage, and polish.', price: '$30', image_url: 'https://picsum.photos/seed/pedicure-relax-elite/600/800' },
+        { emoji: '💎', title: 'Acrylic & Extensions', description: 'Custom acrylic nail enhancements, tips, and sculpted extensions for length and strength.', price: '$40', image_url: 'https://picsum.photos/seed/acrylic-tips-elite/600/800' },
+        { emoji: '🎨', title: 'Nail Art & Design', description: 'Express yourself with custom nail art, hand-painted designs, gems, foils, and trending styles.', price: '$5+', image_url: 'https://picsum.photos/seed/nail-art-creative/600/800' },
+        { emoji: '🌸', title: 'Waxing Services', description: 'Professional waxing services for brows, lip, chin, and more with gentle techniques.', price: '$10', image_url: 'https://picsum.photos/seed/waxing-smooth-elite/600/800' }
       ] %>
 
       <% services.each do |service| %>
