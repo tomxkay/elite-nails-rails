@@ -26,10 +26,10 @@
 
     <div class="order-1 lg:order-2 relative" data-controller="scroll-reveal" data-scroll-reveal-animation-value="fadeInRight" data-scroll-reveal-delay-value="0.2">
       <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-warm-lg">
-        <img src="<%= placeholder_image(width: 800, height: 1000, seed: 'elite-nails-story') %>"
-             alt="Elite Nails Salon Interior"
-             class="w-full h-full object-cover saturate-110"
-             loading="lazy" />
+        <%= image_tag "salon-interior.png",
+                      alt: "Elite Nails Salon Interior",
+                      class: "w-full h-full object-cover saturate-110",
+                      loading: "lazy" %>
       </div>
       <div class="absolute -bottom-6 -left-4 bg-cream-50 rounded-2xl shadow-warm px-6 py-4 border border-cream-200">
         <p class="font-script text-lg text-terracotta-700">Since 2003</p>
