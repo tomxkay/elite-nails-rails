@@ -2,12 +2,15 @@
 <html>
   <head>
     <title><%= content_for(:title) || "Elite Nails | Luxury Nail Salon & Spa in Cramerton, NC" %></title>
-    <meta name="description" content="Elite Nails offers luxury manicures, pedicures, gel, dip powder, and acrylic services in Cramerton, NC.">
+    <meta name="description" content="Family-owned nail salon in Cramerton, NC since 2003. Manicures, pedicures, gel, dip powder, acrylics, and custom nail art. Call (704) 824-9032 or book online.">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
+    <%= render "shared/meta_tags" %>
+    <%= render "shared/structured_data" %>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

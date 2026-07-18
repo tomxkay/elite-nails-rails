@@ -1,0 +1,37 @@
+<%# LocalBusiness (NailSalon) structured data for local SEO. Rendered in <head>. %>
+<%
+  data = {
+    "@context" => "https://schema.org",
+    "@type" => "NailSalon",
+    "name" => salon[:name],
+    "image" => image_url("hero.png"),
+    "logo" => image_url("logo.png"),
+    "url" => request.base_url + "/",
+    "telephone" => salon[:phone],
+    "priceRange" => salon[:price_range],
+    "foundingDate" => salon[:established].to_s,
+    "address" => {
+      "@type" => "PostalAddress",
+      "streetAddress" => salon[:street],
+      "addressLocality" => salon[:city],
+      "addressRegion" => salon[:region],
+      "postalCode" => salon[:postal_code],
+      "addressCountry" => salon[:country]
+    },
+    "geo" => {
+      "@type" => "GeoCoordinates",
+      "latitude" => salon[:latitude],
+      "longitude" => salon[:longitude]
+    },
+    "openingHoursSpecification" => salon[:hours].map do |block|
+      {
+        "@type" => "OpeningHoursSpecification",
+        "dayOfWeek" => block[:days],
+        "opens" => block[:opens],
+        "closes" => block[:closes]
+      }
+    end
+  }
+  data["hasMap"] = ENV["GOOGLE_REVIEWS_URL"] if ENV["GOOGLE_REVIEWS_URL"].present?
+%>
+<script type="application/ld+json"><%= raw data.to_json %></script>

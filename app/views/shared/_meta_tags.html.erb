@@ -1,0 +1,34 @@
+<%# SEO / social meta tags. Rendered in <head>. %>
+<% page_title = content_for(:title) || "Elite Nails | Luxury Nail Salon & Spa in Cramerton, NC" %>
+<% page_description = "Family-owned nail salon in Cramerton, NC since 2003. Manicures, pedicures, gel, dip powder, acrylics, and custom nail art. Call (704) 824-9032 or book online." %>
+<% canonical = request.base_url + request.path %>
+
+<link rel="canonical" href="<%= canonical %>">
+<meta name="theme-color" content="#a8604e">
+<meta name="author" content="<%= salon[:name] %>">
+
+<%# Local / geo hints %>
+<meta name="geo.region" content="US-NC">
+<meta name="geo.placename" content="<%= salon[:city] %>">
+<meta name="geo.position" content="<%= salon[:latitude] %>;<%= salon[:longitude] %>">
+<meta name="ICBM" content="<%= salon[:latitude] %>, <%= salon[:longitude] %>">
+
+<%# Open Graph %>
+<meta property="og:type" content="business.business">
+<meta property="og:site_name" content="<%= salon[:name] %>">
+<meta property="og:title" content="<%= page_title %>">
+<meta property="og:description" content="<%= page_description %>">
+<meta property="og:url" content="<%= canonical %>">
+<meta property="og:image" content="<%= image_url('hero.png') %>">
+<meta property="og:locale" content="en_US">
+<meta property="business:contact_data:street_address" content="<%= salon[:street] %>">
+<meta property="business:contact_data:locality" content="<%= salon[:city] %>">
+<meta property="business:contact_data:region" content="<%= salon[:region] %>">
+<meta property="business:contact_data:postal_code" content="<%= salon[:postal_code] %>">
+<meta property="business:contact_data:country_name" content="United States">
+
+<%# Twitter %>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<%= page_title %>">
+<meta name="twitter:description" content="<%= page_description %>">
+<meta name="twitter:image" content="<%= image_url('hero.png') %>">
