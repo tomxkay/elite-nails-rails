@@ -46,6 +46,7 @@ alone if you don't need the asset watchers.
 |----------------------|---------------------------------------------------------|
 | `BOOKING_URL`        | Square Appointments booking link used by all "Book" CTAs. Falls back to `tel:+17048249032` when unset. |
 | `GOOGLE_REVIEWS_URL` | Google Business reviews/place link used by the Reviews section CTAs. Falls back to a Google Maps search when unset. |
+| `MCP_AUTH_TOKEN`     | Bearer token for the MCP server (`/mcp`). When set, requests must send `Authorization: Bearer <token>`. Leave unset in dev; required in production. |
 
 `BOOKING_URL` is read in `.env` (via `dotenv-rails`) in development/test.
 Secrets otherwise live in Rails credentials (`config/credentials.yml.enc` +

@@ -202,6 +202,19 @@ gems removed. What I **can't** do (requires your Fly account):
    treat the first deploy as the verification step.
 
 ### Progress
+- **Phase B — pilot DONE (2026-07-18).** MCP server live via **`fast-mcp` 1.6.0**,
+  mounted at `/mcp` (SSE transport: `/mcp/sse` + `/mcp/messages`), bearer-token auth
+  (enabled when `MCP_AUTH_TOKEN` is set). Added **`AuditLog`** (before/after
+  snapshots, `source: "mcp"`) and four **Promotion** tools — `list_promotions`
+  (read), `create_promotion`, `update_promotion`, `set_promotion_active` (guarded
+  writes: validation via dry-schema, every write audited, no hard delete). Verified
+  locally: tools create/update/hide + audit correctly; SSE endpoint emits its
+  handshake. 8 tool/audit tests (full suite 35 green).
+  **Still to do:** (a) verify the transport against a real Claude client — SSE is
+  deprecated vs Streamable HTTP; confirm claude.ai connector compatibility (may
+  need a fast-mcp upgrade or transport option); (b) `allowed_origins` for the
+  production host + Anthropic; (c) extend tools to the other models
+  (services/pricing/team/reviews/settings/hours) once the pattern is blessed.
 - **A2 — DONE (2026-07-18), except Active Storage.** All page content is now
   DB-backed: `Promotion`, `Service`, `PricingItem`, `TeamMember`, `Review`,
   `SiteSetting` (singleton NAP/geo/price/aggregate rating), `BusinessHour` (hours,

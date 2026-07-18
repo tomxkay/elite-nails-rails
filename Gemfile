@@ -70,3 +70,5 @@ gem "dockerfile-rails", ">= 1.7", :group => :development
 
 # S3-compatible object storage (Tigris on Fly) — for Active Storage uploads (A2).
 gem "aws-sdk-s3", "~> 1.206", :require => false
+
+gem "fast-mcp", "~> 1.6"

@@ -178,6 +178,13 @@ To be answered with the client. Grouped by theme; update inline as we learn more
 
 ## Progress Log
 
+- **2026-07-18 — Milestone 2 / Phase B pilot: MCP server live.** Added the
+  `fast-mcp` server at `/mcp` with bearer auth (`MCP_AUTH_TOKEN`), an `AuditLog`
+  model (before/after snapshots), and four **Promotion** tools (list + guarded
+  create/update/hide — validated, audited, no hard delete). Verified locally
+  (tools + SSE handshake); 35 tests green. Remaining: verify against a real Claude
+  client (SSE vs Streamable HTTP), production `allowed_origins`, and extend tools
+  to the other models. Detail: `docs/cms-ai-roadmap.md`.
 - **2026-07-18 — Milestone 2 / Phase A2 COMPLETE: all content moved to the DB.**
   Migrated Services, Pricing, Team, Reviews, plus `SiteSetting` (salon NAP/geo/
   price/reviews-aggregate) and `BusinessHour` (hours) to Postgres. The `salon`

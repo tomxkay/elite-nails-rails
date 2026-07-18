@@ -58,6 +58,9 @@ bin/brakeman                       # security scan
 - **`GOOGLE_REVIEWS_URL`** — the salon's Google Business reviews/place link. Read
   via `ApplicationHelper#google_reviews_link`, which falls back to a Google Maps
   search for the salon when unset. Used by the Reviews section CTAs.
+- **`MCP_AUTH_TOKEN`** — bearer token for the MCP server (see MCP section). When
+  set, MCP requests must send `Authorization: Bearer <token>`. Leave unset in dev;
+  **required in production**. Set via `fly secrets`.
 - Secrets via Rails credentials (`config/credentials.yml.enc` + `master.key`).
 - All salon details (address, phone, hours) are **hardcoded in the views**, not
   in config — see "Editing Content" below.
@@ -187,6 +190,27 @@ hands/flowers).
 Dynamic PWA files exist at `app/views/pwa/` (`manifest.json.erb`,
 `service-worker.js`) but the routes are **commented out** in `config/routes.rb` —
 the PWA is not currently wired up.
+
+## MCP Server (AI content control — Milestone 2, Phase B)
+
+An MCP server (gem **`fast-mcp`**) lets an AI agent (Claude) read and edit the
+salon's DB-backed content. This is the intended control surface (MCP-only, no admin
+UI). Config: `config/initializers/fast_mcp.rb`.
+
+- **Mount:** `/mcp` (SSE transport: `/mcp/sse` + `/mcp/messages`).
+- **Auth:** bearer token via `MCP_AUTH_TOKEN` (enabled when set). The owner pastes it
+  into their Claude connector's `Authorization` header.
+- **Tools** live in `app/tools/` (subclass `ApplicationTool`, registered explicitly
+  in the initializer). Pilot set covers **Promotions**: `list_promotions` (read),
+  `create_promotion`, `update_promotion`, `set_promotion_active` (guarded writes).
+- **Guardrails:** dry-schema validates all tool input; every write is recorded in
+  **`AuditLog`** (`source: "mcp"`, before/after `details`); **no hard-delete** tool
+  (hide via `set_promotion_active`). Add new tools following this pattern and
+  register them in the initializer.
+- ⚠️ **Not yet verified against a live Claude client.** SSE is deprecated vs the
+  current Streamable HTTP; confirm claude.ai connector compatibility + set
+  `allowed_origins` for the production host at deploy time. See
+  `docs/cms-ai-roadmap.md`.
 
 ## Deployment
 
