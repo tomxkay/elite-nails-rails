@@ -7,6 +7,12 @@ Rails.application.routes.draw do
   post   "/owner/login",  to: "owner_sessions#create"
   delete "/owner/logout", to: "owner_sessions#destroy"
 
+  # OAuth discovery metadata (RFC 9728 + RFC 8414). Bare + path-aware (/mcp) variants.
+  get "/.well-known/oauth-protected-resource",      to: "oauth/metadata#protected_resource"
+  get "/.well-known/oauth-protected-resource/mcp",  to: "oauth/metadata#protected_resource"
+  get "/.well-known/oauth-authorization-server",     to: "oauth/metadata#authorization_server"
+  get "/.well-known/oauth-authorization-server/mcp", to: "oauth/metadata#authorization_server"
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
