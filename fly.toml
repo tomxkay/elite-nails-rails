@@ -10,18 +10,14 @@ console_command = '/rails/bin/rails console'
 [build]
 
 [env]
-  DATABASE_URL = 'sqlite3:///data/production.sqlite3'
   PORT = '8080'
+  # DATABASE_URL is provided as a Fly secret via `fly postgres attach` (not stored here).
 
 [processes]
-  app = './bin/rake litestream:run ./bin/rails server'
+  app = './bin/thrust ./bin/rails server'
 
-[[mounts]]
-  source = 'data'
-  destination = '/data'
-  auto_extend_size_threshold = 80
-  auto_extend_size_increment = '1GB'
-  auto_extend_size_limit = '10GB'
+# DB migrations run on boot via bin/docker-entrypoint (`rails db:prepare`).
+# Postgres is an external Fly Postgres cluster — no persistent volume needed.
 
 [http_service]
   internal_port = 8080

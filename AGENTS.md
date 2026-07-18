@@ -20,13 +20,13 @@ built on Hotwire (Turbo + Stimulus), GSAP, and Tailwind CSS v4.
 |------------|--------|
 | Framework  | Rails 8.0.2 (Ruby 3.2.1) |
 | Web server | Puma + Thruster |
-| Database   | **PostgreSQL** (development & test primary). Production still SQLite + Solid stack + Litestream — prod-Postgres migration is a tracked task (see `docs/cms-ai-roadmap.md`). Content is migrating from code → DB (Milestone 2). |
+| Database   | **PostgreSQL** (all environments). Production uses the multi-DB Solid layout (primary + `_cache`/`_queue`/`_cable`). Content is migrating from code → DB (Milestone 2). |
 | Assets     | Propshaft |
 | JS bundler | esbuild (`jsbundling-rails`), ESM output to `app/assets/builds/` |
 | CSS        | Tailwind CSS v4 CLI (`cssbundling-rails`) |
 | Front-end  | Hotwire (`turbo-rails`, `stimulus-rails`) + GSAP 3 (ScrollTrigger, ScrollToPlugin) |
 | Icons      | `heroicons` gem (+ custom inline SVGs) |
-| Deploy     | **Fly.io** (app `elite-nails-rails`, region `iad`); SQLite on a persistent volume, Litestream → Tigris. |
+| Deploy     | **Fly.io** (app `elite-nails-rails`, region `iad`); PostgreSQL (Fly Postgres). Tigris (S3) reserved for Active Storage. |
 | Lint       | RuboCop (rails-omakase), Brakeman |
 | Test       | Minitest + Capybara + Selenium |
 | Node       | 20.8.1 |
@@ -189,13 +189,13 @@ the PWA is not currently wired up.
 
 **Deploys to Fly.io** (this is the chosen host). Config in `fly.toml`:
 - App `elite-nails-rails`, primary region `iad`, internal port `8080`, HTTPS forced.
-- **SQLite in production** lives on a persistent volume mounted at `/data`
-  (`DATABASE_URL=sqlite3:///data/production.sqlite3`), auto-extending to 10GB.
-- **Litestream** streams the SQLite DB to **Tigris** (Fly's S3-compatible object
-  storage) for durability — hence the `litestream` + `aws-sdk-s3` gems and
-  `lib/tasks/litestream.rake`. The app process runs
-  `./bin/rake litestream:run ./bin/rails server`.
-- Machines auto-stop/start (`min_machines_running = 0`).
+- **PostgreSQL** via Fly Postgres; `DATABASE_URL` is a Fly secret (`fly postgres
+  attach`). Multi-DB Solid layout uses separate `_cache`/`_queue`/`_cable`
+  databases (see the deploy-steps + CREATEDB gotcha in `docs/cms-ai-roadmap.md`).
+- App process: `./bin/thrust ./bin/rails server`; migrations run on boot via
+  `bin/docker-entrypoint` (`rails db:prepare`). Machines auto-stop/start.
+- **Tigris** (Fly S3-compatible storage) reserved for Active Storage (A2);
+  `aws-sdk-s3` retained for it. Litestream/SQLite removed.
 
 ```bash
 fly deploy        # deploy
@@ -203,10 +203,13 @@ fly logs          # tail logs
 fly ssh console   # shell into a machine
 ```
 
-Set production secrets with `fly secrets set BOOKING_URL=… GOOGLE_REVIEWS_URL=…`.
-The Dockerfile is managed by `dockerfile-rails` (see `config/dockerfile.yml`).
-`thruster` (the Rails 8 HTTP/asset accelerator) is retained — it's referenced by
-the Dockerfile CMD; the default Kamal scaffold has been removed.
+Set production secrets with `fly secrets set …` (`RAILS_MASTER_KEY`, `BOOKING_URL`,
+`GOOGLE_REVIEWS_URL`, Tigris `AWS_*`). The Dockerfile is managed by
+`dockerfile-rails` (`config/dockerfile.yml`). `thruster` (Rails 8 HTTP/asset
+accelerator) is retained; the default Kamal scaffold was removed.
+
+> ⚠️ The Postgres production config is **prepared but not yet deploy-verified** —
+> the first `fly deploy` is the verification. See `docs/cms-ai-roadmap.md`.
 
 ## Conventions
 

@@ -4,9 +4,8 @@ source "https://rubygems.org"
 gem "rails", "~> 8.0.2"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
-# Use sqlite3 as the database for Active Record
-gem "sqlite3", ">= 2.1" # production Solid stack (until prod moves to Postgres)
-gem "pg", "~> 1.5"      # development & test primary database
+# PostgreSQL database for Active Record (all environments)
+gem "pg", "~> 1.5"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
@@ -69,6 +68,5 @@ end
 
 gem "dockerfile-rails", ">= 1.7", :group => :development
 
-gem "litestream", "~> 0.14.0"
-
+# S3-compatible object storage (Tigris on Fly) — for Active Storage uploads (A2).
 gem "aws-sdk-s3", "~> 1.206", :require => false

@@ -174,6 +174,33 @@ These become possible once data is in the DB and reachable over MCP.
   canonical seed source) and a `for_display` that falls back to it when the table
   is empty/unavailable — the site always renders, and re-seeding never loses data.
 
+## Production Postgres — deploy steps (MANUAL, needs your Fly account)
+
+Repo is **prepared** for Postgres in production (2026-07-18): `database.yml`
+production → Postgres multi-DB; `Dockerfile` uses `postgresql-client` + `libpq-dev`;
+`fly.toml` drops the SQLite volume + litestream and runs `./bin/thrust ./bin/rails
+server` (DB migrates on boot via `bin/docker-entrypoint`); litestream + sqlite3
+gems removed. What I **can't** do (requires your Fly account):
+
+1. **Provision Postgres:** `fly postgres create` (or Fly Managed Postgres).
+2. **Attach:** `fly postgres attach <cluster> -a elite-nails-rails` — sets the
+   `DATABASE_URL` secret automatically.
+3. **⚠️ Multi-DB gotcha:** the Solid stack uses separate databases
+   (`elite_nails_cache/_queue/_cable`). Fly's attached DB user often lacks
+   `CREATEDB`, so boot-time `db:prepare` can't create them. Fix once, either:
+   - grant it: `fly postgres connect` → `ALTER ROLE <role> CREATEDB;`, **or**
+   - pre-create the three databases, **or**
+   - (alternative) collapse Solid onto the primary DB — a small config change if
+     we'd rather avoid the extra databases. _Decide at deploy time._
+4. **Secrets:** ensure `RAILS_MASTER_KEY` is set, plus `BOOKING_URL`,
+   `GOOGLE_REVIEWS_URL`, and the **Tigris/S3** vars (`AWS_REGION`,
+   `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `BUCKET_NAME`, `AWS_ENDPOINT_URL_S3`)
+   — production currently boots the Tigris Active Storage service, which needs a
+   region even before A2 uses it.
+5. **Deploy & verify:** `fly deploy`; watch `fly logs` for a clean `db:prepare`
+   and boot. ⚠️ **Unverified locally** — I can't run a real Fly Postgres deploy, so
+   treat the first deploy as the verification step.
+
 ### Progress
 - **A1 — Promotions slice: DONE (2026-07-18).** `Promotion` model + migration +
   primary `db/schema.rb`, idempotent seeds from `Promotion::DEFAULTS`, `_promotions`
