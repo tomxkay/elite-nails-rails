@@ -3,6 +3,10 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # Allow ngrok tunnels to reach the dev server (for testing the MCP connection
+  # from a Claude client). Dev-only.
+  config.hosts << /[a-z0-9-]+\.ngrok(-free)?\.(app|io)/
+
   # Make code changes take effect immediately without server restart.
   config.enable_reloading = true
 

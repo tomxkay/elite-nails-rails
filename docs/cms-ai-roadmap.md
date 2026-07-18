@@ -210,11 +210,18 @@ gems removed. What I **can't** do (requires your Fly account):
   writes: validation via dry-schema, every write audited, no hard delete). Verified
   locally: tools create/update/hide + audit correctly; SSE endpoint emits its
   handshake. 8 tool/audit tests (full suite 35 green).
-  **Still to do:** (a) verify the transport against a real Claude client — SSE is
-  deprecated vs Streamable HTTP; confirm claude.ai connector compatibility (may
-  need a fast-mcp upgrade or transport option); (b) `allowed_origins` for the
-  production host + Anthropic; (c) extend tools to the other models
-  (services/pricing/team/reviews/settings/hours) once the pattern is blessed.
+  **✅ Verified with a live Claude client (2026-07-18):** connected **Claude Code**
+  to the server over ngrok (SSE transport + static bearer token via
+  `--header "Authorization: Bearer <MCP_AUTH_TOKEN>"`) and successfully did CRUD on
+  promotions through Claude. Gotchas found + fixed: fast-mcp's `localhost_only`
+  (default true) blocks remote/tunnelled clients → set false; `allowed_origins`
+  only wildcards via a **Regexp** (`[/.*/]`), not the string `"*"`. Auth via static
+  header works; the interactive "authenticate" button uses OAuth (unsupported by
+  fast-mcp) and must be avoided. Origin/IP protections are now env-gated
+  (permissive in dev, host-restricted in production via `MCP_ALLOWED_ORIGINS`).
+  **Still to do:** (a) verify the **claude.ai** custom connector specifically
+  (OAuth-first UI — may need real OAuth on the server for a clean owner experience);
+  (b) extend tools to the other models (services/pricing/team/reviews/settings/hours).
 - **A2 — DONE (2026-07-18), except Active Storage.** All page content is now
   DB-backed: `Promotion`, `Service`, `PricingItem`, `TeamMember`, `Review`,
   `SiteSetting` (singleton NAP/geo/price/aggregate rating), `BusinessHour` (hours,

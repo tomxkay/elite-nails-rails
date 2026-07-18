@@ -20,6 +20,23 @@ require 'fast_mcp'
 # docs/cms-ai-roadmap.md for how the owner connects.
 mcp_token = ENV["MCP_AUTH_TOKEN"].presence
 
+# Client-IP + Origin (DNS-rebinding) protections. Remote clients (Claude via
+# ngrok in dev, or Anthropic in production) are never "localhost", so localhost_only
+# must be false whenever we accept remote connections.
+#
+# - Non-production: fully permissive origin so a tunnelled dev client connects.
+# - Production: restrict origins to the app host(s). Set MCP_ALLOWED_ORIGINS as a
+#   comma-separated list to add more (e.g. a custom domain). Note the request
+#   Origin is often absent for server-to-server MCP calls, in which case fast-mcp
+#   falls back to the request host — so the app host must be listed.
+mcp_localhost_only = false
+mcp_allowed_origins =
+  if Rails.env.production?
+    ["elite-nails-rails.fly.dev", *ENV["MCP_ALLOWED_ORIGINS"].to_s.split(",").map(&:strip)]
+  else
+    [/.*/]
+  end
+
 FastMcp.mount_in_rails(
   Rails.application,
   name: Rails.application.class.module_parent_name.underscore.dasherize,
@@ -28,10 +45,9 @@ FastMcp.mount_in_rails(
   messages_route: 'messages',
   sse_route: 'sse',
   authenticate: mcp_token.present?,
-  auth_token: mcp_token
-  # allowed_origins defaults to Rails.application.config.hosts. When connecting a
-  # real Claude client from claude.ai, ensure the production host + Anthropic
-  # origins are permitted (verify at deploy time — see roadmap).
+  auth_token: mcp_token,
+  localhost_only: mcp_localhost_only,
+  allowed_origins: mcp_allowed_origins
 ) do |server|
   Rails.application.config.after_initialize do
     # Registered explicitly (rather than ApplicationTool.descendants) so tools load
