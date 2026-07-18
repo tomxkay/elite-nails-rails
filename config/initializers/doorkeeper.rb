@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# The single resource owner (there is no User table). Doorkeeper calls `#id` on
+# whatever resource_owner_authenticator returns, so it must be an object, not 1.
+MCP_OWNER = Data.define(:id).new(id: 1)
+
 Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (requires ORM extensions installed).
   # Check the list of supported ORMs here: https://github.com/doorkeeper-gem/doorkeeper#orms
@@ -22,10 +26,11 @@ Doorkeeper.configure do
 
   # Single-owner model: there is no User table. The owner authenticates with a
   # password (MCP_OWNER_PASSWORD) at /owner/login, which sets a session flag. When
-  # present we return a fixed owner id (1); otherwise we bounce to the login page.
+  # present we return a fixed owner (Doorkeeper calls `.id` on it when creating
+  # grants/tokens, so a bare integer won't do); otherwise we bounce to login.
   resource_owner_authenticator do
     if session[:mcp_owner]
-      1
+      MCP_OWNER
     else
       redirect_to("/owner/login?return_to=#{CGI.escape(request.fullpath)}")
       nil
