@@ -211,8 +211,8 @@ gems removed. What I **can't** do (requires your Fly account):
      (`/owner/login`, `MCP_OWNER_PASSWORD` — no User table), migrations, routes.
   2. ⬜ **Discovery** — `/.well-known/oauth-protected-resource` (RFC 9728) +
      `/.well-known/oauth-authorization-server` (RFC 8414) advertising S256.
-  3. ⬜ **Dynamic Client Registration** — custom `/oauth/register` (RFC 7591;
-     Doorkeeper lacks it) creating public clients.
+  3. ✅ **Dynamic Client Registration** — custom `/oauth/register` (RFC 7591)
+     creating public Doorkeeper clients; CSRF-exempt, CORS-open, 201 + client_id.
   4. ⬜ **Dual-auth in front of `/mcp`** — accept static `MCP_AUTH_TOKEN` (Claude
      Code) OR a Doorkeeper access token (claude.ai); return `401` +
      `WWW-Authenticate: Bearer resource_metadata="…"` to trigger discovery.

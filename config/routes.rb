@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   get "/.well-known/oauth-authorization-server",     to: "oauth/metadata#authorization_server"
   get "/.well-known/oauth-authorization-server/mcp", to: "oauth/metadata#authorization_server"
 
+  # Dynamic Client Registration (RFC 7591) — Doorkeeper lacks this.
+  post "/oauth/register", to: "oauth/registration#create"
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
