@@ -1,24 +1,91 @@
-# README
+# Elite Nails
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Marketing website for **Elite Nails**, a family-owned nail salon in Cramerton, NC
+(est. 2003). A single-page, server-rendered Rails 8 site that gives the salon a
+digital presence and drives clients to book appointments.
 
-Things you may want to cover:
+> For a deeper architecture and feature map, see [`AGENTS.md`](AGENTS.md).
+> Project goals and roadmap live in [`PROJECT.md`](PROJECT.md).
 
-* Ruby version
+## Requirements
 
-* System dependencies
+- **Ruby** 3.2.1 (see `.ruby-version`)
+- **Node** 20.8.1 (see `.node-version`)
+- **Yarn** (for JS/CSS dependencies)
+- SQLite 3 (bundled on most systems)
+- Chrome + WebDriver (only for system tests)
 
-* Configuration
+## Getting Started
 
-* Database creation
+```bash
+# 1. Install dependencies
+bundle install
+yarn install
 
-* Database initialization
+# 2. Configure environment
+cp .env.example .env   # if present; otherwise create .env
+# Set BOOKING_URL to the Square Appointments link.
+# If unset, booking buttons fall back to tel:+17048249032
 
-* How to run the test suite
+# 3. Set up the database (Solid Cache/Queue/Cable use SQLite)
+bin/rails db:prepare
 
-* Services (job queues, cache servers, search engines, etc.)
+# 4. Run the app (Rails + esbuild + Tailwind watchers on port 3000)
+bin/dev
+```
 
-* Deployment instructions
+Then visit http://localhost:3000.
 
-* ...
+`bin/dev` runs three processes via Foreman (`Procfile.dev`): the Rails server,
+the esbuild JS watcher, and the Tailwind CSS watcher. Use `bin/rails server`
+alone if you don't need the asset watchers.
+
+## Configuration
+
+| Variable      | Purpose                                                        |
+|---------------|----------------------------------------------------------------|
+| `BOOKING_URL` | Square Appointments booking link used by all "Book" CTAs. Falls back to `tel:+17048249032` when unset. |
+
+`BOOKING_URL` is read in `.env` (via `dotenv-rails`) in development/test.
+Secrets otherwise live in Rails credentials (`config/credentials.yml.enc` +
+`master.key`).
+
+## Building Assets
+
+```bash
+yarn build        # bundle JS -> app/assets/builds (esbuild, ESM)
+yarn build:css    # build minified Tailwind CSS -> app/assets/builds
+```
+
+The dev server watches automatically; run these manually before precompiling for
+production. Files in `app/assets/builds/` are **generated** — do not hand-edit.
+
+## Testing & Quality
+
+```bash
+bin/rails test          # unit + controller tests (Minitest)
+bin/rails test:system   # browser/system tests (Capybara + Selenium, needs Chrome)
+bundle exec rubocop     # Ruby lint (rails-omakase)
+bin/brakeman            # security scan
+```
+
+## Deployment
+
+Deployed with [Kamal](https://kamal-deploy.org) (Docker). Service name:
+`elite_nails`. Configure hosts/registry in `config/deploy.yml`, then:
+
+```bash
+bin/kamal setup     # first deploy
+bin/kamal deploy    # subsequent deploys
+```
+
+Before deploying, ensure assets are fresh: `yarn build`, `yarn build:css`, and
+`bin/rails assets:precompile` in the target environment.
+
+## Project Structure
+
+Single-page site rendered from `app/views/pages/home.html.erb`, composed of
+section partials in `app/views/pages/home/` and reusable components in
+`app/views/shared/`. Frontend animation uses Stimulus controllers
+(`app/javascript/controllers/`) built on GSAP. See [`AGENTS.md`](AGENTS.md) for
+the full breakdown.
