@@ -26,7 +26,7 @@ built on Hotwire (Turbo + Stimulus), GSAP, and Tailwind CSS v4.
 | CSS        | Tailwind CSS v4 CLI (`cssbundling-rails`) |
 | Front-end  | Hotwire (`turbo-rails`, `stimulus-rails`) + GSAP 3 (ScrollTrigger, ScrollToPlugin) |
 | Icons      | `heroicons` gem (+ custom inline SVGs) |
-| Deploy     | **Fly.io** (app `elite-nails-rails`, region `iad`); SQLite on a persistent volume, Litestream → Tigris. Kamal scaffold also present but unused. |
+| Deploy     | **Fly.io** (app `elite-nails-rails`, region `iad`); SQLite on a persistent volume, Litestream → Tigris. |
 | Lint       | RuboCop (rails-omakase), Brakeman |
 | Test       | Minitest + Capybara + Selenium |
 | Node       | 20.8.1 |
@@ -200,10 +200,8 @@ fly ssh console   # shell into a machine
 
 Set production secrets with `fly secrets set BOOKING_URL=… GOOGLE_REVIEWS_URL=…`.
 The Dockerfile is managed by `dockerfile-rails` (see `config/dockerfile.yml`).
-
-> **Kamal note:** the repo still contains the default Kamal scaffold
-> (`config/deploy.yml`, `.kamal/`, `kamal`/`thruster` gems) from `bin/rails new`.
-> It is **unused** — Fly.io is the deployment path. The Kamal files can be removed.
+`thruster` (the Rails 8 HTTP/asset accelerator) is retained — it's referenced by
+the Dockerfile CMD; the default Kamal scaffold has been removed.
 
 ## Conventions
 

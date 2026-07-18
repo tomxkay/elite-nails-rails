@@ -240,35 +240,6 @@
   will-change: transform, opacity;
 }
 
-/* Service Card Image Reveal Enhancements */
-.service-card-image {
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-  transform: translateZ(0);
-}
-
-.service-card-glow {
-  will-change: transform, opacity;
-  mix-blend-mode: soft-light;
-}
-
-.shadow-warm-2xl {
-  box-shadow:
-    0 25px 35px -8px rgba(212, 154, 138, 0.25),
-    0 12px 15px -10px rgba(212, 154, 138, 0.2);
-}
-
-.service-card-stack {
-  position: relative;
-  z-index: 1;
-  transition: z-index 0s 0s;
-}
-
-.service-card-stack:hover {
-  z-index: 10;
-  transition: z-index 0s 0s;
-}
-
 /* Team — cutout portrait backdrops (photos blend, not framed) */
 .portrait-backdrop-terra {
   background: radial-gradient(58% 58% at 50% 42%, rgba(212, 154, 138, 0.38) 0%, rgba(212, 154, 138, 0.1) 55%, transparent 72%);

@@ -89,9 +89,6 @@ Set production secrets (not committed) with Fly:
 fly secrets set BOOKING_URL=… GOOGLE_REVIEWS_URL=…
 ```
 
-> The repo also contains the default Kamal scaffold (`config/deploy.yml`,
-> `.kamal/`) from `bin/rails new`, but it is **unused** — Fly.io is the
-> deployment path.
 
 ## Project Structure
 

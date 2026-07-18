@@ -156,8 +156,8 @@ To be answered with the client. Grouped by theme; update inline as we learn more
 - **Fly.io is the deployment path** (app `elite-nails-rails`, region `iad`;
   SQLite on a persistent volume + Litestream → Tigris). Documented in `AGENTS.md`
   and `README.md`. The default **Kamal scaffold** (`config/deploy.yml`, `.kamal/`,
-  `kamal`/`thruster` gems) that shipped with `bin/rails new` is now **unused** and
-  can be removed in a cleanup pass.
+  `bin/kamal`, `kamal` gem) has been **removed** (2026-07-18 cleanup). `thruster`
+  is retained (referenced by the Dockerfile CMD).
 
 ### Goals & priorities
 - What does "driving customers" mean to them — more online bookings, more calls,
@@ -167,6 +167,14 @@ To be answered with the client. Grouped by theme; update inline as we learn more
 
 ## Progress Log
 
+- **2026-07-18 — Cleanup pass.** Removed the unused Kamal deploy scaffold
+  (`config/deploy.yml`, `.kamal/`, `bin/kamal`, `kamal` gem, `.dockerignore`
+  entries; Dockerfile comment updated) now that Fly.io is the confirmed host —
+  `thruster` retained (Dockerfile CMD uses it). Removed the now-unused
+  `service-image-hover` Stimulus controller (+ registration) and its dead CSS
+  (`service-card-image/-glow/-stack`, `shadow-warm-2xl`) left over from the
+  Services redesign. Rebuilt JS + CSS; verified the site still boots (200) with
+  no stale references.
 - **2026-07-18 — Phase 1: Services section editorial pass.**
   Replaced the emoji-forward card grid with **image-forward** editorial cards
   (real service photos front-and-center — the photography lever): numbered labels
@@ -258,4 +266,4 @@ _(Record confirmed decisions here as we make them, with date.)_
 - 2026-07-18 — **Design de-robotizing levers:** real photography, distinctive
   layout, refined motion & polish.
 - 2026-07-18 — **Deployment = Fly.io** (app `elite-nails-rails`, region `iad`,
-  SQLite + Litestream → Tigris). Unused Kamal scaffold can be removed later.
+  SQLite + Litestream → Tigris). Unused Kamal scaffold removed in cleanup.
