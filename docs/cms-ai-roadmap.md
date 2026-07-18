@@ -202,13 +202,15 @@ gems removed. What I **can't** do (requires your Fly account):
    treat the first deploy as the verification step.
 
 ### Progress
-- **A2 — in progress (2026-07-18).** Migrated **Services** (`Service`), **Pricing**
-  (`PricingItem`), **Team** (`TeamMember`, specialties as a Postgres array), and
-  **Reviews** (`Review`) to the DB — models + migrations + seeds + `for_display`
-  fallback + tests (20 model tests pass); views render from DB. Remaining A2:
-  **SiteSetting + BusinessHour** (salon NAP/hours/settings, incl. the reviews
-  aggregate 4.9/120+ still hardcoded). Active Storage (uploadable photos → Tigris)
-  deferred within A2.
+- **A2 — DONE (2026-07-18), except Active Storage.** All page content is now
+  DB-backed: `Promotion`, `Service`, `PricingItem`, `TeamMember`, `Review`,
+  `SiteSetting` (singleton NAP/geo/price/aggregate rating), `BusinessHour` (hours,
+  with grouped display + schema.org `openingHoursSpecification`). The `salon`
+  helper reads `SiteSetting`; contact + JSON-LD + meta tags + reviews aggregate all
+  read from the DB (added a bonus JSON-LD `aggregateRating`). 26 model tests pass;
+  each model keeps an in-code `DEFAULTS` fallback. **Deferred:** Active Storage
+  (uploadable team/service/gallery photos → Tigris) — photos are still asset files.
+  **Next: Phase B (MCP server).**
 - **Prod Postgres: PREPARED (2026-07-18), not yet deploy-verified** — see the
   deploy-steps section above.
 - **A1 — Promotions slice: DONE (2026-07-18).** `Promotion` model + migration +

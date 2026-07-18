@@ -5,26 +5,26 @@
 
 <link rel="canonical" href="<%= canonical %>">
 <meta name="theme-color" content="#a8604e">
-<meta name="author" content="<%= salon[:name] %>">
+<meta name="author" content="<%= salon.name %>">
 
 <%# Local / geo hints %>
 <meta name="geo.region" content="US-NC">
-<meta name="geo.placename" content="<%= salon[:city] %>">
-<meta name="geo.position" content="<%= salon[:latitude] %>;<%= salon[:longitude] %>">
-<meta name="ICBM" content="<%= salon[:latitude] %>, <%= salon[:longitude] %>">
+<meta name="geo.placename" content="<%= salon.city %>">
+<meta name="geo.position" content="<%= salon.latitude %>;<%= salon.longitude %>">
+<meta name="ICBM" content="<%= salon.latitude %>, <%= salon.longitude %>">
 
 <%# Open Graph %>
 <meta property="og:type" content="business.business">
-<meta property="og:site_name" content="<%= salon[:name] %>">
+<meta property="og:site_name" content="<%= salon.name %>">
 <meta property="og:title" content="<%= page_title %>">
 <meta property="og:description" content="<%= page_description %>">
 <meta property="og:url" content="<%= canonical %>">
 <meta property="og:image" content="<%= image_url('hero.png') %>">
 <meta property="og:locale" content="en_US">
-<meta property="business:contact_data:street_address" content="<%= salon[:street] %>">
-<meta property="business:contact_data:locality" content="<%= salon[:city] %>">
-<meta property="business:contact_data:region" content="<%= salon[:region] %>">
-<meta property="business:contact_data:postal_code" content="<%= salon[:postal_code] %>">
+<meta property="business:contact_data:street_address" content="<%= salon.street %>">
+<meta property="business:contact_data:locality" content="<%= salon.city %>">
+<meta property="business:contact_data:region" content="<%= salon.region %>">
+<meta property="business:contact_data:postal_code" content="<%= salon.postal_code %>">
 <meta property="business:contact_data:country_name" content="United States">
 
 <%# Twitter %>

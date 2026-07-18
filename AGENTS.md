@@ -68,11 +68,12 @@ The app is essentially static from the server's perspective:
 
 - `config/routes.rb`: `root "pages#home"` + `/up` health check. That's it.
 - `PagesController#home` — **empty action**, just renders the view.
-- Content is migrating from code → DB (Milestone 2). First model: **`Promotion`**
-  (the Specials section renders from it). Each migrated model keeps an in-code
-  `DEFAULTS` backup and a `for_display` method that falls back to it if the table
-  is empty/unavailable — so the site always renders and can re-seed from code.
-  Remaining sections still use inline arrays until migrated. No jobs/mailers yet.
+- **All page content is DB-backed** (Milestone 2 / A2 complete): `Promotion`,
+  `Service`, `PricingItem`, `TeamMember`, `Review`, `SiteSetting` (singleton NAP/
+  geo/price/aggregate rating), `BusinessHour`. Each model keeps an in-code
+  `DEFAULTS` backup + a `for_display`/`current` method that falls back to it if the
+  table is empty/unavailable — so the site always renders and can re-seed from
+  code. Photos are still asset files (Active Storage deferred). No jobs/mailers yet.
 
 **Key helper — `app/helpers/application_helper.rb`:**
 - `icon(name, variant:, classes:, **opts)` — unified icon helper. Delegates to
@@ -81,9 +82,11 @@ The app is essentially static from the server's perspective:
   use this helper for booking CTAs**, never hardcode the URL.
 - `google_reviews_link` — centralized Google reviews URL (env `GOOGLE_REVIEWS_URL`,
   falls back to a Maps search). Used by the Reviews section CTAs.
-- `salon` — **single source of truth** for the salon's NAP (name/address/phone),
-  hours, geo, price range, and founding year. Used by the SEO structured data;
-  prefer it over re-hardcoding contact details in new views.
+- `salon` — returns the **`SiteSetting` singleton** (NAP, geo, price range,
+  founding year, reviews aggregate), falling back to `SiteSetting::DEFAULTS`.
+  Access via methods (`salon.phone_display`), not hash keys. Hours live in
+  `BusinessHour` (`grouped_for_display` for the contact list,
+  `opening_hours_specification` for JSON-LD). Prefer these over hardcoding.
 - `salon_map_embed_url` — keyless Google Maps embed URL for the salon address
   (used by the contact section map iframe).
 - `placeholder_image(...)` — currently returns `nil` by design (shows CSS
@@ -129,11 +132,11 @@ used by the nav:
 `_section_header` (eyebrow/title/subtitle), `_cta_button`, `_service_card`,
 `_team_member`, `_testimonial_card`, `_stat_card`, `_gallery_item`.
 
-**Editing content:** **Promotions** are now **DB-backed** (`Promotion` model) —
-edit via the DB (or `Promotion::DEFAULTS` + re-seed). Services, prices, team, and
-testimonials are still **inline Ruby arrays inside their partials** (migrating to
-the DB in Milestone 2). Salon address, phone `(704) 824-9032`, and hours (Mon–Fri
-10–7, Sat 9–6, Sun closed) are hardcoded in `_contact` / the `salon` helper.
+**Editing content:** **all content is DB-backed** — edit the DB records (or the
+model's `DEFAULTS` constant + `bin/rails db:seed`). Models: `Promotion`, `Service`,
+`PricingItem`, `TeamMember`, `Review`, `SiteSetting` (address/phone/geo/aggregate
+rating), `BusinessHour` (hours). Each has an in-code `DEFAULTS` backup so the site
+still renders if the DB is empty. Photos remain asset files for now.
 
 ## Frontend / Animation System
 

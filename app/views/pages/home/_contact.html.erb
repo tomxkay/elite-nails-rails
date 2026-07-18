@@ -19,10 +19,10 @@
             <div>
               <h3 class="font-serif text-lg text-warm-gray-900 mb-1">Address</h3>
               <p class="text-warm-gray-700">
-                202 Market St F<br>
-                Cramerton, NC 28032
+                <%= salon.street %><br>
+                <%= salon.city %>, <%= salon.region %> <%= salon.postal_code %>
               </p>
-              <a href="https://maps.google.com/?q=202+Market+St+F,+Cramerton,+NC+28032" target="_blank" class="mt-2 inline-block text-terracotta-600 hover:text-terracotta-700 text-sm font-medium">
+              <a href="https://maps.google.com/?q=<%= ERB::Util.url_encode("#{salon.street}, #{salon.city}, #{salon.region} #{salon.postal_code}") %>" target="_blank" rel="noopener" class="mt-2 inline-block text-terracotta-600 hover:text-terracotta-700 text-sm font-medium">
                 Get Directions →
               </a>
             </div>
@@ -34,8 +34,8 @@
             </div>
             <div>
               <h3 class="font-serif text-lg text-warm-gray-900 mb-1">Phone</h3>
-              <a href="tel:+17048249032" class="text-terracotta-600 hover:text-terracotta-700 text-xl font-medium">
-                (704) 824-9032
+              <a href="tel:<%= salon.phone %>" class="text-terracotta-600 hover:text-terracotta-700 text-xl font-medium">
+                <%= salon.phone_display %>
               </a>
               <p class="text-warm-gray-700 text-sm mt-1">Walk-ins welcome!</p>
             </div>
@@ -48,18 +48,17 @@
             <div class="flex-1">
               <h3 class="font-serif text-lg text-warm-gray-900 mb-3">Hours</h3>
               <div class="space-y-2">
-                <div class="flex justify-between py-2 border-b border-cream-200">
-                  <span class="text-warm-gray-900">Monday – Friday</span>
-                  <span class="text-warm-gray-700">10:00 AM – 7:00 PM</span>
-                </div>
-                <div class="flex justify-between py-2 border-b border-cream-200">
-                  <span class="text-warm-gray-900">Saturday</span>
-                  <span class="text-warm-gray-700">9:00 AM – 6:00 PM</span>
-                </div>
-                <div class="flex justify-between py-2">
-                  <span class="text-warm-gray-900">Sunday</span>
-                  <span class="text-terracotta-600 font-semibold">Closed</span>
-                </div>
+                <% rows = BusinessHour.grouped_for_display %>
+                <% rows.each_with_index do |(label, hours), i| %>
+                  <div class="flex justify-between py-2 <%= 'border-b border-cream-200' unless i == rows.size - 1 %>">
+                    <span class="text-warm-gray-900"><%= label %></span>
+                    <% if hours == "Closed" %>
+                      <span class="text-terracotta-600 font-semibold">Closed</span>
+                    <% else %>
+                      <span class="text-warm-gray-700"><%= hours %></span>
+                    <% end %>
+                  </div>
+                <% end %>
               </div>
             </div>
           </div>

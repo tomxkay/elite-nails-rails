@@ -15,14 +15,14 @@
     <div class="mt-14 flex flex-col items-center gap-8 rounded-3xl border border-cream-200 bg-cream-50/90 px-8 py-8 shadow-warm-lg backdrop-blur md:flex-row md:justify-between"
          data-controller="scroll-reveal" data-scroll-reveal-animation-value="fadeInUp">
       <div class="flex items-center gap-6">
-        <p class="font-serif text-6xl leading-none text-warm-gray-900">4.9</p>
+        <p class="font-serif text-6xl leading-none text-warm-gray-900"><%= salon.aggregate_rating %></p>
         <div>
-          <div class="flex" aria-label="Average rating 4.9 out of 5">
+          <div class="flex" aria-label="Average rating <%= salon.aggregate_rating %> out of 5">
             <% 5.times do %>
               <%= icon 'star', variant: :solid, classes: 'w-6 h-6 text-gold-500 drop-shadow-sm' %>
             <% end %>
           </div>
-          <p class="mt-2 text-sm text-warm-gray-700">Based on <span class="font-semibold text-warm-gray-900">120+ reviews</span> from happy guests</p>
+          <p class="mt-2 text-sm text-warm-gray-700">Based on <span class="font-semibold text-warm-gray-900"><%= salon.review_count %>+ reviews</span> from happy guests</p>
         </div>
       </div>
 

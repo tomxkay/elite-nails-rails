@@ -31,34 +31,17 @@ module ApplicationHelper
       "https://www.google.com/maps/search/?api=1&query=Elite+Nails+202+Market+St+Cramerton+NC"
   end
 
-  # Single source of truth for the salon's name/address/phone (NAP), hours, and
-  # geo. Used by structured data (SEO) and available for contact/footer.
-  # NOTE: geo coordinates are approximate — verify the exact lat/lng before launch.
+  # Single source of truth for the salon's name/address/phone (NAP), geo, price
+  # range, and founding year — backed by the SiteSetting record (falls back to
+  # SiteSetting::DEFAULTS when unset). Hours live in BusinessHour. Returns the
+  # SiteSetting instance; call attributes directly (e.g. `salon.phone_display`).
   def salon
-    {
-      name: "Elite Nails",
-      phone: "+17048249032",
-      phone_display: "(704) 824-9032",
-      street: "202 Market St F",
-      city: "Cramerton",
-      region: "NC",
-      postal_code: "28032",
-      country: "US",
-      latitude: 35.2387,
-      longitude: -81.0737,
-      price_range: "$$",
-      established: 2003,
-      # ISO-day opening hours (24h). Sunday intentionally omitted (closed).
-      hours: [
-        { days: %w[Monday Tuesday Wednesday Thursday Friday], opens: "10:00", closes: "19:00" },
-        { days: %w[Saturday], opens: "09:00", closes: "18:00" }
-      ]
-    }
+    SiteSetting.current
   end
 
   # Keyless Google Maps embed URL for the salon address (no API key required).
   def salon_map_embed_url
-    query = "#{salon[:street]}, #{salon[:city]}, #{salon[:region]} #{salon[:postal_code]}"
+    query = "#{salon.street}, #{salon.city}, #{salon.region} #{salon.postal_code}"
     "https://www.google.com/maps?q=#{ERB::Util.url_encode(query)}&output=embed"
   end
 

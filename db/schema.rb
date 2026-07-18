@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_18_171601) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_18_172451) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "business_hours", force: :cascade do |t|
+    t.integer "wday", null: false
+    t.string "opens"
+    t.string "closes"
+    t.boolean "closed", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["wday"], name: "index_business_hours_on_wday", unique: true
+  end
 
   create_table "pricing_items", force: :cascade do |t|
     t.string "category", null: false
@@ -66,6 +76,25 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_18_171601) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["active", "position"], name: "index_services_on_active_and_position"
+  end
+
+  create_table "site_settings", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "phone"
+    t.string "phone_display"
+    t.string "street"
+    t.string "city"
+    t.string "region"
+    t.string "postal_code"
+    t.string "country"
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.string "price_range"
+    t.integer "established"
+    t.decimal "aggregate_rating", precision: 2, scale: 1
+    t.integer "review_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "team_members", force: :cascade do |t|

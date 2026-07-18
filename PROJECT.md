@@ -178,6 +178,14 @@ To be answered with the client. Grouped by theme; update inline as we learn more
 
 ## Progress Log
 
+- **2026-07-18 — Milestone 2 / Phase A2 COMPLETE: all content moved to the DB.**
+  Migrated Services, Pricing, Team, Reviews, plus `SiteSetting` (salon NAP/geo/
+  price/reviews-aggregate) and `BusinessHour` (hours) to Postgres. The `salon`
+  helper, contact section, `LocalBusiness` JSON-LD, meta tags, and reviews
+  aggregate all read from the DB now; every model keeps an in-code `DEFAULTS`
+  fallback. 26 model tests pass. Deferred: Active Storage for uploadable photos.
+  Also **prepared production for Postgres** (unverified — see memory + roadmap).
+  Next: Phase B (MCP server). Detail: `docs/cms-ai-roadmap.md`.
 - **2026-07-18 — Milestone 2 / Phase A1: Promotions moved to the DB (Postgres).**
   Switched dev + test to **PostgreSQL** (prod stays SQLite until a tracked deploy
   task). Added the `Promotion` model + migration + primary `db/schema.rb`,

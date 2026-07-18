@@ -30,3 +30,13 @@ Review::DEFAULTS.each do |attrs|
   Review.find_or_initialize_by(author_name: attrs[:author_name], quote: attrs[:quote]).update!(attrs)
 end
 puts "Seeded #{Review.count} reviews."
+
+# --- Site settings (singleton) ---
+(SiteSetting.first || SiteSetting.new).update!(SiteSetting::DEFAULTS)
+puts "Seeded site settings for #{SiteSetting.current.name}."
+
+# --- Business hours ---
+BusinessHour::DEFAULTS.each do |attrs|
+  BusinessHour.find_or_initialize_by(wday: attrs[:wday]).update!(attrs)
+end
+puts "Seeded #{BusinessHour.count} business-hour rows."
