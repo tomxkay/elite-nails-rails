@@ -26,7 +26,7 @@ built on Hotwire (Turbo + Stimulus), GSAP, and Tailwind CSS v4.
 | CSS        | Tailwind CSS v4 CLI (`cssbundling-rails`) |
 | Front-end  | Hotwire (`turbo-rails`, `stimulus-rails`) + GSAP 3 (ScrollTrigger, ScrollToPlugin) |
 | Icons      | `heroicons` gem (+ custom inline SVGs) |
-| Deploy     | Kamal (Docker), service name `elite_nails` |
+| Deploy     | **Fly.io** (app `elite-nails-rails`, region `iad`); SQLite on a persistent volume, Litestream → Tigris. Kamal scaffold also present but unused. |
 | Lint       | RuboCop (rails-omakase), Brakeman |
 | Test       | Minitest + Capybara + Selenium |
 | Node       | 20.8.1 |
@@ -180,6 +180,31 @@ Dynamic PWA files exist at `app/views/pwa/` (`manifest.json.erb`,
 `service-worker.js`) but the routes are **commented out** in `config/routes.rb` —
 the PWA is not currently wired up.
 
+## Deployment
+
+**Deploys to Fly.io** (this is the chosen host). Config in `fly.toml`:
+- App `elite-nails-rails`, primary region `iad`, internal port `8080`, HTTPS forced.
+- **SQLite in production** lives on a persistent volume mounted at `/data`
+  (`DATABASE_URL=sqlite3:///data/production.sqlite3`), auto-extending to 10GB.
+- **Litestream** streams the SQLite DB to **Tigris** (Fly's S3-compatible object
+  storage) for durability — hence the `litestream` + `aws-sdk-s3` gems and
+  `lib/tasks/litestream.rake`. The app process runs
+  `./bin/rake litestream:run ./bin/rails server`.
+- Machines auto-stop/start (`min_machines_running = 0`).
+
+```bash
+fly deploy        # deploy
+fly logs          # tail logs
+fly ssh console   # shell into a machine
+```
+
+Set production secrets with `fly secrets set BOOKING_URL=… GOOGLE_REVIEWS_URL=…`.
+The Dockerfile is managed by `dockerfile-rails` (see `config/dockerfile.yml`).
+
+> **Kamal note:** the repo still contains the default Kamal scaffold
+> (`config/deploy.yml`, `.kamal/`, `kamal`/`thruster` gems) from `bin/rails new`.
+> It is **unused** — Fly.io is the deployment path. The Kamal files can be removed.
+
 ## Conventions
 
 - **Ruby:** 2-space indent, snake_case methods, CamelCase classes; rails-omakase
@@ -199,7 +224,8 @@ the PWA is not currently wired up.
   says, edit the **view partials**, not a controller or model.
 - Booking CTAs must route through `booking_link`; the site degrades to a phone
   link if `BOOKING_URL` is unset.
-- The contact **map is a styled placeholder**, not an embedded map; team photos
-  render as placeholders until `placeholder_image` returns real assets.
+- Team photos render as placeholders until `placeholder_image` returns real
+  assets. The contact map is now a live keyless Google Maps embed
+  (`salon_map_embed_url`).
 - Rebuild assets (`yarn build`, `yarn build:css`) after JS/CSS changes — the dev
   server watches, but production/precompile needs a fresh build.

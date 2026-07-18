@@ -152,17 +152,12 @@ To be answered with the client. Grouped by theme; update inline as we learn more
 - **Exact salon geo coordinates** (lat/lng) for the LocalBusiness structured
   data — currently approximate (35.2387, -81.0737).
 
-### Deployment (unresolved)
-- **Two deployment paths exist in the repo — pick one.** Kamal shipped with the
-  initial `bin/rails new` scaffold (commit `ec139ba`, 2025-12-02): `config/deploy.yml`,
-  `.kamal/`, `kamal`/`thruster` gems. Fly.io was then layered on by running
-  `fly launch` (commit `1ed7b62`, 2025-12-04, author "Fly.io", PR #5): `fly.toml`,
-  `config/dockerfile.yml`, `lib/tasks/litestream.rake`, plus edits to `Gemfile`,
-  `database.yml`, `production.rb`, `storage.yml`. This was tooling output, not a
-  deliberate dual setup. Decide the real host, then remove the other path's config
-  (note Fly's Litestream handles SQLite durability, which matters given SQLite is
-  used for the app + Solid Queue/Cache/Cable). `AGENTS.md` currently documents only
-  Kamal.
+### Deployment — RESOLVED: Fly.io
+- **Fly.io is the deployment path** (app `elite-nails-rails`, region `iad`;
+  SQLite on a persistent volume + Litestream → Tigris). Documented in `AGENTS.md`
+  and `README.md`. The default **Kamal scaffold** (`config/deploy.yml`, `.kamal/`,
+  `kamal`/`thruster` gems) that shipped with `bin/rails new` is now **unused** and
+  can be removed in a cleanup pass.
 
 ### Goals & priorities
 - What does "driving customers" mean to them — more online bookings, more calls,
@@ -251,3 +246,5 @@ _(Record confirmed decisions here as we make them, with date.)_
   promotions & specials, local SEO & map, reviews & social proof.
 - 2026-07-18 — **Design de-robotizing levers:** real photography, distinctive
   layout, refined motion & polish.
+- 2026-07-18 — **Deployment = Fly.io** (app `elite-nails-rails`, region `iad`,
+  SQLite + Litestream → Tigris). Unused Kamal scaffold can be removed later.

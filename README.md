@@ -72,16 +72,26 @@ bin/brakeman            # security scan
 
 ## Deployment
 
-Deployed with [Kamal](https://kamal-deploy.org) (Docker). Service name:
-`elite_nails`. Configure hosts/registry in `config/deploy.yml`, then:
+Deployed to [Fly.io](https://fly.io) (app `elite-nails-rails`, region `iad`).
+Production runs SQLite on a persistent volume at `/data`, with
+[Litestream](https://litestream.io) replicating it to Tigris object storage for
+durability. Configuration lives in `fly.toml`.
 
 ```bash
-bin/kamal setup     # first deploy
-bin/kamal deploy    # subsequent deploys
+fly deploy        # build + deploy
+fly logs          # tail logs
+fly ssh console   # shell into a running machine
 ```
 
-Before deploying, ensure assets are fresh: `yarn build`, `yarn build:css`, and
-`bin/rails assets:precompile` in the target environment.
+Set production secrets (not committed) with Fly:
+
+```bash
+fly secrets set BOOKING_URL=… GOOGLE_REVIEWS_URL=…
+```
+
+> The repo also contains the default Kamal scaffold (`config/deploy.yml`,
+> `.kamal/`) from `bin/rails new`, but it is **unused** — Fly.io is the
+> deployment path.
 
 ## Project Structure
 
