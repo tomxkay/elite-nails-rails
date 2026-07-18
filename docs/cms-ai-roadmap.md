@@ -202,6 +202,21 @@ gems removed. What I **can't** do (requires your Fly account):
    treat the first deploy as the verification step.
 
 ### Progress
+- **Phase B — Streamable HTTP transport (2026-07-18).** claude.ai completed OAuth
+  but then reported "no MCP server found": its connector speaks **Streamable
+  HTTP** (JSON-RPC `POST /mcp`), while fast-mcp 1.6 only serves the deprecated
+  SSE transport (`/mcp/sse` + `/mcp/messages`) and 404s a bare `POST /mcp`.
+  Following the working pattern in the Crown project, replaced the fast-mcp
+  mount with **`McpController`** — a minimal Streamable HTTP endpoint
+  (`initialize`, `ping`, `tools/list` with camelCase annotations, `tools/call`;
+  notifications → 202; GET/DELETE → 405). fast-mcp remains only as the tool
+  layer (`ActionTool::Base` + dry-schema validation, invoked via
+  `call_with_schema_validation!`); tools are registered in
+  `McpController::TOOL_CLASS_NAMES`. `McpDualAuth` still fronts `/mcp` and now
+  answers CORS preflights itself. Claude Code must reconnect with
+  `--transport http` and URL `<base>/mcp` (SSE endpoints are gone). Verified
+  through ngrok: initialize/tools-list/tools-call all work with the static
+  token; 401 challenge intact. Suite 58 green.
 - **Phase B — OAuth (claude.ai) — IN PROGRESS (2026-07-18).** claude.ai's connector
   UI (confirmed via screenshot) offers only OAuth Client ID/Secret — no static-header
   option — so `static_headers` is unavailable to this account; **OAuth is required**

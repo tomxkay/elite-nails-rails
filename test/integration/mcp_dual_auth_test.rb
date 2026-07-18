@@ -9,7 +9,7 @@ class McpDualAuthTest < ActionDispatch::IntegrationTest
   def post_mcp(token: nil)
     headers = { "CONTENT_TYPE" => "application/json" }
     headers["Authorization"] = "Bearer #{token}" if token
-    post "/mcp/messages", params: PING, headers: headers
+    post "/mcp", params: PING, headers: headers
   end
 
   def with_static_token(value)
@@ -80,11 +80,13 @@ class McpDualAuthTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test "CORS preflight passes through without auth" do
+  test "CORS preflight is answered without auth" do
     with_static_token("static-secret") do
-      options "/mcp/sse", headers: { "Origin" => "https://claude.ai" }
+      options "/mcp", headers: { "Origin" => "https://claude.ai" }
     end
-    assert_response :success
+    assert_response :no_content
+    assert_equal "*", response.headers["Access-Control-Allow-Origin"]
+    assert_includes response.headers["Access-Control-Allow-Headers"], "Authorization"
   end
 
   test "non-mcp routes are unaffected" do

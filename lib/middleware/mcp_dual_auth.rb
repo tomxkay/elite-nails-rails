@@ -22,8 +22,9 @@ class McpDualAuth
     return @app.call(env) unless mcp_path?(env["PATH_INFO"])
 
     request = Rack::Request.new(env)
-    # CORS preflights never carry Authorization; let the transport answer them.
-    return @app.call(env) if request.options?
+    # CORS preflights never carry Authorization; answer them here (no OPTIONS
+    # route exists for /mcp).
+    return preflight_response if request.options?
 
     token = bearer_token(env)
     return @app.call(env) if static_token_valid?(token) || oauth_token_valid?(token)
@@ -55,6 +56,19 @@ class McpDualAuth
 
     access_token = Doorkeeper::AccessToken.by_token(token)
     access_token.present? && access_token.accessible?
+  end
+
+  def preflight_response
+    [
+      204,
+      {
+        "Access-Control-Allow-Origin" => "*",
+        "Access-Control-Allow-Methods" => "POST, OPTIONS",
+        "Access-Control-Allow-Headers" => "Authorization, Content-Type",
+        "Access-Control-Max-Age" => "86400"
+      },
+      []
+    ]
   end
 
   def unauthorized_response(request)

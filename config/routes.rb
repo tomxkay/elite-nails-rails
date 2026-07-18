@@ -16,6 +16,12 @@ Rails.application.routes.draw do
   # Dynamic Client Registration (RFC 7591) — Doorkeeper lacks this.
   post "/oauth/register", to: "oauth/registration#create"
 
+  # MCP over Streamable HTTP: Claude POSTs JSON-RPC here (guarded by the
+  # McpDualAuth middleware). GET/DELETE are transport features we don't
+  # support — answered with 405 per spec.
+  post "/mcp", to: "mcp#handle"
+  match "/mcp", to: "mcp#reject", via: [ :get, :delete ]
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

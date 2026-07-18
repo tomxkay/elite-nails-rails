@@ -194,29 +194,30 @@ the PWA is not currently wired up.
 
 ## MCP Server (AI content control — Milestone 2, Phase B)
 
-An MCP server (gem **`fast-mcp`**) lets an AI agent (Claude) read and edit the
-salon's DB-backed content. This is the intended control surface (MCP-only, no admin
-UI). Config: `config/initializers/fast_mcp.rb`.
+An MCP server lets an AI agent (Claude) read and edit the salon's DB-backed
+content. This is the intended control surface (MCP-only, no admin UI).
 
-- **Mount:** `/mcp` (SSE transport: `/mcp/sse` + `/mcp/messages`).
+- **Endpoint:** `POST /mcp` — **Streamable HTTP** JSON-RPC served by
+  `McpController` (`initialize`, `ping`, `tools/list`, `tools/call`;
+  notifications → 202; GET/DELETE → 405). fast-mcp's Rack/SSE transport is
+  **not mounted** (claude.ai requires Streamable HTTP); the **`fast-mcp`** gem
+  provides only the tool layer (`ActionTool::Base` + dry-schema). See
+  `config/initializers/mcp.rb`.
 - **Auth:** dual-auth via the `McpDualAuth` Rack middleware
-  (`lib/middleware/mcp_dual_auth.rb`, inserted ahead of the fast-mcp transport;
-  fast-mcp's built-in auth is disabled). Accepts EITHER the static
-  `MCP_AUTH_TOKEN` bearer token (Claude Code) OR a Doorkeeper OAuth access token
-  (claude.ai). Unauthenticated requests get `401` + `WWW-Authenticate: Bearer
+  (`lib/middleware/mcp_dual_auth.rb`, runs before the router; answers CORS
+  preflights). Accepts EITHER the static `MCP_AUTH_TOKEN` bearer token (Claude
+  Code) OR a Doorkeeper OAuth access token (claude.ai). Unauthenticated
+  requests get `401` + `WWW-Authenticate: Bearer
   resource_metadata="…/.well-known/oauth-protected-resource"` to trigger OAuth
-  discovery.
-- **Tools** live in `app/tools/` (subclass `ApplicationTool`, registered explicitly
-  in the initializer). Pilot set covers **Promotions**: `list_promotions` (read),
-  `create_promotion`, `update_promotion`, `set_promotion_active` (guarded writes).
+  discovery (Doorkeeper + `/owner/login` + DCR at `/oauth/register`).
+- **Tools** live in `app/tools/` (subclass `ApplicationTool`, registered in
+  `McpController::TOOL_CLASS_NAMES`). Pilot set covers **Promotions**:
+  `ListPromotionsTool` (read), `CreatePromotionTool`, `UpdatePromotionTool`,
+  `SetPromotionActiveTool` (guarded writes).
 - **Guardrails:** dry-schema validates all tool input; every write is recorded in
   **`AuditLog`** (`source: "mcp"`, before/after `details`); **no hard-delete** tool
-  (hide via `set_promotion_active`). Add new tools following this pattern and
-  register them in the initializer.
-- ⚠️ **Not yet verified against a live Claude client.** SSE is deprecated vs the
-  current Streamable HTTP; confirm claude.ai connector compatibility + set
-  `allowed_origins` for the production host at deploy time. See
-  `docs/cms-ai-roadmap.md`.
+  (hide via `SetPromotionActiveTool`). Add new tools following this pattern and
+  register them in `TOOL_CLASS_NAMES`.
 
 ## Deployment
 

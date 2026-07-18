@@ -54,7 +54,7 @@ class OauthAuthorizationFlowTest < ActionDispatch::IntegrationTest
       token = JSON.parse(response.body)
       assert_equal "mcp", token["scope"]
 
-      post "/mcp/messages",
+      post "/mcp",
            params: { jsonrpc: "2.0", method: "ping", id: 1 }.to_json,
            headers: { "CONTENT_TYPE" => "application/json",
                       "Authorization" => "Bearer #{token["access_token"]}" }
@@ -116,7 +116,7 @@ class OauthAuthorizationFlowTest < ActionDispatch::IntegrationTest
       assert_equal "claudeai", token["scope"]
 
       # 6. The issued token authenticates against /mcp
-      post "/mcp/messages",
+      post "/mcp",
            params: { jsonrpc: "2.0", method: "ping", id: 1 }.to_json,
            headers: { "CONTENT_TYPE" => "application/json",
                       "Authorization" => "Bearer #{token["access_token"]}" }
