@@ -1,49 +1,83 @@
 <!-- ===== ABOUT SECTION ===== -->
-<section id="about" class="relative py-24 lg:py-32 warm-gradient-cream overflow-hidden">
-  <div class="absolute inset-0 pointer-events-none opacity-40" aria-hidden="true">
-    <div class="absolute top-0 left-0 w-96 h-96 rounded-full bg-peach-100 blur-3xl"></div>
-    <div class="absolute bottom-0 right-0 w-[28rem] h-[28rem] rounded-full bg-sage-100 blur-3xl"></div>
+<section id="about" class="relative flex items-center overflow-hidden warm-gradient-cream lg:min-h-[85vh] py-24 lg:py-32">
+  <!-- ambient backdrop -->
+  <div class="pointer-events-none absolute inset-0 hero-grid-lines opacity-40" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute inset-0 opacity-60" aria-hidden="true">
+    <div class="absolute -top-10 left-0 h-96 w-96 rounded-full hero-orb-terra blur-3xl"></div>
+    <div class="absolute bottom-0 right-0 h-[30rem] w-[30rem] rounded-full hero-orb-sage blur-3xl"></div>
   </div>
 
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-      <div data-controller="scroll-reveal" data-scroll-reveal-animation-value="fadeInUp">
-        <%= render 'shared/section_header',
-                   eyebrow: 'Welcome to Elite Nails',
-                   title: 'Your Neighborhood',
-                   title_accent: 'Nail Sanctuary',
-                   align: :left %>
+  <div class="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10">
+    <div class="grid grid-cols-1 items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
 
-        <div class="mt-6 space-y-4 text-warm-gray-700 leading-relaxed">
+      <%# ===== Statement column ===== %>
+      <div data-controller="scroll-reveal" data-scroll-reveal-animation-value="fadeInLeft">
+        <div class="flex items-center gap-4">
+          <span class="h-px w-16 bg-gradient-to-r from-terracotta-300 to-transparent"></span>
+          <span class="text-xs uppercase tracking-[0.24em] text-terracotta-600">Welcome to Elite Nails</span>
+        </div>
+
+        <h2 class="mt-6 font-serif text-4xl leading-[1.05] text-warm-gray-900 sm:text-5xl lg:text-6xl">
+          Your neighborhood
+          <span class="block italic font-light text-terracotta-600">nail sanctuary</span>
+        </h2>
+
+        <p class="mt-8 font-script text-2xl leading-snug text-warm-gray-700 lg:text-3xl">
+          &ldquo;A cozy escape from the everyday, right on Market Street.&rdquo;
+        </p>
+
+        <div class="mt-6 max-w-xl space-y-4 leading-relaxed text-warm-gray-700">
           <p>
-            Since 2003, Elite Nails has been a beloved fixture on Market Street in downtown Cramerton. Our cozy salon offers a welcoming escape from the everyday, where skilled technicians transform your nails into works of art.
+            Since 2003, Elite Nails has been a beloved fixture in downtown Cramerton.
+            Our cozy salon offers a welcoming escape where skilled technicians
+            transform your nails into small works of art.
           </p>
           <p>
-            Whether you're seeking a classic manicure, a luxurious spa pedicure, or the latest in gel and acrylic designs, our dedicated team brings precision, creativity, and genuine care to every service.
+            Whether it's a classic manicure, a luxurious spa pedicure, or the latest
+            in gel and acrylic designs, our team brings precision, creativity, and
+            genuine care to every service.
           </p>
         </div>
 
-        <div class="mt-8">
+        <div class="mt-9">
           <%= render 'shared/cta_button',
                      text: 'Schedule Your Visit',
                      href: booking_link,
                      style: :solid,
-                     size: :md %>
+                     size: :lg,
+                     icon: 'calendar-days' %>
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-6" data-controller="stagger" data-stagger-amount-value="0.15" data-stagger-from-value="scale">
+      <%# ===== Editorial stats column ===== %>
+      <div class="relative" data-controller="scroll-reveal" data-scroll-reveal-animation-value="fadeInRight" data-scroll-reveal-delay-value="0.15">
+        <%# oversized watermark %>
+        <span class="pointer-events-none absolute -top-16 right-0 select-none font-serif leading-none text-[9rem] lg:text-[12rem] text-warm-gray-900/[0.05]" aria-hidden="true">2003</span>
+
         <% stats = [
-          { value: '20+', label: 'Years of Excellence' },
-          { value: '3+', label: 'Expert Technicians' },
-          { value: '★', label: '5-Star Reviews' },
-          { icon_name: 'map-pin', label: 'Market St, Cramerton' }
+          { value: '20+', label: 'Years of Excellence', note: 'Serving Cramerton since 2003' },
+          { value: '3+', label: 'Expert Technicians', note: 'A close, family-run team' },
+          { value: '★', label: 'Guest-Loved Service', note: 'Warm, unhurried, personal' },
+          { value: 'NC', label: 'Market St, Cramerton', note: 'Just off downtown', icon_name: 'map-pin' }
         ] %>
 
-        <% stats.each do |stat| %>
-          <%= render 'shared/stat_card', **stat %>
-        <% end %>
+        <div class="relative grid grid-cols-1 gap-px overflow-hidden rounded-3xl border border-cream-200 bg-cream-200/60 shadow-warm-lg sm:grid-cols-2">
+          <% stats.each do |stat| %>
+            <div class="bg-cream-50/90 p-6 backdrop-blur transition-colors duration-300 hover:bg-white/90">
+              <% if stat[:icon_name].present? %>
+                <span class="flex h-11 w-11 items-center justify-center rounded-full bg-peach-100 shadow-warm-sm">
+                  <%= icon stat[:icon_name], classes: 'w-5 h-5 text-terracotta-600' %>
+                </span>
+              <% else %>
+                <p class="font-serif text-5xl leading-none text-warm-gray-900"><%= stat[:value] %></p>
+              <% end %>
+              <p class="mt-4 text-sm font-semibold uppercase tracking-[0.14em] text-terracotta-600"><%= stat[:label] %></p>
+              <p class="mt-1 text-sm text-warm-gray-600"><%= stat[:note] %></p>
+            </div>
+          <% end %>
+        </div>
       </div>
+
     </div>
   </div>
 </section>

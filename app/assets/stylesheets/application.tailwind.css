@@ -269,6 +269,20 @@
   transition: z-index 0s 0s;
 }
 
+/* Team — cutout portrait backdrops (photos blend, not framed) */
+.portrait-backdrop-terra {
+  background: radial-gradient(58% 58% at 50% 42%, rgba(212, 154, 138, 0.38) 0%, rgba(212, 154, 138, 0.1) 55%, transparent 72%);
+}
+
+.portrait-backdrop-sage {
+  background: radial-gradient(58% 58% at 50% 42%, rgba(125, 158, 134, 0.34) 0%, rgba(125, 158, 134, 0.1) 55%, transparent 72%);
+}
+
+/* Soft ground shadow that grounds a background-removed portrait */
+.portrait-ground {
+  background: radial-gradient(50% 100% at 50% 100%, rgba(104, 72, 57, 0.22) 0%, transparent 70%);
+}
+
 /* Respect user motion preferences */
 @media (prefers-reduced-motion: reduce) {
   * {
