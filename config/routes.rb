@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  # OAuth 2.1 provider (Doorkeeper): /oauth/authorize, /oauth/token, etc.
+  use_doorkeeper
+
+  # Single-owner login (used by Doorkeeper's resource_owner_authenticator).
+  get    "/owner/login",  to: "owner_sessions#new"
+  post   "/owner/login",  to: "owner_sessions#create"
+  delete "/owner/logout", to: "owner_sessions#destroy"
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

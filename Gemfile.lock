@@ -123,6 +123,8 @@ GEM
       reline (>= 0.3.8)
     dockerfile-rails (1.7.10)
       rails (>= 3.0.0)
+    doorkeeper (5.9.3)
+      railties (>= 5)
     dotenv (3.1.8)
     dotenv-rails (3.1.8)
       dotenv (= 3.1.8)
@@ -420,6 +422,7 @@ DEPENDENCIES
   cssbundling-rails
   debug
   dockerfile-rails (>= 1.7)
+  doorkeeper (~> 5.9)
   dotenv-rails
   fast-mcp (~> 1.6)
   heroicons (~> 2.0)

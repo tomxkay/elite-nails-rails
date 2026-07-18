@@ -202,6 +202,22 @@ gems removed. What I **can't** do (requires your Fly account):
    treat the first deploy as the verification step.
 
 ### Progress
+- **Phase B — OAuth (claude.ai) — IN PROGRESS (2026-07-18).** claude.ai's connector
+  UI (confirmed via screenshot) offers only OAuth Client ID/Secret — no static-header
+  option — so `static_headers` is unavailable to this account; **OAuth is required**
+  for claude.ai. Building an OAuth 2.1 provider in the app (Doorkeeper). Slices:
+  1. ✅ **Foundation** — Doorkeeper installed (public clients, PKCE S256 forced,
+     authorization_code + refresh tokens, `skip_authorization`), single-owner login
+     (`/owner/login`, `MCP_OWNER_PASSWORD` — no User table), migrations, routes.
+  2. ⬜ **Discovery** — `/.well-known/oauth-protected-resource` (RFC 9728) +
+     `/.well-known/oauth-authorization-server` (RFC 8414) advertising S256.
+  3. ⬜ **Dynamic Client Registration** — custom `/oauth/register` (RFC 7591;
+     Doorkeeper lacks it) creating public clients.
+  4. ⬜ **Dual-auth in front of `/mcp`** — accept static `MCP_AUTH_TOKEN` (Claude
+     Code) OR a Doorkeeper access token (claude.ai); return `401` +
+     `WWW-Authenticate: Bearer resource_metadata="…"` to trigger discovery.
+  5. ⬜ Verify against claude.ai over ngrok (redirect URI `https://claude.ai/api/mcp/auth_callback`);
+     watch CORS on `WWW-Authenticate`, CSP `form_action`, scope parsing.
 - **Phase B — pilot DONE (2026-07-18).** MCP server live via **`fast-mcp` 1.6.0**,
   mounted at `/mcp` (SSE transport: `/mcp/sse` + `/mcp/messages`), bearer-token auth
   (enabled when `MCP_AUTH_TOKEN` is set). Added **`AuditLog`** (before/after
