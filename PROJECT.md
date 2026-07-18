@@ -167,6 +167,17 @@ To be answered with the client. Grouped by theme; update inline as we learn more
 
 ## Progress Log
 
+- **2026-07-18 — Phase 1: Services section editorial pass.**
+  Replaced the emoji-forward card grid with **image-forward** editorial cards
+  (real service photos front-and-center — the photography lever): numbered labels
+  (01–06), serif title overlaid on a warm gradient scrim, "Most Loved" badge on
+  the featured card, refined image-zoom + lift hover, description + "View Pricing"
+  link. Added the ambient grid backdrop for consistency and preserved the
+  "View Pricing → flash matching pricing category" wiring. Dropped the unused
+  `emoji` field; the old `service-image-hover` controller/CSS are now unused (left
+  registered, harmless — candidate for cleanup). Files:
+  `app/views/shared/_service_card.html.erb`, `app/views/pages/home/_services.html.erb`.
+  Verified via headless-browser screenshot.
 - **2026-07-18 — Phase 2: Promotions / Specials section added.**
   New `#specials` section (rendered after pricing, before reviews) surfacing
   current offers in a distinctive **coupon/ticket** style (kept visually separate
