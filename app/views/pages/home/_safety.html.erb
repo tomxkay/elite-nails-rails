@@ -1,6 +1,9 @@
 <!-- ===== SAFETY & CLEANLINESS SECTION ===== -->
-<section class="py-24 lg:py-28 bg-gradient-to-r from-cream-50 via-peach-50 to-cream-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rounded-3xl border border-cream-200 shadow-warm-sm bg-cream-50/90 backdrop-blur">
+<section class="relative overflow-hidden bg-gradient-to-r from-cream-50 via-peach-50 to-cream-50 py-24 lg:py-28">
+  <!-- ambient backdrop -->
+  <div class="pointer-events-none absolute inset-0 hero-grid-lines opacity-30" aria-hidden="true"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rounded-3xl border border-cream-200 shadow-warm-sm bg-cream-50/90 backdrop-blur">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-center px-6 py-10">
       <div class="md:col-span-2 max-w-3xl">
         <%= render 'shared/section_header',
