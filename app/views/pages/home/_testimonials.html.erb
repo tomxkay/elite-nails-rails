@@ -46,20 +46,17 @@
       </div>
     </div>
 
-    <%# ===== Review cards (organic masonry) ===== %>
-    <% reviews = [
-      { quote: "The staff here is incredibly friendly and talented! They always take their time to make sure every detail is perfect. My go-to spot for special occasions.", name: "Sarah M.", rating: 5, date: "2 weeks ago", source: "Google" },
-      { quote: "Best nail salon in the area! Great prices and the quality is amazing. They're so gentle with cuticle work — I never feel rushed or uncomfortable.", name: "Jennifer L.", rating: 5, date: "1 month ago", source: "Google" },
-      { quote: "I've been coming here for years and the consistency is unmatched. Clean salon, professional service, and my gel manicures last for weeks!", name: "Michelle R.", rating: 5, date: "3 weeks ago", source: "Google" },
-      { quote: "Michael did the most beautiful fine-line art for my wedding. Everyone asked where I got my nails done. Truly a local gem.", name: "Ana P.", rating: 5, date: "2 months ago", source: "Google" },
-      { quote: "The spa pedicure is pure relaxation. Warm, welcoming, and they remember your name every visit. Wouldn't go anywhere else.", name: "Karen T.", rating: 5, date: "1 week ago", source: "Google" },
-      { quote: "Spotlessly clean and the whole family is so kind. Fair prices and they never rush. Highly recommend to anyone in Cramerton.", name: "Denise W.", rating: 5, date: "5 weeks ago", source: "Google" }
-    ] %>
-
+    <%# ===== Review cards (organic masonry) — from the DB (Review), with
+        in-code DEFAULTS fallback. ===== %>
     <div class="mt-12 gap-6 [column-fill:_balance] sm:columns-2 lg:columns-3"
          data-controller="stagger" data-stagger-amount-value="0.12" data-stagger-from-value="bottom">
-      <% reviews.each do |review| %>
-        <%= render 'shared/testimonial_card', **review %>
+      <% Review.for_display.each do |review| %>
+        <%= render 'shared/testimonial_card',
+                   quote: review.quote,
+                   name: review.author_name,
+                   rating: review.rating,
+                   date: review.relative_date,
+                   source: review.source %>
       <% end %>
     </div>
   </div>

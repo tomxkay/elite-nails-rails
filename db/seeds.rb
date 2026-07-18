@@ -18,3 +18,15 @@ PricingItem::DEFAULTS.each do |attrs|
   PricingItem.find_or_initialize_by(category: attrs[:category], name: attrs[:name]).update!(attrs)
 end
 puts "Seeded #{PricingItem.count} pricing items."
+
+# --- Team members ---
+TeamMember::DEFAULTS.each do |attrs|
+  TeamMember.find_or_initialize_by(name: attrs[:name]).update!(attrs)
+end
+puts "Seeded #{TeamMember.count} team members."
+
+# --- Reviews ---
+Review::DEFAULTS.each do |attrs|
+  Review.find_or_initialize_by(author_name: attrs[:author_name], quote: attrs[:quote]).update!(attrs)
+end
+puts "Seeded #{Review.count} reviews."

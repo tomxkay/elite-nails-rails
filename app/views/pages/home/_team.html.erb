@@ -10,36 +10,18 @@
                subtitle: 'Small team, big heart. We listen first, recommend honestly, and care about every detail.' %>
   </div>
 
-  <% team = [
-    {
-      name: "Michael K",
-      role: "Owner & Lead Nail Artist",
-      quote: "Every set should feel like it was made just for you.",
-      bio: "Specializes in gel, dip, and fine-line nail art. Known for a gentle touch and calming demeanor.",
-      specialties: ["Gel Art", "Dip Powder", "Fine Line"],
-      image_url: placeholder_image(width: 600, height: 800, seed: 'team-michael')
-    },
-    {
-      name: "Nhan Ka",
-      role: "Senior Technician",
-      quote: "Color is where I get to play — let's find yours.",
-      bio: "Loves creative color palettes and spa pedicures. Guests rave about her relaxing massages.",
-      specialties: ["Spa Pedicure", "Color Pairing", "Massage"],
-      image_url: placeholder_image(width: 600, height: 800, seed: 'team-nhan')
-    },
-    {
-      name: "Lien Ka",
-      role: "Nail Technician",
-      quote: "Clean shapes, strong nails, and a warm welcome every time.",
-      bio: "Precise shaping and durable acrylics with a friendly, welcoming vibe.",
-      specialties: ["Acrylics", "Nail Shaping", "Natural Looks"],
-      image_url: placeholder_image(width: 600, height: 800, seed: 'team-lien')
-    }
-  ] %>
-
+  <%# Content from the DB (TeamMember), with in-code DEFAULTS fallback.
+      image_url stays nil until real photos land (renders the cutout placeholder). %>
   <div class="relative z-10 mt-8 divide-y divide-cream-200/70">
-    <% team.each_with_index do |member, i| %>
-      <%= render 'shared/team_member', **member, index: i %>
+    <% TeamMember.for_display.each_with_index do |member, i| %>
+      <%= render 'shared/team_member',
+                 name: member.name,
+                 role: member.role,
+                 bio: member.bio,
+                 quote: member.quote,
+                 specialties: member.specialties,
+                 image_url: (asset_path(member.image) if member.image.present?),
+                 index: i %>
     <% end %>
   </div>
 </section>

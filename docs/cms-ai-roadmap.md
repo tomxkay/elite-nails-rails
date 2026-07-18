@@ -202,11 +202,13 @@ gems removed. What I **can't** do (requires your Fly account):
    treat the first deploy as the verification step.
 
 ### Progress
-- **A2 — in progress (2026-07-18).** Migrated **Services** (`Service`) and
-  **Pricing** (`PricingItem`, grouped by category) to the DB — models + migrations
-  + seeds + `for_display` fallback + tests; views render from DB. Remaining A2
-  models: Team, Reviews, SiteSetting + BusinessHour. Active Storage (uploadable
-  photos → Tigris) deferred within A2.
+- **A2 — in progress (2026-07-18).** Migrated **Services** (`Service`), **Pricing**
+  (`PricingItem`), **Team** (`TeamMember`, specialties as a Postgres array), and
+  **Reviews** (`Review`) to the DB — models + migrations + seeds + `for_display`
+  fallback + tests (20 model tests pass); views render from DB. Remaining A2:
+  **SiteSetting + BusinessHour** (salon NAP/hours/settings, incl. the reviews
+  aggregate 4.9/120+ still hardcoded). Active Storage (uploadable photos → Tigris)
+  deferred within A2.
 - **Prod Postgres: PREPARED (2026-07-18), not yet deploy-verified** — see the
   deploy-steps section above.
 - **A1 — Promotions slice: DONE (2026-07-18).** `Promotion` model + migration +

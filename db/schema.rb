@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_18_171252) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_18_171601) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -41,6 +41,20 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_18_171252) do
     t.index ["active", "position"], name: "index_promotions_on_active_and_position"
   end
 
+  create_table "reviews", force: :cascade do |t|
+    t.string "author_name", null: false
+    t.integer "rating", default: 5, null: false
+    t.text "quote"
+    t.string "source"
+    t.string "relative_date"
+    t.boolean "featured", default: false, null: false
+    t.boolean "approved", default: true, null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["approved", "position"], name: "index_reviews_on_approved_and_position"
+  end
+
   create_table "services", force: :cascade do |t|
     t.string "title", null: false
     t.text "description"
@@ -52,5 +66,19 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_18_171252) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["active", "position"], name: "index_services_on_active_and_position"
+  end
+
+  create_table "team_members", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "role"
+    t.text "bio"
+    t.string "quote"
+    t.string "image"
+    t.string "specialties", default: [], null: false, array: true
+    t.integer "position", default: 0, null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active", "position"], name: "index_team_members_on_active_and_position"
   end
 end
