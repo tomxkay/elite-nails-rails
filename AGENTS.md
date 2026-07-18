@@ -241,12 +241,18 @@ fly ssh console   # shell into a machine
 ```
 
 Set production secrets with `fly secrets set …` (`RAILS_MASTER_KEY`, `BOOKING_URL`,
-`GOOGLE_REVIEWS_URL`, Tigris `AWS_*`). The Dockerfile is managed by
-`dockerfile-rails` (`config/dockerfile.yml`). `thruster` (Rails 8 HTTP/asset
-accelerator) is retained; the default Kamal scaffold was removed.
+`GOOGLE_REVIEWS_URL`, `MCP_AUTH_TOKEN`, `MCP_OWNER_PASSWORD`, Tigris `AWS_*`).
+The Dockerfile is managed by `dockerfile-rails` (`config/dockerfile.yml`).
+`thruster` (Rails 8 HTTP/asset accelerator) is retained; the default Kamal
+scaffold was removed. ⚠️ Thruster listens on **`HTTP_PORT`** (set to 8080 in
+`fly.toml [env]`, matching `internal_port`) — its default :80 can't bind as the
+container's non-root user.
 
-> ⚠️ The Postgres production config is **prepared but not yet deploy-verified** —
-> the first `fly deploy` is the verification. See `docs/cms-ai-roadmap.md`.
+> ✅ **Deployed and verified (2026-07-18):** live at
+> https://elite-nails-rails.fly.dev with Fly Postgres (`elite-nails-db`,
+> attached; app role has CREATEDB so boot-time `db:prepare` creates the Solid
+> `_cache`/`_queue`/`_cable` databases). Site, OAuth flow, and all 24 MCP tools
+> verified in production.
 
 ## Conventions
 
@@ -263,9 +269,9 @@ accelerator) is retained; the default Kamal scaffold was removed.
 
 ## Gotchas
 
-- Dev/test run on **Postgres** (`bin/rails db:create db:migrate db:seed`); prod is
-  still SQLite until migrated. Seeds are idempotent and sourced from each model's
-  in-code `DEFAULTS`.
+- Dev/test and **production** all run on **Postgres** (prod: Fly Postgres via
+  `DATABASE_URL`). Seeds are idempotent and sourced from each model's in-code
+  `DEFAULTS`; a fresh production DB seeds itself on first boot via `db:prepare`.
 - The action is empty and most content is still in code — to change what the site
   says, edit the **view partials**, not a controller or model.
 - Booking CTAs must route through `booking_link`; the site degrades to a phone

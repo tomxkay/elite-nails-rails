@@ -304,7 +304,18 @@ gems removed. What I **can't** do (requires your Fly account):
   each model keeps an in-code `DEFAULTS` fallback. **Deferred:** Active Storage
   (uploadable team/service/gallery photos → Tigris) — photos are still asset files.
   **Next: Phase B (MCP server).**
-- **Prod Postgres: PREPARED (2026-07-18), not yet deploy-verified** — see the
+- **Prod deploy: DONE (2026-07-18)** — live at https://elite-nails-rails.fly.dev.
+  Fly Postgres `elite-nails-db` (smallest, iad) created + attached; app role
+  granted CREATEDB (Solid `_cache`/`_queue`/`_cable` created on boot); old
+  SQLite-era machine + volume destroyed; secrets set (`RAILS_MASTER_KEY`, prod
+  `MCP_AUTH_TOKEN`/`MCP_OWNER_PASSWORD` — generated fresh, distinct from dev).
+  One deploy fix needed: Thruster binds `HTTP_PORT` (default :80 fails as
+  non-root) → `HTTP_PORT=8080` in `fly.toml [env]`. Verified in production:
+  site renders seeded content, `/up` 200, discovery docs, 401 challenge, 24
+  tools via static token, and the full OAuth flow (DCR→PKCE→login→token→
+  tools/call). Note: prod DB seeded fresh from `DEFAULTS` — content edits made
+  in dev (e.g. the $40 gel manicure) are not carried over.
+- **Prod Postgres: PREPARED (2026-07-18), then deployed same day** — see the
   deploy-steps section above.
 - **A1 — Promotions slice: DONE (2026-07-18).** `Promotion` model + migration +
   primary `db/schema.rb`, idempotent seeds from `Promotion::DEFAULTS`, `_promotions`

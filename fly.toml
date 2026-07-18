@@ -10,7 +10,10 @@ console_command = '/rails/bin/rails console'
 [build]
 
 [env]
-  PORT = '8080'
+  # Thruster listens on HTTP_PORT (must be >1024 — the container runs as a
+  # non-root user, so binding its default :80 fails) and runs Puma internally
+  # on its own target port. Fly's internal_port below must match.
+  HTTP_PORT = '8080'
   # DATABASE_URL is provided as a Fly secret via `fly postgres attach` (not stored here).
 
 [processes]
