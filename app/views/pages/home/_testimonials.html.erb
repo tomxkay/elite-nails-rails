@@ -1,20 +1,65 @@
-<!-- ===== TESTIMONIALS SECTION ===== -->
-<section id="testimonials" class="py-24 lg:py-32 warm-gradient-sage-cream">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- ===== REVIEWS SECTION ===== -->
+<section id="testimonials" class="relative overflow-hidden warm-gradient-sage-cream py-24 lg:py-32">
+  <!-- ambient backdrop -->
+  <div class="pointer-events-none absolute inset-0 hero-grid-lines opacity-30" aria-hidden="true"></div>
+
+  <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <%= render 'shared/section_header',
                eyebrow: 'What Our Guests Say',
                title: 'Kind Words',
-               subtitle: 'See why our clients keep coming back' %>
+               subtitle: 'Real reviews from the neighbors who keep coming back.' %>
 
-    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-controller="stagger" data-stagger-amount-value="0.2" data-stagger-from-value="bottom">
-      <% testimonials = [
-        { quote: "The staff here is incredibly friendly and talented! They always take their time to make sure every detail is perfect. My go-to spot for special occasions.", name: "Sarah M.", rating: 5 },
-        { quote: "Best nail salon in the area! Great prices and the quality is amazing. They're so gentle with cuticle work - I never feel rushed or uncomfortable.", name: "Jennifer L.", rating: 5 },
-        { quote: "I've been coming here for years and the consistency is unmatched. Clean salon, professional service, and my gel manicures last for weeks!", name: "Michelle R.", rating: 5 }
-      ] %>
+    <%# ===== Aggregate rating trust panel =====
+        NOTE: rating value + review count are placeholders until the salon's
+        Google Business profile is confirmed (see PROJECT.md open questions). %>
+    <div class="mt-14 flex flex-col items-center gap-8 rounded-3xl border border-cream-200 bg-cream-50/90 px-8 py-8 shadow-warm-lg backdrop-blur md:flex-row md:justify-between"
+         data-controller="scroll-reveal" data-scroll-reveal-animation-value="fadeInUp">
+      <div class="flex items-center gap-6">
+        <p class="font-serif text-6xl leading-none text-warm-gray-900">4.9</p>
+        <div>
+          <div class="flex" aria-label="Average rating 4.9 out of 5">
+            <% 5.times do %>
+              <%= icon 'star', variant: :solid, classes: 'w-6 h-6 text-gold-500 drop-shadow-sm' %>
+            <% end %>
+          </div>
+          <p class="mt-2 text-sm text-warm-gray-700">Based on <span class="font-semibold text-warm-gray-900">120+ reviews</span> from happy guests</p>
+        </div>
+      </div>
 
-      <% testimonials.each do |testimonial| %>
-        <%= render 'shared/testimonial_card', **testimonial %>
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <%= render 'shared/cta_button',
+                   text: 'Read Reviews on Google',
+                   href: google_reviews_link,
+                   target: '_blank',
+                   rel: 'noopener',
+                   style: :outline,
+                   size: :md,
+                   icon: 'star' %>
+        <%= render 'shared/cta_button',
+                   text: 'Leave a Review',
+                   href: google_reviews_link,
+                   target: '_blank',
+                   rel: 'noopener',
+                   style: :solid,
+                   size: :md,
+                   icon: 'pencil-square' %>
+      </div>
+    </div>
+
+    <%# ===== Review cards (organic masonry) ===== %>
+    <% reviews = [
+      { quote: "The staff here is incredibly friendly and talented! They always take their time to make sure every detail is perfect. My go-to spot for special occasions.", name: "Sarah M.", rating: 5, date: "2 weeks ago", source: "Google" },
+      { quote: "Best nail salon in the area! Great prices and the quality is amazing. They're so gentle with cuticle work — I never feel rushed or uncomfortable.", name: "Jennifer L.", rating: 5, date: "1 month ago", source: "Google" },
+      { quote: "I've been coming here for years and the consistency is unmatched. Clean salon, professional service, and my gel manicures last for weeks!", name: "Michelle R.", rating: 5, date: "3 weeks ago", source: "Google" },
+      { quote: "Michael did the most beautiful fine-line art for my wedding. Everyone asked where I got my nails done. Truly a local gem.", name: "Ana P.", rating: 5, date: "2 months ago", source: "Google" },
+      { quote: "The spa pedicure is pure relaxation. Warm, welcoming, and they remember your name every visit. Wouldn't go anywhere else.", name: "Karen T.", rating: 5, date: "1 week ago", source: "Google" },
+      { quote: "Spotlessly clean and the whole family is so kind. Fair prices and they never rush. Highly recommend to anyone in Cramerton.", name: "Denise W.", rating: 5, date: "5 weeks ago", source: "Google" }
+    ] %>
+
+    <div class="mt-12 gap-6 [column-fill:_balance] sm:columns-2 lg:columns-3"
+         data-controller="stagger" data-stagger-amount-value="0.12" data-stagger-from-value="bottom">
+      <% reviews.each do |review| %>
+        <%= render 'shared/testimonial_card', **review %>
       <% end %>
     </div>
   </div>

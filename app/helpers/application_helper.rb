@@ -24,6 +24,13 @@ module ApplicationHelper
     ENV["BOOKING_URL"].presence || "tel:+17048249032"
   end
 
+  # Google reviews/business URL with a sensible fallback to a Maps search.
+  # Set GOOGLE_REVIEWS_URL to the salon's Google Business "reviews" or place link.
+  def google_reviews_link
+    ENV["GOOGLE_REVIEWS_URL"].presence ||
+      "https://www.google.com/maps/search/?api=1&query=Elite+Nails+202+Market+St+Cramerton+NC"
+  end
+
   # Placeholder image helper (currently disabled - returns nil)
   # Kept for future use when actual images are added
   #
