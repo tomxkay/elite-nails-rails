@@ -167,6 +167,12 @@ To be answered with the client. Grouped by theme; update inline as we learn more
 
 ## Progress Log
 
+- **2026-07-18 — Editorial polish: Pricing, Contact, Safety.** Added the shared
+  ambient grid backdrop (`hero-grid-lines`) to all three so every content section
+  reads as one system. Pricing category headers now use the serif + numbered
+  (01/02/03) treatment matching Team/Services, with a divider. Contact and Safety
+  wrapped with the backdrop; content kept intact (map, hours, pricing-highlight
+  wiring all preserved). Verified via screenshots.
 - **2026-07-18 — Cleanup pass.** Removed the unused Kamal deploy scaffold
   (`config/deploy.yml`, `.kamal/`, `bin/kamal`, `kamal` gem, `.dockerignore`
   entries; Dockerfile comment updated) now that Fly.io is the confirmed host —
