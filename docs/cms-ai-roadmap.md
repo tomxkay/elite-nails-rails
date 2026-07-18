@@ -224,8 +224,21 @@ gems removed. What I **can't** do (requires your Fly account):
      preflights pass through unauthenticated. 9 integration tests
      (`test/integration/mcp_dual_auth_test.rb`); suite 46 green. Verified live:
      401 challenge / static-token 200 / bad-token 401 on a booted dev server.
-  5. ⬜ Verify against claude.ai over ngrok (redirect URI `https://claude.ai/api/mcp/auth_callback`);
-     watch CORS on `WWW-Authenticate`, CSP `form_action`, scope parsing.
+  5. 🔶 **Verify against claude.ai over ngrok — machinery verified (2026-07-18),
+     UI connection pending.** Simulated claude.ai's exact flow with curl through
+     ngrok and it passes end-to-end: DCR → PKCE authorize → owner login →
+     `skip_authorization` redirect to `https://claude.ai/api/mcp/auth_callback`
+     with code+state → token exchange (scope `claudeai` echoed, 7200s expiry,
+     refresh token) → `/mcp` 200 with the OAuth token → refresh grant works.
+     Watch items resolved: `WWW-Authenticate` is CORS-exposed; **no CSP header**
+     is sent, so `form_action` can't block the redirect; per-app scopes from DCR
+     make Doorkeeper accept `scope=claudeai`. Found+fixed live: Doorkeeper calls
+     `.id` on the resource owner, so `resource_owner_authenticator` now returns
+     `MCP_OWNER` (a `Data` object), not the integer 1 — locked in by
+     `test/integration/oauth_authorization_flow_test.rb`. **Remaining:** add the
+     connector in claude.ai's UI (Settings → Connectors → paste `<ngrok>/mcp`)
+     and exercise the Promotion tools from a chat — couldn't be automated
+     (Chrome extension not connected); needs a quick manual run.
 - **Phase B — pilot DONE (2026-07-18).** MCP server live via **`fast-mcp` 1.6.0**,
   mounted at `/mcp` (SSE transport: `/mcp/sse` + `/mcp/messages`), bearer-token auth
   (enabled when `MCP_AUTH_TOKEN` is set). Added **`AuditLog`** (before/after
