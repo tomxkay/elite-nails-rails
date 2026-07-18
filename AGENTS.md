@@ -20,7 +20,7 @@ built on Hotwire (Turbo + Stimulus), GSAP, and Tailwind CSS v4.
 |------------|--------|
 | Framework  | Rails 8.0.2 (Ruby 3.2.1) |
 | Web server | Puma + Thruster |
-| Database   | SQLite 3 (Solid Cache / Solid Queue / Solid Cable — all SQLite-backed) |
+| Database   | **PostgreSQL** (development & test primary). Production still SQLite + Solid stack + Litestream — prod-Postgres migration is a tracked task (see `docs/cms-ai-roadmap.md`). Content is migrating from code → DB (Milestone 2). |
 | Assets     | Propshaft |
 | JS bundler | esbuild (`jsbundling-rails`), ESM output to `app/assets/builds/` |
 | CSS        | Tailwind CSS v4 CLI (`cssbundling-rails`) |
@@ -68,7 +68,11 @@ The app is essentially static from the server's perspective:
 
 - `config/routes.rb`: `root "pages#home"` + `/up` health check. That's it.
 - `PagesController#home` — **empty action**, just renders the view.
-- No models (`app/models` has only `ApplicationRecord`), no jobs, no mailers in use.
+- Content is migrating from code → DB (Milestone 2). First model: **`Promotion`**
+  (the Specials section renders from it). Each migrated model keeps an in-code
+  `DEFAULTS` backup and a `for_display` method that falls back to it if the table
+  is empty/unavailable — so the site always renders and can re-seed from code.
+  Remaining sections still use inline arrays until migrated. No jobs/mailers yet.
 
 **Key helper — `app/helpers/application_helper.rb`:**
 - `icon(name, variant:, classes:, **opts)` — unified icon helper. Delegates to
@@ -125,10 +129,11 @@ used by the nav:
 `_section_header` (eyebrow/title/subtitle), `_cta_button`, `_service_card`,
 `_team_member`, `_testimonial_card`, `_stat_card`, `_gallery_item`.
 
-**Editing content:** Service list, prices, team members, and testimonials are
-defined as **inline Ruby arrays inside their partials** (not a CMS/DB). Salon
-address, phone `(704) 824-9032`, and hours (Mon–Fri 10–7, Sat 9–6, Sun closed)
-are hardcoded in `_contact`. Update those files directly to change content.
+**Editing content:** **Promotions** are now **DB-backed** (`Promotion` model) —
+edit via the DB (or `Promotion::DEFAULTS` + re-seed). Services, prices, team, and
+testimonials are still **inline Ruby arrays inside their partials** (migrating to
+the DB in Milestone 2). Salon address, phone `(704) 824-9032`, and hours (Mon–Fri
+10–7, Sat 9–6, Sun closed) are hardcoded in `_contact` / the `salon` helper.
 
 ## Frontend / Animation System
 
@@ -218,7 +223,10 @@ the Dockerfile CMD; the default Kamal scaffold has been removed.
 
 ## Gotchas
 
-- The action is empty and there's no DB-backed content — to change what the site
+- Dev/test run on **Postgres** (`bin/rails db:create db:migrate db:seed`); prod is
+  still SQLite until migrated. Seeds are idempotent and sourced from each model's
+  in-code `DEFAULTS`.
+- The action is empty and most content is still in code — to change what the site
   says, edit the **view partials**, not a controller or model.
 - Booking CTAs must route through `booking_link`; the site degrades to a phone
   link if `BOOKING_URL` is unset.

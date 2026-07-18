@@ -178,6 +178,14 @@ To be answered with the client. Grouped by theme; update inline as we learn more
 
 ## Progress Log
 
+- **2026-07-18 — Milestone 2 / Phase A1: Promotions moved to the DB (Postgres).**
+  Switched dev + test to **PostgreSQL** (prod stays SQLite until a tracked deploy
+  task). Added the `Promotion` model + migration + primary `db/schema.rb`,
+  idempotent seeds, and refactored `_promotions` to render from the DB. Per the
+  "keep data in code as backup" requirement, each model keeps an in-code
+  `DEFAULTS` constant + a `for_display` fallback, so the site renders even if the
+  DB is empty/unavailable (verified). 5 model tests pass. Next: A2 (migrate the
+  other sections) then Phase B (MCP server). Full detail: `docs/cms-ai-roadmap.md`.
 - **2026-07-18 — Editorial polish: Pricing, Contact, Safety.** Added the shared
   ambient grid backdrop (`hero-grid-lines`) to all three so every content section
   reads as one system. Pricing category headers now use the serif + numbered

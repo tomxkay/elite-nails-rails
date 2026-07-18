@@ -164,6 +164,22 @@ These become possible once data is in the DB and reachable over MCP.
   and needs **no Active Storage** (promotions have no images), so images/Tigris are
   deferred to the later team/services/gallery migration.
 - **Approach: research/spike the stack first**, then build.
+- **Database engine: PostgreSQL.** Dev + test primary DB switched to Postgres
+  (2026-07-18). **Production still runs SQLite + Litestream** until a tracked
+  deploy task provisions managed Postgres on Fly (update `fly.toml` + the
+  production block in `database.yml`, retire Litestream-for-DB; Tigris stays for
+  future Active Storage). Low lock-in: data re-seeds from each model's in-code
+  `DEFAULTS`.
+- **In-code backup pattern:** every migrated model keeps a `DEFAULTS` constant (the
+  canonical seed source) and a `for_display` that falls back to it when the table
+  is empty/unavailable — the site always renders, and re-seeding never loses data.
+
+### Progress
+- **A1 — Promotions slice: DONE (2026-07-18).** `Promotion` model + migration +
+  primary `db/schema.rb`, idempotent seeds from `Promotion::DEFAULTS`, `_promotions`
+  view rendering from the DB with in-code fallback, 5 passing model tests. Verified
+  on Postgres end-to-end (DB-backed render + fallback). AuditLog deferred to Phase B
+  (no writes yet in A1).
 
 ## Research Findings (2026-07-18)
 
