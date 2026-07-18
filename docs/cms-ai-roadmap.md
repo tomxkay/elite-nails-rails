@@ -239,8 +239,13 @@ gems removed. What I **can't** do (requires your Fly account):
      preflights pass through unauthenticated. 9 integration tests
      (`test/integration/mcp_dual_auth_test.rb`); suite 46 green. Verified live:
      401 challenge / static-token 200 / bad-token 401 on a booted dev server.
-  5. 🔶 **Verify against claude.ai over ngrok — machinery verified (2026-07-18),
-     UI connection pending.** Simulated claude.ai's exact flow with curl through
+  5. ✅ **Verified against claude.ai over ngrok (2026-07-18).** The owner-facing
+     flow works end-to-end in the real claude.ai UI: custom connector added with
+     just the `<base>/mcp` URL (no client id — DCR handles registration), OAuth
+     completes via `/owner/login`, and **all four Promotion tools work from a
+     chat** (list/create/update/hide, with claude.ai's per-tool approval
+     prompts). Required the Streamable HTTP transport switch + the two
+     Doorkeeper fixes below. Earlier, the same flow was simulated with curl through
      ngrok and it passes end-to-end: DCR → PKCE authorize → owner login →
      `skip_authorization` redirect to `https://claude.ai/api/mcp/auth_callback`
      with code+state → token exchange (scope `claudeai` echoed, 7200s expiry,
