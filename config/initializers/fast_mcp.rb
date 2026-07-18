@@ -12,13 +12,15 @@
 
 # Mount the MCP middleware in your Rails application
 # You can customize the options below to fit your needs.
-require 'fast_mcp'
+require "fast_mcp"
 
-# Bearer-token auth: enabled whenever MCP_AUTH_TOKEN is set (required in
-# production; leave unset in dev for easy local testing). The owner pastes this
-# token into their Claude connector's Authorization header. See
-# docs/cms-ai-roadmap.md for how the owner connects.
-mcp_token = ENV["MCP_AUTH_TOKEN"].presence
+# Auth is owned by the McpDualAuth middleware (inserted below, ahead of the
+# fast-mcp transport): it accepts EITHER the static MCP_AUTH_TOKEN (Claude Code)
+# OR a Doorkeeper OAuth access token (claude.ai), and answers everything else
+# with 401 + a WWW-Authenticate challenge that triggers OAuth discovery.
+# fast-mcp's built-in static-token auth stays disabled (authenticate: false).
+require Rails.root.join("lib/middleware/mcp_dual_auth")
+Rails.application.config.middleware.use McpDualAuth
 
 # Client-IP + Origin (DNS-rebinding) protections. Remote clients (Claude via
 # ngrok in dev, or Anthropic in production) are never "localhost", so localhost_only
@@ -32,20 +34,19 @@ mcp_token = ENV["MCP_AUTH_TOKEN"].presence
 mcp_localhost_only = false
 mcp_allowed_origins =
   if Rails.env.production?
-    ["elite-nails-rails.fly.dev", *ENV["MCP_ALLOWED_ORIGINS"].to_s.split(",").map(&:strip)]
+    [ "elite-nails-rails.fly.dev", *ENV["MCP_ALLOWED_ORIGINS"].to_s.split(",").map(&:strip) ]
   else
-    [/.*/]
+    [ /.*/ ]
   end
 
 FastMcp.mount_in_rails(
   Rails.application,
   name: Rails.application.class.module_parent_name.underscore.dasherize,
-  version: '1.0.0',
-  path_prefix: '/mcp',
-  messages_route: 'messages',
-  sse_route: 'sse',
-  authenticate: mcp_token.present?,
-  auth_token: mcp_token,
+  version: "1.0.0",
+  path_prefix: "/mcp",
+  messages_route: "messages",
+  sse_route: "sse",
+  authenticate: false,
   localhost_only: mcp_localhost_only,
   allowed_origins: mcp_allowed_origins
 ) do |server|

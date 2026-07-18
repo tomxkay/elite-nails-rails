@@ -209,13 +209,21 @@ gems removed. What I **can't** do (requires your Fly account):
   1. ✅ **Foundation** — Doorkeeper installed (public clients, PKCE S256 forced,
      authorization_code + refresh tokens, `skip_authorization`), single-owner login
      (`/owner/login`, `MCP_OWNER_PASSWORD` — no User table), migrations, routes.
-  2. ⬜ **Discovery** — `/.well-known/oauth-protected-resource` (RFC 9728) +
+  2. ✅ **Discovery** — `/.well-known/oauth-protected-resource` (RFC 9728) +
      `/.well-known/oauth-authorization-server` (RFC 8414) advertising S256.
   3. ✅ **Dynamic Client Registration** — custom `/oauth/register` (RFC 7591)
      creating public Doorkeeper clients; CSRF-exempt, CORS-open, 201 + client_id.
-  4. ⬜ **Dual-auth in front of `/mcp`** — accept static `MCP_AUTH_TOKEN` (Claude
-     Code) OR a Doorkeeper access token (claude.ai); return `401` +
-     `WWW-Authenticate: Bearer resource_metadata="…"` to trigger discovery.
+  4. ✅ **Dual-auth in front of `/mcp`** — `McpDualAuth` Rack middleware
+     (`lib/middleware/mcp_dual_auth.rb`), inserted ahead of the fast-mcp transport
+     in `config/initializers/fast_mcp.rb`; fast-mcp's own auth is disabled
+     (`authenticate: false`). Accepts static `MCP_AUTH_TOKEN` (secure-compared,
+     read per-request) OR an `accessible?` Doorkeeper token; otherwise `401` +
+     `WWW-Authenticate: Bearer resource_metadata="<base>/.well-known/oauth-protected-resource"`
+     with `Access-Control-Allow-Origin: *` + `Access-Control-Expose-Headers:
+     WWW-Authenticate` so claude.ai's browser can read the challenge. CORS
+     preflights pass through unauthenticated. 9 integration tests
+     (`test/integration/mcp_dual_auth_test.rb`); suite 46 green. Verified live:
+     401 challenge / static-token 200 / bad-token 401 on a booted dev server.
   5. ⬜ Verify against claude.ai over ngrok (redirect URI `https://claude.ai/api/mcp/auth_callback`);
      watch CORS on `WWW-Authenticate`, CSP `form_action`, scope parsing.
 - **Phase B — pilot DONE (2026-07-18).** MCP server live via **`fast-mcp` 1.6.0**,

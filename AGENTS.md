@@ -58,9 +58,10 @@ bin/brakeman                       # security scan
 - **`GOOGLE_REVIEWS_URL`** — the salon's Google Business reviews/place link. Read
   via `ApplicationHelper#google_reviews_link`, which falls back to a Google Maps
   search for the salon when unset. Used by the Reviews section CTAs.
-- **`MCP_AUTH_TOKEN`** — bearer token for the MCP server (see MCP section). When
-  set, MCP requests must send `Authorization: Bearer <token>`. Leave unset in dev;
-  **required in production**. Set via `fly secrets`.
+- **`MCP_AUTH_TOKEN`** — static bearer token for the MCP server (see MCP
+  section). One of the two accepted credentials (the other is a Doorkeeper OAuth
+  token); MCP auth is always enforced, so with this unset only OAuth tokens work.
+  Set in `.env` for dev; **required in production** via `fly secrets`.
 - Secrets via Rails credentials (`config/credentials.yml.enc` + `master.key`).
 - All salon details (address, phone, hours) are **hardcoded in the views**, not
   in config — see "Editing Content" below.
@@ -198,8 +199,13 @@ salon's DB-backed content. This is the intended control surface (MCP-only, no ad
 UI). Config: `config/initializers/fast_mcp.rb`.
 
 - **Mount:** `/mcp` (SSE transport: `/mcp/sse` + `/mcp/messages`).
-- **Auth:** bearer token via `MCP_AUTH_TOKEN` (enabled when set). The owner pastes it
-  into their Claude connector's `Authorization` header.
+- **Auth:** dual-auth via the `McpDualAuth` Rack middleware
+  (`lib/middleware/mcp_dual_auth.rb`, inserted ahead of the fast-mcp transport;
+  fast-mcp's built-in auth is disabled). Accepts EITHER the static
+  `MCP_AUTH_TOKEN` bearer token (Claude Code) OR a Doorkeeper OAuth access token
+  (claude.ai). Unauthenticated requests get `401` + `WWW-Authenticate: Bearer
+  resource_metadata="…/.well-known/oauth-protected-resource"` to trigger OAuth
+  discovery.
 - **Tools** live in `app/tools/` (subclass `ApplicationTool`, registered explicitly
   in the initializer). Pilot set covers **Promotions**: `list_promotions` (read),
   `create_promotion`, `update_promotion`, `set_promotion_active` (guarded writes).
