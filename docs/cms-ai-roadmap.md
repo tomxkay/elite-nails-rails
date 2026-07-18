@@ -17,7 +17,8 @@ change anything without a developer. We want to:
    write it safely.
 3. Let owners **control the salon by talking to Claude** — "add a Valentine's
    promo," "raise gel manicure to $40," "we're closing early Friday," "feature
-   Sarah's 5-star review" — including hands-free/voice while they work.
+   Sarah's 5-star review." (Via **text chat** with Claude; native voice→MCP isn't
+   production-ready yet — see Research Findings.)
 
 The DB migration (Phase A) is the **prerequisite** for everything else: once
 content is CRUD-able models, the MCP server (Phase B) is mostly thin, well-guarded
@@ -150,6 +151,61 @@ These become possible once data is in the DB and reachable over MCP.
 - Comfort level with **AI making live changes** vs a **review-before-publish** step?
 - Is **Square** the booking system (unblocks booking notifications)?
 - Any need for **multiple staff logins / roles**, or single-owner access?
+
+## Decisions (2026-07-18)
+- **Control surface: MCP only — no admin UI.** Claude (chat/voice) is the sole way
+  owners edit content. ⚠️ Implication: no GUI fallback, so (a) guardrails + audit +
+  rollback are critical, and (b) keep a break-glass path for emergencies (Rails
+  console / re-seed) documented for the developer.
+- **AI autonomy: live edits + audit log.** Changes apply immediately; every write
+  is logged with before/after and is one-click reversible. No pre-publish approval
+  step (accepted higher risk for a faster, more magical experience).
+- **First vertical slice: Promotions** — self-contained, high value, time-bound,
+  and needs **no Active Storage** (promotions have no images), so images/Tigris are
+  deferred to the later team/services/gallery migration.
+- **Approach: research/spike the stack first**, then build.
+
+## Research Findings (2026-07-18)
+
+Resolves the Phase B "to research" items. Sources at bottom.
+
+**Rails MCP implementation → `fast-mcp`** (v1.6.0, Sept 2025; Ruby 3.2+, we're on
+3.2.1). Mounts via `FastMcp.mount_in_rails`; tools subclass `ApplicationTool` with
+**dry-schema-validated arguments** (validates untrusted agent input at the
+boundary — exactly what our guardrails need) and a `call` method.
+
+**Transport → Streamable HTTP.** Current/recommended per MCP spec; **SSE is
+deprecated** (2025). Our endpoint must be **public HTTPS** — Fly.io provides this.
+⚠️ **Verify during the spike** that fast-mcp's HTTP transport is compatible with
+claude.ai's current remote-connector expectations (older write-ups referenced SSE +
+an `mcp-proxy` bridge for Claude Desktop; the modern claude.ai custom-connector path
+takes a remote HTTPS URL directly).
+
+**Auth → static Bearer token via request header.** Simplest secure option for a
+single owner, and it matches fast-mcp's built-in token auth (`authenticate: true` +
+`auth_token`). OAuth 2.x is supported/recommended only if we later need multi-user.
+Token stored in Rails credentials / Fly secrets.
+
+**How the owner connects (non-technical friendly):**
+- **claude.ai:** Settings → Connectors → "Add custom connector" → paste the Fly
+  URL → Advanced/Request headers → `Authorization: Bearer <token>` → Add. (Request-
+  header auth is currently **beta**.)
+- **Claude Code:** `claude mcp add --transport http cms https://<app>.fly.dev/mcp --header "Authorization: Bearer <token>"`.
+
+**Destructive/write tools:** MCP has no protocol-level "confirm" — claude.ai shows a
+per-tool **approval prompt** (allow once / always). We reinforce with descriptive
+tool names/descriptions + our own guardrails (audit log, soft delete, validation).
+
+**Requirements/gotchas:** HTTPS required; public endpoint (Fly is fine); no dynamic
+client registration (pre-register the URL); tool response ≲1MB; if we ever move to a
+private network, Anthropic "MCP Tunnels" exist (not needed on public Fly).
+
+**⚠️ Voice control — reality check.** Native **voice → MCP tool invocation is NOT
+production-ready today.** Claude voice mode can't reliably invoke MCP tools directly.
+The realistic experience is **text chat** (typing to Claude, or phone dictation →
+text → Claude → MCP). Voice-first control should be treated as **aspirational**, not
+a 2026 deliverable. This tempers the original "voice control" framing — the CMS-over-
+chat value stands regardless.
 
 ## Suggested build order
 1. **A1 — first vertical slice:** one model end-to-end (recommend **Promotions**:
