@@ -18,7 +18,10 @@ module Oauth
         name: body["client_name"].presence || "MCP Client",
         redirect_uri: redirect_uris.join("\n"),
         confidential: false, # public client — PKCE, no secret
-        scopes: body["scope"].to_s
+        # Deliberately blank: per-app scopes would override the server's
+        # default/optional scopes at authorize time, and claude.ai omits the
+        # scope param there — a stored list would then fail scope validation.
+        scopes: ""
       )
 
       if app.save
@@ -36,8 +39,8 @@ module Oauth
         client_id_issued_at: app.created_at.to_i,
         client_name: app.name,
         redirect_uris: redirect_uris,
-        grant_types: ["authorization_code", "refresh_token"],
-        response_types: ["code"],
+        grant_types: [ "authorization_code", "refresh_token" ],
+        response_types: [ "code" ],
         token_endpoint_auth_method: "none"
       }
     end

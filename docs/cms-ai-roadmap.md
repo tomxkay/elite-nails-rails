@@ -231,8 +231,12 @@ gems removed. What I **can't** do (requires your Fly account):
      with code+state → token exchange (scope `claudeai` echoed, 7200s expiry,
      refresh token) → `/mcp` 200 with the OAuth token → refresh grant works.
      Watch items resolved: `WWW-Authenticate` is CORS-exposed; **no CSP header**
-     is sent, so `form_action` can't block the redirect; per-app scopes from DCR
-     make Doorkeeper accept `scope=claudeai`. Found+fixed live: Doorkeeper calls
+     is sent, so `form_action` can't block the redirect; scope parsing — the real
+     claude.ai authorize request sends **no scope param**, which Doorkeeper
+     rejects ("Missing required parameter: scope") unless `default_scopes` is
+     set → configured `default_scopes :mcp` + `optional_scopes :claudeai`, DCR
+     stores blank per-app scopes (so they can't shadow the server list), and
+     both discovery docs advertise `scopes_supported`. Found+fixed live: Doorkeeper calls
      `.id` on the resource owner, so `resource_owner_authenticator` now returns
      `MCP_OWNER` (a `Data` object), not the integer 1 — locked in by
      `test/integration/oauth_authorization_flow_test.rb`. **Remaining:** add the

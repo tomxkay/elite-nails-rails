@@ -48,6 +48,15 @@ Doorkeeper.configure do
   force_pkce
   use_refresh_token
 
+  # claude.ai's authorize request sends NO scope parameter, and Doorkeeper
+  # rejects a scopeless request ("Missing required parameter: scope") unless a
+  # default is configured. `claudeai` is also accepted when a client requests it
+  # explicitly. Registered applications keep blank scopes (see
+  # Oauth::RegistrationController) so requests are always validated against
+  # these server scopes and can't conflict with a stored per-app list.
+  default_scopes :mcp
+  optional_scopes :claudeai
+
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
   # file then you need to declare this block in order to restrict access to the web interface for
   # adding oauth authorized applications. In other case it will return 403 Forbidden response

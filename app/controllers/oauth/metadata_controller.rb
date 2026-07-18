@@ -10,8 +10,9 @@ module Oauth
     def protected_resource
       render json: {
         resource: "#{base}/mcp",
-        authorization_servers: [base],
-        bearer_methods_supported: ["header"],
+        authorization_servers: [ base ],
+        bearer_methods_supported: [ "header" ],
+        scopes_supported: [ "mcp", "claudeai" ],
         resource_documentation: "#{base}/"
       }
     end
@@ -22,10 +23,11 @@ module Oauth
         authorization_endpoint: "#{base}/oauth/authorize",
         token_endpoint: "#{base}/oauth/token",
         registration_endpoint: "#{base}/oauth/register",
-        response_types_supported: ["code"],
-        grant_types_supported: ["authorization_code", "refresh_token"],
-        code_challenge_methods_supported: ["S256"],
-        token_endpoint_auth_methods_supported: ["none"]
+        response_types_supported: [ "code" ],
+        grant_types_supported: [ "authorization_code", "refresh_token" ],
+        scopes_supported: [ "mcp", "claudeai" ],
+        code_challenge_methods_supported: [ "S256" ],
+        token_endpoint_auth_methods_supported: [ "none" ]
       }
     end
 

@@ -15,6 +15,53 @@ class OauthAuthorizationFlowTest < ActionDispatch::IntegrationTest
     original.nil? ? ENV.delete("MCP_OWNER_PASSWORD") : ENV["MCP_OWNER_PASSWORD"] = original
   end
 
+  # claude.ai sends NO scope parameter at register or authorize time; Doorkeeper
+  # must fall back to the configured default_scopes instead of erroring with
+  # "Missing required parameter: scope".
+  test "authorize without a scope param falls back to the default scope" do
+    with_owner_password("owner-secret") do
+      post "/oauth/register",
+           params: { client_name: "Claude", redirect_uris: [ CALLBACK ] }.to_json,
+           headers: { "CONTENT_TYPE" => "application/json" }
+      assert_response :created
+      client_id = JSON.parse(response.body)["client_id"]
+
+      verifier = SecureRandom.urlsafe_base64(48)
+      challenge = Base64.urlsafe_encode64(Digest::SHA256.digest(verifier), padding: false)
+
+      post "/owner/login", params: { password: "owner-secret", return_to: "/" }
+
+      get "/oauth/authorize", params: {
+        client_id: client_id,
+        redirect_uri: CALLBACK,
+        response_type: "code",
+        state: "st456",
+        code_challenge: challenge,
+        code_challenge_method: "S256"
+      }
+      assert_response :redirect
+      assert response.location.start_with?(CALLBACK), "expected redirect to claude.ai, got #{response.location}"
+      code = Rack::Utils.parse_query(URI.parse(response.location).query)["code"]
+
+      post "/oauth/token", params: {
+        grant_type: "authorization_code",
+        code: code,
+        redirect_uri: CALLBACK,
+        client_id: client_id,
+        code_verifier: verifier
+      }
+      assert_response :success
+      token = JSON.parse(response.body)
+      assert_equal "mcp", token["scope"]
+
+      post "/mcp/messages",
+           params: { jsonrpc: "2.0", method: "ping", id: 1 }.to_json,
+           headers: { "CONTENT_TYPE" => "application/json",
+                      "Authorization" => "Bearer #{token["access_token"]}" }
+      assert_response :success
+    end
+  end
+
   test "full claude.ai-style flow: register, login, authorize, exchange, call mcp" do
     with_owner_password("owner-secret") do
       # 1. Dynamic Client Registration
