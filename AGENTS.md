@@ -97,8 +97,9 @@ The whole site is one page composed from partials. Render order lives in
 `app/views/pages/home.html.erb`:
 
 ```
-navigation → hero → about → story → [services + pricing] → testimonials
-→ team → gallery → contact → safety → cta_banner → mobile_sticky_cta → footer
+navigation → hero → about → story → [services + pricing] → promotions
+→ testimonials → team → gallery → contact → safety → cta_banner
+→ mobile_sticky_cta → footer
 ```
 
 **Home sections** (`app/views/pages/home/_*.html.erb`), each with an anchor `id`
@@ -111,6 +112,7 @@ used by the nav:
 | `_story`         | `#story`       | Family-owned since 2003, serving Cramerton/Belmont/Gaston County |
 | `_services`      | `#services`    | 6 service cards (defined inline as a Ruby array) |
 | `_pricing`       | `#pricing`     | 3 categories (Hands / Feet / Add-Ons) with prices, inline array |
+| `_promotions`    | `#specials`    | Featured offer + coupon-style specials, inline arrays (placeholders) |
 | `_testimonials`  | `#testimonials`| Client "Kind Words" |
 | `_team`          | `#team`        | 3 technicians (Michael K, Nhan Ka, Lien Ka), inline array |
 | `_gallery`       | `#gallery`     | 4 gallery items |

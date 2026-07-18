@@ -172,6 +172,16 @@ To be answered with the client. Grouped by theme; update inline as we learn more
 
 ## Progress Log
 
+- **2026-07-18 — Phase 2: Promotions / Specials section added.**
+  New `#specials` section (rendered after pricing, before reviews) surfacing
+  current offers in a distinctive **coupon/ticket** style (kept visually separate
+  from the terracotta closing CTA banner): a full-width featured "New Guests —
+  15% off first visit" offer with a badge and dashed divider, plus three
+  coupon cards (Refer a Friend, Birthday Treat, Tues–Thurs Gel Special) with
+  peach deal stubs. Data-driven from inline arrays for easy editing. Files:
+  `app/views/pages/home/_promotions.html.erb`, `app/views/pages/home.html.erb`.
+  Verified via headless-browser screenshot. **All offers are placeholders** —
+  confirm real specials with the salon (see open questions).
 - **2026-07-18 — Phase 1: Local SEO + real map embed.**
   Added `NailSalon` LocalBusiness structured data (JSON-LD: name, address, geo,
   phone, hours, price range, founding date) and social/local meta (Open Graph,
