@@ -65,9 +65,11 @@ class McpController < ActionController::Base
     id = req["id"]
     case req["method"]
     when "initialize"
+      # Don't declare listChanged: false — that invites clients to cache the
+      # tool list forever, and ours grows as models gain tools.
       success_response(id,
                        protocolVersion: PROTOCOL_VERSION,
-                       capabilities: { tools: { listChanged: false } },
+                       capabilities: { tools: {} },
                        serverInfo: { name: "elite-nails", version: "1.0.0" })
     when "ping"
       success_response(id, {})
