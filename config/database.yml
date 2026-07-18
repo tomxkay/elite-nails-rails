@@ -1,45 +1,48 @@
-# SQLite. Versions 3.8.0 and up are supported.
-#   gem install sqlite3
+# Development & test run on PostgreSQL.
 #
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem "sqlite3"
+# Production still runs on SQLite (primary/cache/queue/cable) + Litestream for now;
+# migrating production to Postgres is a tracked deploy task (see
+# docs/cms-ai-roadmap.md). Keep dev/prod parity in mind until that lands.
 #
-default: &default
-  adapter: sqlite3
+postgres_default: &postgres_default
+  adapter: postgresql
+  encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
 
 development:
-  <<: *default
-  database: storage/development.sqlite3
+  <<: *postgres_default
+  database: elite_nails_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
-  database: storage/test.sqlite3
+  <<: *postgres_default
+  database: elite_nails_test
 
+# --- Production (SQLite + Litestream; migrate to Postgres before CMS launch) ---
+sqlite_default: &sqlite_default
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
 
-# Store production database in the storage/ directory, which by default
-# is mounted as a persistent Docker volume in config/deploy.yml.
 production:
   primary:
-    <<: *default
+    <<: *sqlite_default
     database: storage/production.sqlite3
     url: <%= ENV["DATABASE_URL"] %>
   cache:
-    <<: *default
+    <<: *sqlite_default
     database: storage/production_cache.sqlite3
     migrations_paths: db/cache_migrate
     url: <%= URI.parse(ENV["DATABASE_URL"]).tap { |url| url.path += "_cache" } if ENV["DATABASE_URL"] %>
   queue:
-    <<: *default
+    <<: *sqlite_default
     database: storage/production_queue.sqlite3
     migrations_paths: db/queue_migrate
     url: <%= URI.parse(ENV["DATABASE_URL"]).tap { |url| url.path += "_queue" } if ENV["DATABASE_URL"] %>
   cable:
-    <<: *default
+    <<: *sqlite_default
     database: storage/production_cable.sqlite3
     migrations_paths: db/cable_migrate
     url: <%= URI.parse(ENV["DATABASE_URL"]).tap { |url| url.path += "_cable" } if ENV["DATABASE_URL"] %>

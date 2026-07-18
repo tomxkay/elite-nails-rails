@@ -1,0 +1,2 @@
+# Intentionally empty — Promotion tests build their own records so they can
+# exercise the empty-table fallback (Promotion.for_display -> in-code DEFAULTS).

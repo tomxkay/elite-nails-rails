@@ -12,57 +12,53 @@
                title: 'Deals & Seasonal Offers',
                subtitle: 'A few ways to treat yourself for a little less — just mention the offer when you book or check in.' %>
 
-    <% featured = {
-      badge: "New Guests",
-      deal: "15% Off",
-      title: "Your First Visit",
-      description: "New to Elite Nails? Enjoy 15% off any service on your very first appointment — our way of saying welcome to the family.",
-      fine_print: "First-time guests only. One per person."
-    } %>
-
-    <% offers = [
-      { deal: "$10 Off", title: "Refer a Friend", description: "Send a friend our way and you both get $10 off your next service.", fine_print: "Applied after their first visit." },
-      { deal: "Free", title: "Birthday Treat", description: "Celebrate with a complimentary nail-art add-on during your birthday month.", fine_print: "Valid with any manicure." },
-      { deal: "Midweek", title: "Tues–Thurs Gel Special", description: "Book a gel manicure Tuesday through Thursday for a relaxed, quieter visit.", fine_print: "Subject to availability." }
-    ] %>
+    <%# Content comes from the DB (Promotion). Falls back to the in-code backup
+        (Promotion::DEFAULTS) if the table is empty/unavailable. %>
+    <% promotions = Promotion.for_display %>
+    <% featured = promotions.find(&:featured) %>
+    <% offers = promotions.reject(&:featured) %>
 
     <div class="mt-14 grid gap-6 lg:grid-cols-3" data-controller="stagger" data-stagger-amount-value="0.12" data-stagger-from-value="bottom">
       <%# ===== Featured offer (full width) ===== %>
-      <div class="lg:col-span-3 relative overflow-hidden rounded-3xl warm-gradient-peach ring-1 ring-cream-200 shadow-warm-lg">
-        <span class="absolute right-6 top-6 rounded-full bg-terracotta-700 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-cream-50 shadow-warm-md"><%= featured[:badge] %></span>
-        <div class="flex flex-col gap-6 p-8 sm:flex-row sm:items-center sm:gap-10 lg:p-10">
-          <div class="flex-shrink-0 text-center sm:text-left">
-            <p class="font-serif text-6xl leading-none text-terracotta-700 lg:text-7xl"><%= featured[:deal] %></p>
-            <p class="mt-2 text-sm font-semibold uppercase tracking-[0.18em] text-terracotta-600"><%= featured[:title] %></p>
-          </div>
-          <div class="hidden w-px self-stretch border-l border-dashed border-terracotta-300 sm:block"></div>
-          <div class="flex-1">
-            <p class="text-warm-gray-700 leading-relaxed"><%= featured[:description] %></p>
-            <div class="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-              <%= render 'shared/cta_button',
-                         text: 'Book & Save',
-                         href: booking_link,
-                         style: :solid,
-                         size: :md,
-                         icon: 'calendar-days',
-                         classes: 'bg-terracotta-700 hover:bg-terracotta-800 whitespace-nowrap flex-shrink-0' %>
-              <span class="text-xs text-warm-gray-500"><%= featured[:fine_print] %></span>
+      <% if featured %>
+        <div class="lg:col-span-3 relative overflow-hidden rounded-3xl warm-gradient-peach ring-1 ring-cream-200 shadow-warm-lg">
+          <% if featured.badge.present? %>
+            <span class="absolute right-6 top-6 rounded-full bg-terracotta-700 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-cream-50 shadow-warm-md"><%= featured.badge %></span>
+          <% end %>
+          <div class="flex flex-col gap-6 p-8 sm:flex-row sm:items-center sm:gap-10 lg:p-10">
+            <div class="flex-shrink-0 text-center sm:text-left">
+              <p class="font-serif text-6xl leading-none text-terracotta-700 lg:text-7xl"><%= featured.deal %></p>
+              <p class="mt-2 text-sm font-semibold uppercase tracking-[0.18em] text-terracotta-600"><%= featured.title %></p>
+            </div>
+            <div class="hidden w-px self-stretch border-l border-dashed border-terracotta-300 sm:block"></div>
+            <div class="flex-1">
+              <p class="text-warm-gray-700 leading-relaxed"><%= featured.description %></p>
+              <div class="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+                <%= render 'shared/cta_button',
+                           text: 'Book & Save',
+                           href: booking_link,
+                           style: :solid,
+                           size: :md,
+                           icon: 'calendar-days',
+                           classes: 'bg-terracotta-700 hover:bg-terracotta-800 whitespace-nowrap flex-shrink-0' %>
+                <span class="text-xs text-warm-gray-500"><%= featured.fine_print %></span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      <% end %>
 
       <%# ===== Coupon-style offers ===== %>
       <% offers.each do |offer| %>
         <div class="relative flex overflow-hidden rounded-2xl border border-cream-200 bg-cream-50/90 shadow-warm-sm transition-shadow duration-300 hover:shadow-warm-xl"
              data-controller="card-hover">
           <div class="flex flex-shrink-0 flex-col items-center justify-center border-r border-dashed border-terracotta-200 bg-peach-100/70 px-5 text-center">
-            <span class="font-serif text-2xl leading-tight text-terracotta-700" data-card-hover-target="icon"><%= offer[:deal] %></span>
+            <span class="font-serif text-2xl leading-tight text-terracotta-700" data-card-hover-target="icon"><%= offer.deal %></span>
           </div>
           <div class="flex-1 p-5">
-            <h3 class="font-serif text-lg text-warm-gray-900"><%= offer[:title] %></h3>
-            <p class="mt-1.5 text-sm leading-relaxed text-warm-gray-700"><%= offer[:description] %></p>
-            <p class="mt-3 text-[0.7rem] uppercase tracking-[0.14em] text-warm-gray-400"><%= offer[:fine_print] %></p>
+            <h3 class="font-serif text-lg text-warm-gray-900"><%= offer.title %></h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-warm-gray-700"><%= offer.description %></p>
+            <p class="mt-3 text-[0.7rem] uppercase tracking-[0.14em] text-warm-gray-400"><%= offer.fine_print %></p>
           </div>
         </div>
       <% end %>
