@@ -110,6 +110,17 @@ fit for non-technical owners and an ongoing liability for us.
 - **Deciding factor:** what POS / payment system do they use today? Nail salons
   commonly already run Square — if so, Square Appointments is the natural pick.
 
+## Milestone 2 — CMS + AI/MCP (next major focus)
+
+Move all content out of code and into the **database** so owners can edit it, then
+expose it via an **MCP server** so an AI agent (Claude) can read/write it — letting
+owners control the salon by chat/voice (promotions, pricing, hours, reviews,
+booking notifications). Full design, data model, phased plan, guardrails, and
+extra AI ideas live in **[`docs/cms-ai-roadmap.md`](docs/cms-ai-roadmap.md)**.
+
+Prerequisite reality (see Data section below): there is currently **no business
+data in the DB** — Phase A (content → DB models) unlocks the rest.
+
 ## Roadmap (phased — draft)
 
 - **Phase 1 — Foundation & Real Content:** Gather + place real photos and
