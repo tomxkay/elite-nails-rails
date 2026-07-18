@@ -201,6 +201,46 @@ gems removed. What I **can't** do (requires your Fly account):
    and boot. ⚠️ **Unverified locally** — I can't run a real Fly Postgres deploy, so
    treat the first deploy as the verification step.
 
+## What's next — launch checklist (2026-07-18)
+
+Milestone 2 core is **live**: site + MCP + OAuth deployed and verified at
+https://elite-nails-rails.fly.dev, and the owner's claude.ai connector is
+attached to production. Remaining work, in priority order:
+
+**Housekeeping**
+- [x] Re-point claude.ai connector from ngrok to production (`/mcp` on fly.dev).
+- [x] Stop the local ngrok tunnel + tunnel-test dev server.
+- [ ] Re-apply dev-only content edits in prod via chat (e.g. gel manicure $40 —
+      prod seeded fresh from `DEFAULTS`).
+- [ ] `git push` — the whole milestone (~46 commits) is local-only.
+- [ ] Optional: set `GOOGLE_REVIEWS_URL` prod secret (currently falls back to a
+      Maps search link).
+
+**Client-ready polish**
+- [ ] **Custom domain** — `fly certs add <domain>` + DNS once the salon has one;
+      fly.dev URL is fine for testing, not for a business card.
+- [ ] **Owner handoff doc** — one page: how to add the connector, where the
+      password lives, example phrases ("add a promo", "change Saturday hours",
+      "hide that review"), what the approval prompts mean, who to call when
+      stuck. With MCP-only control, this doc is the admin manual.
+
+**Remaining engineering**
+- [ ] **Active Storage + Tigris** (last deferred Phase A item) — make
+      team/service/gallery photos owner-manageable; unlocks photo tools over MCP.
+- [ ] **Phase C by owner priority** — first candidates: scheduled promo
+      expiry/digest (first real Solid Queue use), Google review sync,
+      AI-drafted seasonal copy. See Phase C list above.
+
+**Ops notes**
+- Machines auto-stop when idle → first request after a lull cold-starts (~2-4s).
+  The Postgres machine stays up (~$2/mo).
+- Credentials (MCP owner password/token, PG superuser, `RAILS_MASTER_KEY`) are
+  in the developer's password manager + git-ignored `.env.production.secrets`.
+  Fly secrets are write-only — rotate, never recover.
+- Break-glass path (MCP down/misbehaving): `fly ssh console -a elite-nails-rails`
+  → `bin/rails console`; content re-seeds from model `DEFAULTS` via
+  `bin/rails db:seed`; every MCP write has an `AuditLog` before/after snapshot.
+
 ### Progress
 - **Phase B — full tool coverage (2026-07-18).** MCP tools extended from the
   Promotions pilot to **every content model** — 24 tools registered in
