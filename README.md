@@ -42,9 +42,10 @@ alone if you don't need the asset watchers.
 
 ## Configuration
 
-| Variable      | Purpose                                                        |
-|---------------|----------------------------------------------------------------|
-| `BOOKING_URL` | Square Appointments booking link used by all "Book" CTAs. Falls back to `tel:+17048249032` when unset. |
+| Variable             | Purpose                                                 |
+|----------------------|---------------------------------------------------------|
+| `BOOKING_URL`        | Square Appointments booking link used by all "Book" CTAs. Falls back to `tel:+17048249032` when unset. |
+| `GOOGLE_REVIEWS_URL` | Google Business reviews/place link used by the Reviews section CTAs. Falls back to a Google Maps search when unset. |
 
 `BOOKING_URL` is read in `.env` (via `dotenv-rails`) in development/test.
 Secrets otherwise live in Rails credentials (`config/credentials.yml.enc` +

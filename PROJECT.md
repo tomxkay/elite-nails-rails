@@ -146,6 +146,9 @@ To be answered with the client. Grouped by theme; update inline as we learn more
 - Do they offer gift cards? Loyalty/rewards? Group/party bookings?
 - Any current promotions or seasonal specials to feature?
 - Social media accounts (Instagram, Facebook, Google Business)?
+- **Google Business profile / reviews URL** (for `GOOGLE_REVIEWS_URL`) + their
+  real average rating and review count (Reviews section currently uses
+  placeholder `4.9` / `120+` and placeholder review text).
 
 ### Goals & priorities
 - What does "driving customers" mean to them — more online bookings, more calls,
@@ -155,6 +158,18 @@ To be answered with the client. Grouped by theme; update inline as we learn more
 
 ## Progress Log
 
+- **2026-07-18 — Phase 1: Reviews section rebuilt (Google-reviews-ready).**
+  Reworked the "Kind Words" section (`#testimonials`, the nav "Reviews" target)
+  into a trust-focused reviews block in the editorial language: an **aggregate
+  rating panel** (big serif score, gold stars, review count, "Read Reviews on
+  Google" + "Leave a Review" CTAs) above an **organic masonry** of review cards
+  (avatar initial, name, relative date, stars, quote, "Posted on Google" tag).
+  Added a configurable `google_reviews_link` helper (env `GOOGLE_REVIEWS_URL`,
+  falls back to a Maps search). Files: `app/views/pages/home/_testimonials.html.erb`,
+  `app/views/shared/_testimonial_card.html.erb`,
+  `app/helpers/application_helper.rb`. Verified via headless-browser screenshot.
+  **Placeholder data:** the `4.9` rating, `120+` count, and all review text/names
+  are placeholders pending real Google reviews.
 - **2026-07-18 — Phase 1: About & Story sections given the editorial treatment.**
   Reworked both to share the Team section's design language so the page reads as
   one system: ambient backdrops (grid lines + soft orbs), oversized serif/script

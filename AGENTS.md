@@ -55,6 +55,9 @@ bin/brakeman                       # security scan
 - **`BOOKING_URL`** — the Square Appointments booking link. Read via
   `ApplicationHelper#booking_link`, which falls back to `tel:+17048249032`
   when unset. Set in `.env` (loaded by `dotenv-rails` in dev/test).
+- **`GOOGLE_REVIEWS_URL`** — the salon's Google Business reviews/place link. Read
+  via `ApplicationHelper#google_reviews_link`, which falls back to a Google Maps
+  search for the salon when unset. Used by the Reviews section CTAs.
 - Secrets via Rails credentials (`config/credentials.yml.enc` + `master.key`).
 - All salon details (address, phone, hours) are **hardcoded in the views**, not
   in config — see "Editing Content" below.
