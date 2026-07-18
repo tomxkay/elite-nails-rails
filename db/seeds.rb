@@ -12,3 +12,9 @@ Service::DEFAULTS.each do |attrs|
   Service.find_or_initialize_by(title: attrs[:title]).update!(attrs)
 end
 puts "Seeded #{Service.count} services."
+
+# --- Pricing items ---
+PricingItem::DEFAULTS.each do |attrs|
+  PricingItem.find_or_initialize_by(category: attrs[:category], name: attrs[:name]).update!(attrs)
+end
+puts "Seeded #{PricingItem.count} pricing items."

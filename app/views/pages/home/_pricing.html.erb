@@ -9,50 +9,22 @@
                title: 'Pricing',
                subtitle: 'Clear, honest pricing for hands, feet, and add-ons. Call for full menu and seasonal specials.' %>
 
-    <% categories = [
-      {
-        title: "Hands",
-        items: [
-          ["Classic Manicure", "$20"],
-          ["Gel Manicure", "$35"],
-          ["Dip Powder", "$40"],
-          ["French Add-On", "+$5"]
-        ]
-      },
-      {
-        title: "Feet",
-        items: [
-          ["Signature Pedicure", "$35"],
-          ["Spa Pedicure", "$45"],
-          ["Gel Pedicure", "$55"],
-          ["Callus Care Upgrade", "+$8"]
-        ]
-      },
-      {
-        title: "Add-Ons",
-        items: [
-          ["Nail Art (per nail)", "$5+"],
-          ["Acrylic Full Set", "$40+"],
-          ["Acrylic Fill", "$30+"],
-          ["Waxing (brows/lip/chin)", "$10+"]
-        ]
-      }
-    ] %>
-
+    <%# Content from the DB (PricingItem), grouped by category, with in-code
+        DEFAULTS fallback. %>
     <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6" data-controller="stagger" data-stagger-amount-value="0.15" data-stagger-from-value="scale">
-      <% categories.each_with_index do |category, i| %>
+      <% PricingItem.grouped_for_display.each_with_index do |(category, items), i| %>
         <div class="card-surface-warm rounded-2xl p-7 shadow-warm-sm hover:shadow-warm-xl transition-shadow duration-300"
              data-controller="pricing-highlight"
-             data-pricing-highlight-category-value="<%= category[:title].downcase %>">
+             data-pricing-highlight-category-value="<%= category.downcase %>">
           <div class="flex items-baseline justify-between border-b border-cream-200 pb-4">
-            <h3 class="font-serif text-2xl text-warm-gray-900"><%= category[:title] %></h3>
+            <h3 class="font-serif text-2xl text-warm-gray-900"><%= category %></h3>
             <span class="font-serif text-lg text-terracotta-200" aria-hidden="true"><%= format("%02d", i + 1) %></span>
           </div>
           <ul class="mt-2 divide-y divide-cream-200 text-sm text-warm-gray-700">
-            <% category[:items].each do |name, price| %>
+            <% items.each do |item| %>
               <li class="flex justify-between py-3">
-                <span><%= name %></span>
-                <span class="text-terracotta-600 font-semibold"><%= price %></span>
+                <span><%= item.name %></span>
+                <span class="text-terracotta-600 font-semibold"><%= item.price %></span>
               </li>
             <% end %>
           </ul>
