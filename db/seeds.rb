@@ -6,3 +6,9 @@ Promotion::DEFAULTS.each do |attrs|
   Promotion.find_or_initialize_by(title: attrs[:title]).update!(attrs)
 end
 puts "Seeded #{Promotion.count} promotions."
+
+# --- Services ---
+Service::DEFAULTS.each do |attrs|
+  Service.find_or_initialize_by(title: attrs[:title]).update!(attrs)
+end
+puts "Seeded #{Service.count} services."

@@ -9,18 +9,16 @@
                title: 'Our Services',
                subtitle: 'From classic care to creative artistry, we offer a full range of nail and spa services' %>
 
-    <% services = [
-      { title: 'Gel & Dip Powder', description: 'Long-lasting, chip-resistant color with gel polish or dip powder systems. Up to 3 weeks of gorgeous nails.', featured: true, image_url: asset_path('manicure-service.jpg'), pricing_category: 'hands' },
-      { title: 'Manicures', description: 'Classic and spa manicures featuring premium products, cuticle care, nail shaping, and your choice of polish.', image_url: asset_path('manicure-service.jpg'), pricing_category: 'hands' },
-      { title: 'Pedicures', description: 'Relax with our signature pedicures including foot soak, exfoliation, massage, and polish.', image_url: asset_path('pedicure-service.jpg'), pricing_category: 'feet' },
-      { title: 'Acrylic & Extensions', description: 'Custom acrylic nail enhancements, tips, and sculpted extensions for length and strength.', image_url: asset_path('manicure-service.jpg'), pricing_category: 'add-ons' },
-      { title: 'Nail Art & Design', description: 'Express yourself with custom nail art, hand-painted designs, gems, foils, and trending styles.', image_url: asset_path('nail-art-service.png'), pricing_category: 'add-ons' },
-      { title: 'Waxing Services', description: 'Professional waxing services for brows, lip, chin, and more with gentle techniques.', image_url: asset_path('pedicure-service.jpg'), pricing_category: 'add-ons' }
-    ] %>
-
+    <%# Content from the DB (Service), with in-code DEFAULTS fallback. %>
     <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10" data-controller="stagger" data-stagger-amount-value="0.1" data-stagger-from-value="bottom" data-stagger-start-value="top 95%">
-      <% services.each_with_index do |service, i| %>
-        <%= render 'shared/service_card', **service, index: i %>
+      <% Service.for_display.each_with_index do |service, i| %>
+        <%= render 'shared/service_card',
+                   title: service.title,
+                   description: service.description,
+                   image_url: (asset_path(service.image) if service.image.present?),
+                   featured: service.featured,
+                   pricing_category: service.pricing_category,
+                   index: i %>
       <% end %>
     </div>
 

@@ -1,0 +1,2 @@
+# Intentionally empty — tests build their own records to exercise the
+# empty-table fallback (Service.for_display -> in-code DEFAULTS).
