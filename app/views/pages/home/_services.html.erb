@@ -1,23 +1,26 @@
 <!-- ===== SERVICES SECTION ===== -->
-<section id="services" class="py-24 lg:py-32 warm-gradient-peach">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section id="services" class="relative overflow-hidden warm-gradient-peach py-24 lg:py-32">
+  <!-- ambient backdrop -->
+  <div class="pointer-events-none absolute inset-0 hero-grid-lines opacity-30" aria-hidden="true"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <%= render 'shared/section_header',
                eyebrow: 'What We Offer',
                title: 'Our Services',
                subtitle: 'From classic care to creative artistry, we offer a full range of nail and spa services' %>
 
-    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12" data-controller="stagger" data-stagger-amount-value="0.1" data-stagger-from-value="bottom" data-stagger-start-value="top 95%">
-      <% services = [
-        { emoji: '✨', title: 'Gel & Dip Powder', description: 'Long-lasting, chip-resistant color with gel polish or dip powder systems. Up to 3 weeks of gorgeous nails.', featured: true, image_url: asset_path('manicure-service.jpg'), pricing_category: 'hands' },
-        { emoji: '💅', title: 'Manicures', description: 'Classic and spa manicures featuring premium products, cuticle care, nail shaping, and your choice of polish.', image_url: asset_path('manicure-service.jpg'), pricing_category: 'hands' },
-        { emoji: '🦶', title: 'Pedicures', description: 'Relax with our signature pedicures including foot soak, exfoliation, massage, and polish.', image_url: asset_path('pedicure-service.jpg'), pricing_category: 'feet' },
-        { emoji: '💎', title: 'Acrylic & Extensions', description: 'Custom acrylic nail enhancements, tips, and sculpted extensions for length and strength.', image_url: asset_path('manicure-service.jpg'), pricing_category: 'add-ons' },
-        { emoji: '🎨', title: 'Nail Art & Design', description: 'Express yourself with custom nail art, hand-painted designs, gems, foils, and trending styles.', image_url: asset_path('nail-art-service.png'), pricing_category: 'add-ons' },
-        { emoji: '🌸', title: 'Waxing Services', description: 'Professional waxing services for brows, lip, chin, and more with gentle techniques.', image_url: asset_path('pedicure-service.jpg'), pricing_category: 'add-ons' }
-      ] %>
+    <% services = [
+      { title: 'Gel & Dip Powder', description: 'Long-lasting, chip-resistant color with gel polish or dip powder systems. Up to 3 weeks of gorgeous nails.', featured: true, image_url: asset_path('manicure-service.jpg'), pricing_category: 'hands' },
+      { title: 'Manicures', description: 'Classic and spa manicures featuring premium products, cuticle care, nail shaping, and your choice of polish.', image_url: asset_path('manicure-service.jpg'), pricing_category: 'hands' },
+      { title: 'Pedicures', description: 'Relax with our signature pedicures including foot soak, exfoliation, massage, and polish.', image_url: asset_path('pedicure-service.jpg'), pricing_category: 'feet' },
+      { title: 'Acrylic & Extensions', description: 'Custom acrylic nail enhancements, tips, and sculpted extensions for length and strength.', image_url: asset_path('manicure-service.jpg'), pricing_category: 'add-ons' },
+      { title: 'Nail Art & Design', description: 'Express yourself with custom nail art, hand-painted designs, gems, foils, and trending styles.', image_url: asset_path('nail-art-service.png'), pricing_category: 'add-ons' },
+      { title: 'Waxing Services', description: 'Professional waxing services for brows, lip, chin, and more with gentle techniques.', image_url: asset_path('pedicure-service.jpg'), pricing_category: 'add-ons' }
+    ] %>
 
-      <% services.each do |service| %>
-        <%= render 'shared/service_card', **service %>
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10" data-controller="stagger" data-stagger-amount-value="0.1" data-stagger-from-value="bottom" data-stagger-start-value="top 95%">
+      <% services.each_with_index do |service, i| %>
+        <%= render 'shared/service_card', **service, index: i %>
       <% end %>
     </div>
 

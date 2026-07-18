@@ -1,75 +1,65 @@
-<%# Service card with GSAP hover image reveal
-  Parameters:
-    - emoji: String (icon)
+<%# Service card — image-forward editorial
+  Locals:
     - title: String
     - description: String
+    - image_url: String (optional) — service photo
     - featured: Boolean (optional)
-    - image_url: String (for hover reveal)
-    - pricing_category: String (optional - for highlighting in pricing section)
+    - pricing_category: String (optional) — flashes the matching pricing card
+    - index: Integer (0-based) — drives the numbered label
 %>
 <% featured ||= false %>
-<% image_url ||= '' %>
-<% pricing_category ||= '' %>
+<% image_url = local_assigns[:image_url] %>
+<% pricing_category = local_assigns[:pricing_category] || '' %>
+<% index = local_assigns[:index] || 0 %>
+<% number = format("%02d", index + 1) %>
 
-<div class="group relative card-surface-warm rounded-2xl p-8 shadow-warm-sm overflow-visible service-card-stack"
-     data-controller="service-image-hover"
-     data-service-image-hover-image-url-value="<%= image_url %>"
-     data-action="mouseenter->service-image-hover#mouseEnter mouseleave->service-image-hover#mouseLeave">
+<article class="group relative flex flex-col overflow-hidden rounded-3xl border bg-cream-50/90 shadow-warm-sm transition-shadow duration-300 hover:shadow-warm-xl <%= featured ? 'border-terracotta-300 ring-1 ring-terracotta-300' : 'border-cream-200' %>"
+         data-controller="card-hover"
+         data-action="mouseenter->card-hover#mouseEnter mouseleave->card-hover#mouseLeave">
 
-  <!-- Floating Image Container (behind card) -->
-  <div class="absolute inset-0 -z-10 rounded-2xl overflow-hidden pointer-events-none opacity-0"
-       data-service-image-hover-target="imageContainer"
-       style="transform: scale(0.85) translateY(20px);">
+  <%# ===== Image ===== %>
+  <div class="relative aspect-[4/3] overflow-hidden">
+    <% if image_url.present? %>
+      <img src="<%= image_url %>"
+           alt="<%= title %> at Elite Nails"
+           class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+           loading="lazy">
+    <% else %>
+      <div class="absolute inset-0 bg-gradient-to-br from-peach-100 via-cream-100 to-sage-100"></div>
+    <% end %>
+    <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-warm-gray-900/55 via-warm-gray-900/10 to-transparent"></div>
 
-    <!-- Glow effect -->
-    <div class="absolute inset-0 bg-gradient-to-br from-peach-400/40 to-terracotta-400/40 blur-xl scale-95 opacity-0 service-card-glow"
-         data-service-image-hover-target="imageGlow"></div>
+    <span class="absolute left-5 top-4 font-serif text-lg text-cream-50/85" aria-hidden="true"><%= number %></span>
 
-    <!-- Service image -->
-    <img data-service-image-hover-target="image"
-         data-src="<%= image_url %>"
-         alt="<%= title %> at Elite Nails"
-         class="w-full h-full object-cover opacity-0 service-card-image"
-         loading="lazy">
-  </div>
+    <% if featured %>
+      <span class="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-terracotta-600 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-cream-50 shadow-warm-sm">
+        <span class="h-1.5 w-1.5 rounded-full bg-cream-50"></span>
+        Most Loved
+      </span>
+    <% end %>
 
-  <!-- Dark overlay for text contrast -->
-  <div class="absolute inset-0 opacity-0 bg-gradient-to-t from-warm-gray-900/50 via-warm-gray-900/30 to-warm-gray-900/20 pointer-events-none rounded-2xl"
-       data-service-image-hover-target="overlay"></div>
-
-  <!-- Card Content -->
-  <div class="relative bg-cream-50/95 group-hover:bg-warm-gray-900/70 rounded-2xl p-6 -m-6 transition-colors duration-300 backdrop-blur-sm" data-service-image-hover-target="content">
-    <div class="flex items-start justify-between gap-4 mb-6">
-      <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-peach-100 to-peach-200 flex items-center justify-center text-3xl shadow-warm-sm transition-transform duration-300 group-hover:-translate-y-1">
-        <%= emoji %>
-      </div>
-      <% if featured %>
-        <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-terracotta-600 text-cream-50 text-xs font-semibold uppercase tracking-wider shadow-warm-sm">
-          <span class="h-1.5 w-1.5 rounded-full bg-cream-50"></span>
-          Featured
-        </div>
-      <% end %>
-    </div>
-
-    <h3 class="font-serif text-2xl text-warm-gray-900 group-hover:text-cream-50 mb-3 transition-colors duration-300">
+    <h3 class="absolute inset-x-5 bottom-4 font-serif text-2xl leading-tight text-cream-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]">
       <%= title %>
     </h3>
+  </div>
 
-    <p class="text-warm-gray-700 group-hover:text-cream-100 leading-relaxed mb-6 text-sm transition-colors duration-300">
-      <%= description %>
-    </p>
+  <%# ===== Body ===== %>
+  <div class="flex flex-1 flex-col p-6">
+    <p class="text-sm leading-relaxed text-warm-gray-700"><%= description %></p>
 
-    <div class="pt-4 border-t border-cream-200 group-hover:border-cream-50/30 transition-colors duration-300">
+    <div class="mt-6 flex-1"></div>
+
+    <div class="border-t border-cream-200 pt-4">
       <a href="#pricing"
-         class="inline-flex items-center gap-2 text-terracotta-600 group-hover:text-cream-50 font-semibold transition-colors duration-300"
+         class="inline-flex items-center gap-2 font-semibold text-terracotta-600 transition-colors duration-300 hover:text-terracotta-700"
          data-controller="smooth-scroll"
          data-action="click->smooth-scroll#scroll"
          data-pricing-category="<%= pricing_category %>">
-        <span class="text-sm uppercase tracking-wider">View Pricing</span>
-        <svg class="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <span class="text-sm uppercase tracking-[0.14em]">View Pricing</span>
+        <svg class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
         </svg>
       </a>
     </div>
   </div>
-</div>
+</article>
