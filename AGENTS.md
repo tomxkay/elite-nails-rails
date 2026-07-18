@@ -75,9 +75,21 @@ The app is essentially static from the server's perspective:
   the `heroicons` gem, except custom inline SVGs for `quote`, `instagram`, `branch`.
 - `booking_link` — centralized booking URL (see Configuration above). **Always
   use this helper for booking CTAs**, never hardcode the URL.
+- `google_reviews_link` — centralized Google reviews URL (env `GOOGLE_REVIEWS_URL`,
+  falls back to a Maps search). Used by the Reviews section CTAs.
+- `salon` — **single source of truth** for the salon's NAP (name/address/phone),
+  hours, geo, price range, and founding year. Used by the SEO structured data;
+  prefer it over re-hardcoding contact details in new views.
+- `salon_map_embed_url` — keyless Google Maps embed URL for the salon address
+  (used by the contact section map iframe).
 - `placeholder_image(...)` — currently returns `nil` by design (shows CSS
   placeholder backgrounds instead of real images); kept for future use. Team
   photos currently use it, so they render as placeholders.
+
+**SEO / structured data:** the layout head renders `shared/_meta_tags`
+(Open Graph, Twitter card, canonical, geo meta) and `shared/_structured_data`
+(`NailSalon` LocalBusiness JSON-LD built from the `salon` helper). Update salon
+facts in the `salon` helper, not in these partials.
 
 ## View Architecture
 

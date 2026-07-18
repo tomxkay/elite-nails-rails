@@ -149,6 +149,20 @@ To be answered with the client. Grouped by theme; update inline as we learn more
 - **Google Business profile / reviews URL** (for `GOOGLE_REVIEWS_URL`) + their
   real average rating and review count (Reviews section currently uses
   placeholder `4.9` / `120+` and placeholder review text).
+- **Exact salon geo coordinates** (lat/lng) for the LocalBusiness structured
+  data — currently approximate (35.2387, -81.0737).
+
+### Deployment (unresolved)
+- **Two deployment paths exist in the repo — pick one.** Kamal shipped with the
+  initial `bin/rails new` scaffold (commit `ec139ba`, 2025-12-02): `config/deploy.yml`,
+  `.kamal/`, `kamal`/`thruster` gems. Fly.io was then layered on by running
+  `fly launch` (commit `1ed7b62`, 2025-12-04, author "Fly.io", PR #5): `fly.toml`,
+  `config/dockerfile.yml`, `lib/tasks/litestream.rake`, plus edits to `Gemfile`,
+  `database.yml`, `production.rb`, `storage.yml`. This was tooling output, not a
+  deliberate dual setup. Decide the real host, then remove the other path's config
+  (note Fly's Litestream handles SQLite durability, which matters given SQLite is
+  used for the app + Solid Queue/Cache/Cable). `AGENTS.md` currently documents only
+  Kamal.
 
 ### Goals & priorities
 - What does "driving customers" mean to them — more online bookings, more calls,
@@ -158,6 +172,20 @@ To be answered with the client. Grouped by theme; update inline as we learn more
 
 ## Progress Log
 
+- **2026-07-18 — Phase 1: Local SEO + real map embed.**
+  Added `NailSalon` LocalBusiness structured data (JSON-LD: name, address, geo,
+  phone, hours, price range, founding date) and social/local meta (Open Graph,
+  Twitter card, canonical, geo tags) via new `shared/_structured_data` and
+  `shared/_meta_tags` partials wired into the layout head. Replaced the contact
+  "Map Placeholder" with a live, **keyless Google Maps embed**. Centralized the
+  salon's NAP/hours/geo in an `ApplicationHelper#salon` hash (single source of
+  truth) plus a `salon_map_embed_url` helper. Files:
+  `app/helpers/application_helper.rb`, `app/views/shared/_meta_tags.html.erb`,
+  `app/views/shared/_structured_data.html.erb`,
+  `app/views/layouts/application.html.erb`,
+  `app/views/pages/home/_contact.html.erb`. Verified head output + map render.
+  **Note:** salon geo coordinates (35.2387, -81.0737) are approximate — verify
+  exact lat/lng before launch.
 - **2026-07-18 — Phase 1: Reviews section rebuilt (Google-reviews-ready).**
   Reworked the "Kind Words" section (`#testimonials`, the nav "Reviews" target)
   into a trust-focused reviews block in the editorial language: an **aggregate
