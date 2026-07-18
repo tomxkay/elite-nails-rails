@@ -21,6 +21,26 @@ class McpController < ActionController::Base
     CreatePromotionTool
     UpdatePromotionTool
     SetPromotionActiveTool
+    ListServicesTool
+    CreateServiceTool
+    UpdateServiceTool
+    SetServiceActiveTool
+    ListPricingItemsTool
+    CreatePricingItemTool
+    UpdatePricingItemTool
+    SetPricingItemActiveTool
+    ListTeamMembersTool
+    CreateTeamMemberTool
+    UpdateTeamMemberTool
+    SetTeamMemberActiveTool
+    ListReviewsTool
+    CreateReviewTool
+    UpdateReviewTool
+    SetReviewApprovedTool
+    GetSiteSettingsTool
+    UpdateSiteSettingsTool
+    GetBusinessHoursTool
+    SetBusinessHoursTool
   ].freeze
 
   def handle

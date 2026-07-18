@@ -25,6 +25,86 @@ class ApplicationTool < ActionTool::Base
     }
   end
 
+  def serialize_service(service)
+    {
+      id: service.id,
+      title: service.title,
+      description: service.description,
+      pricing_category: service.pricing_category,
+      featured: service.featured,
+      active: service.active,
+      position: service.position
+    }
+  end
+
+  def serialize_pricing_item(item)
+    {
+      id: item.id,
+      category: item.category,
+      name: item.name,
+      price: item.price,
+      active: item.active,
+      position: item.position
+    }
+  end
+
+  def serialize_team_member(member)
+    {
+      id: member.id,
+      name: member.name,
+      role: member.role,
+      bio: member.bio,
+      quote: member.quote,
+      specialties: member.specialties,
+      active: member.active,
+      position: member.position
+    }
+  end
+
+  def serialize_review(review)
+    {
+      id: review.id,
+      author_name: review.author_name,
+      rating: review.rating,
+      quote: review.quote,
+      source: review.source,
+      relative_date: review.relative_date,
+      featured: review.featured,
+      approved: review.approved,
+      position: review.position
+    }
+  end
+
+  def serialize_site_setting(setting)
+    {
+      name: setting.name,
+      phone: setting.phone,
+      phone_display: setting.phone_display,
+      street: setting.street,
+      city: setting.city,
+      region: setting.region,
+      postal_code: setting.postal_code,
+      country: setting.country,
+      latitude: setting.latitude&.to_f,
+      longitude: setting.longitude&.to_f,
+      price_range: setting.price_range,
+      established: setting.established,
+      aggregate_rating: setting.aggregate_rating&.to_f,
+      review_count: setting.review_count
+    }
+  end
+
+  def serialize_business_hour(hour)
+    {
+      wday: hour.wday,
+      day: hour.day_name,
+      opens: hour.opens,
+      closes: hour.closes,
+      closed: hour.closed,
+      display: hour.display_hours
+    }
+  end
+
   def json(data)
     JSON.pretty_generate(data)
   end

@@ -211,9 +211,12 @@ content. This is the intended control surface (MCP-only, no admin UI).
   resource_metadata="…/.well-known/oauth-protected-resource"` to trigger OAuth
   discovery (Doorkeeper + `/owner/login` + DCR at `/oauth/register`).
 - **Tools** live in `app/tools/` (subclass `ApplicationTool`, registered in
-  `McpController::TOOL_CLASS_NAMES`). Pilot set covers **Promotions**:
-  `ListPromotionsTool` (read), `CreatePromotionTool`, `UpdatePromotionTool`,
-  `SetPromotionActiveTool` (guarded writes).
+  `McpController::TOOL_CLASS_NAMES`). **All content models are covered** (24
+  tools): per model a `List*`/`Get*` read plus guarded `Create*`/`Update*` and a
+  visibility toggle (`Set*ActiveTool`; reviews use `SetReviewApprovedTool`,
+  hours use `SetBusinessHoursTool` upserting one weekday per call, site
+  settings are a `Get`/`Update` singleton pair). Shared serializers live on
+  `ApplicationTool`.
 - **Guardrails:** dry-schema validates all tool input; every write is recorded in
   **`AuditLog`** (`source: "mcp"`, before/after `details`); **no hard-delete** tool
   (hide via `SetPromotionActiveTool`). Add new tools following this pattern and

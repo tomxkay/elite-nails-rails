@@ -7,7 +7,7 @@ class PromotionToolsTest < ActiveSupport::TestCase
     Promotion.create!(title: "Hidden", active: false)
 
     data = JSON.parse(ListPromotionsTool.new.call(only_active: true))
-    assert_equal ["Visible"], data.map { |h| h["title"] }
+    assert_equal [ "Visible" ], data.map { |h| h["title"] }
   end
 
   test "create appends position and writes an audit log" do

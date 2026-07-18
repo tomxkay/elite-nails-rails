@@ -202,6 +202,18 @@ gems removed. What I **can't** do (requires your Fly account):
    treat the first deploy as the verification step.
 
 ### Progress
+- **Phase B — full tool coverage (2026-07-18).** MCP tools extended from the
+  Promotions pilot to **every content model** — 24 tools registered in
+  `McpController::TOOL_CLASS_NAMES`: Services, PricingItems (category-validated
+  against `CATEGORY_ORDER`), TeamMembers (incl. `specialties` array),
+  Reviews (rating 1–5 schema-validated; visibility via `approved`),
+  SiteSetting (`Get`/`Update` singleton; feeds contact/SEO/JSON-LD),
+  BusinessHours (`Get` incl. grouped display; `Set` upserts one weekday per
+  call, `HH:MM` format-validated, `closed: true` clears times). Same guardrails
+  as the pilot: dry-schema at the boundary, `AuditLog` before/after on every
+  write, no hard-delete tools. Photos stay developer-managed (Active Storage
+  still deferred). Suite 71 green. **Phase B is functionally complete** — next
+  is production deploy (Fly Postgres + secrets) and Phase C features.
 - **Phase B — Streamable HTTP transport (2026-07-18).** claude.ai completed OAuth
   but then reported "no MCP server found": its connector speaks **Streamable
   HTTP** (JSON-RPC `POST /mcp`), while fast-mcp 1.6 only serves the deprecated
