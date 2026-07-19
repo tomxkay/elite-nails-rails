@@ -14,6 +14,7 @@ class CreatePromotionTool < ApplicationTool
   arguments do
     required(:title).filled(:string).description("Internal + display title, e.g. 'Your First Visit'")
     optional(:deal).filled(:string).description("Short deal label, e.g. '15% Off', '$10 Off', 'Free'")
+    optional(:mobile_headline).filled(:string).description("Short mobile banner headline; falls back to deal + title")
     optional(:description).filled(:string).description("One or two sentences describing the offer")
     optional(:fine_print).filled(:string).description("Small print / conditions")
     optional(:badge).filled(:string).description("Small badge label (featured offers only), e.g. 'New Guests'")

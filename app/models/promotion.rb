@@ -77,4 +77,10 @@ class Promotion < ApplicationRecord
   rescue ActiveRecord::ActiveRecordError
     defaults
   end
+
+  # Keep in-code fallback promotions usable while the promotions table is
+  # unavailable during first boot or before migrations have run.
+  def mobile_headline
+    self[:mobile_headline] if has_attribute?(:mobile_headline)
+  end
 end

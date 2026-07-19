@@ -11,10 +11,15 @@ class PromotionToolsTest < ActiveSupport::TestCase
   end
 
   test "create appends position and writes an audit log" do
-    result = JSON.parse(CreatePromotionTool.new.call(title: "New Promo", deal: "10% Off"))
+    result = JSON.parse(CreatePromotionTool.new.call(
+      title: "New Promo",
+      deal: "10% Off",
+      mobile_headline: "10% Off Your Next Visit"
+    ))
 
     assert result["ok"]
     assert_equal 0, result["promotion"]["position"]
+    assert_equal "10% Off Your Next Visit", result["promotion"]["mobile_headline"]
     assert_equal 1, AuditLog.where(action: "create", record_type: "Promotion").count
   end
 

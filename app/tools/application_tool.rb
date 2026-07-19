@@ -14,6 +14,7 @@ class ApplicationTool < ActionTool::Base
       id: promo.id,
       title: promo.title,
       deal: promo.deal,
+      mobile_headline: promo.mobile_headline,
       description: promo.description,
       fine_print: promo.fine_print,
       badge: promo.badge,

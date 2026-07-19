@@ -15,6 +15,7 @@ class UpdatePromotionTool < ApplicationTool
     required(:id).filled(:integer).description("Promotion id (from list_promotions)")
     optional(:title).filled(:string)
     optional(:deal).filled(:string)
+    optional(:mobile_headline).filled(:string)
     optional(:description).filled(:string)
     optional(:fine_print).filled(:string)
     optional(:badge).filled(:string)

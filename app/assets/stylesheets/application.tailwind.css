@@ -214,6 +214,17 @@ section[id] {
   scroll-margin-top: var(--fixed-header-offset);
 }
 
+/* Keep variable promotion copy from expanding the fixed mobile header. */
+@media (max-width: 599px) {
+  .promotion-mobile-headline {
+    display: -webkit-box;
+    max-height: 2.75rem;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+}
+
 .nav-link {
   position: relative;
 }
