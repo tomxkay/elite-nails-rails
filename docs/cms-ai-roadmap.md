@@ -229,11 +229,26 @@ booking backend** and layer our experience/AI on top.
    (If the salon decides NOT to adopt online booking yet: unset `BOOKING_URL`
    so CTAs fall back to `tel:` and no bookings land in a void.)
 
-**D2 — Native booking flow (Bookings API):** custom on-site flow
-(service → tech → real-time slot → confirm) via Square's Bookings/Catalog/
-Availability APIs, so prospects never leave the site. Needs seller API
-credentials (start in Square sandbox). Verify current API scopes/plan
-requirements at build time.
+**D2 — Native booking flow (Bookings API) — DESIGNED 2026-07-18, next to build:**
+custom on-site flow (service → tech → slot → details → confirmed) in the site's
+Hotwire/Stimulus style, so prospects never leave the site.
+- **Auth:** own-seller integration — a Square developer application's access
+  token (sandbox first), no OAuth. Secrets: `SQUARE_ACCESS_TOKEN`,
+  `SQUARE_LOCATION_ID`, `SQUARE_ENVIRONMENT`.
+- **APIs (official Ruby SDK):** Catalog (bookable services + variation ids,
+  short-lived cache — bookable truth lives in Square, marketing copy in our
+  CMS), Team Members (pick-your-tech / any), `SearchAvailability` (real
+  slots), Customers upsert + `CreateBooking` (idempotency key; handle
+  slot-taken race with friendly retry).
+- Square sends confirmations/reminders automatically — we build none of that.
+  `booking_link` CTAs point at our flow; Square's hosted page stays as
+  fallback. Webhooks deferred to D3 (digests/no-show intelligence).
+- **Test plan:** user's fresh Square account + sandbox app end-to-end, then
+  swap production token. (Prior unused account exists; not audited by choice.)
+- **Cost (verify at signup; figures early-2026):** Square Free tier $0, APIs
+  $0, existing Fly infra ~$5-10/mo total. Conditional: Appointments Plus
+  ~$29/mo only for card-on-file/no-show fees/prepay; processing % only on
+  money charged through Square. D3 Claude API later: ~$5-15/mo at salon scale.
 
 **D3 — AI layers (the differentiator):**
 - **Client-facing:** on-site booking assistant (Claude API + availability/
