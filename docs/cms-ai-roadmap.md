@@ -250,7 +250,7 @@ Hotwire/Stimulus style, so prospects never leave the site.
   slots (75 over 7 days), full wizard UX in browser, graceful error paths.
   **⚠️ Blocked at the final write:** Square returns "Merchant subscription
   does not support write operations" — **Bookings API writes (CreateBooking)
-  require Appointments Plus (~$29/mo); the free plan is read-only via API**
+  require Appointments Plus (**$49/mo** per 2026 pricing — the $29 figure was outdated); the free plan is read-only via API**
   (bookings only through Square's own hosted page). Sandbox cannot simulate a
   Plus subscription (upgrade flow errors server-side), so the CreateBooking
   call gets verified during a **production Appointments Plus free trial** when
@@ -259,10 +259,13 @@ Hotwire/Stimulus style, so prospects never leave the site.
   and upgrade later. Gotchas: services need `team_member_ids` assigned on the
   variation or availability returns "no team member performs this service";
   staff working hours drive slots (no Sunday hours → no Sunday slots).
-- **Cost (CORRECTED):** hosted-page booking $0; **native on-site booking (and
-  D3 AI-booked appointments) require Appointments Plus ~$29/mo** — total stack
-  then ~$35/mo. Reads (availability/catalog) are free either way. Processing %
-  only on money charged through Square. D3 Claude API later: ~$5-15/mo.
+- **Cost (CORRECTED 2026-07-19, web-verified):** hosted-page booking $0;
+  **native on-site booking (and D3 AI-booked appointments) require Appointments
+  Plus, now $49/mo per location** (2026 pricing — Free / Plus $49 / Premium
+  $149; the earlier $29 figure was outdated training data). Total stack with
+  native booking ≈ $55/mo. Reads (availability/catalog) are free either way.
+  Processing % only on money charged through Square (2.5%+15¢ in person,
+  2.9%+30¢ online on Plus). D3 Claude API later: ~$5-15/mo.
 
 **D3 — AI layers (the differentiator):**
 - **Client-facing:** on-site booking assistant (Claude API + availability/
