@@ -32,6 +32,11 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  # Square OAuth: mints the buyer-scoped token the booking flow uses
+  # (buyer-level writes work on Square's free plan; see SquareOauthController).
+  get "/square/authorize", to: "square_oauth#authorize"
+  get "/square/callback",  to: "square_oauth#callback", as: :square_callback
+
   # Native booking flow (Square Bookings API — Phase D2).
   get  "/book",              to: "bookings#show", as: :book
   get  "/book/availability", to: "bookings#availability"

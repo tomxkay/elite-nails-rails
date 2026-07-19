@@ -1,0 +1,12 @@
+<main style="font-family: ui-monospace, monospace; max-width: 720px; margin: 4rem auto; line-height: 1.6;">
+  <h1 style="font-size: 1.2rem;">Square buyer-scoped token minted ✅</h1>
+  <p>Put these in <code>.env</code> (dev) or <code>fly secrets set</code> (production):</p>
+  <pre style="background: #f6f1ec; padding: 1rem; border-radius: 8px; overflow-x: auto;">SQUARE_ACCESS_TOKEN=<%= token["access_token"] %>
+SQUARE_REFRESH_TOKEN=<%= token["refresh_token"] %></pre>
+  <ul>
+    <li>expires_at: <%= token["expires_at"] %> (~30 days — renew via refresh token)</li>
+    <li>merchant_id: <%= token["merchant_id"] %></li>
+    <li>scopes are buyer-level only — do not replace with a personal access token</li>
+  </ul>
+  <p>Then restart the server and re-test <code>/book</code>.</p>
+</main>
