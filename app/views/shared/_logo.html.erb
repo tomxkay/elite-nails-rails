@@ -2,11 +2,11 @@
   Parameters:
     - size: :small, :medium, :large (default: :medium)
     - linkable: boolean (default: true)
-    - link_target: string (default: '#home')
+    - link_target: string (default: root home anchor)
 %>
 <% size ||= :medium %>
 <% linkable = local_assigns.fetch(:linkable, true) %>
-<% link_target ||= '#home' %>
+<% link_target ||= root_path(anchor: 'home') %>
 <% collapsible_text = local_assigns.fetch(:collapsible_text, false) %>
 
 <% sizes = {

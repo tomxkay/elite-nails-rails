@@ -7,19 +7,19 @@
       <div class="hidden xl:flex items-center justify-center py-4 relative" data-navbar-target="navRow">
         <!-- Left Nav Links -->
         <div class="flex items-center space-x-8 absolute left-0">
-          <a href="#home" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">Home</a>
-          <a href="#services" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">Services</a>
-          <a href="#pricing" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">Pricing</a>
-          <a href="#gallery" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">Gallery</a>
+          <a href="<%= root_path(anchor: 'home') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#home">Home</a>
+          <a href="<%= root_path(anchor: 'services') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#services">Services</a>
+          <a href="<%= root_path(anchor: 'pricing') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#pricing">Pricing</a>
+          <a href="<%= root_path(anchor: 'gallery') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#gallery">Gallery</a>
         </div>
         <!-- Centered Logo -->
         <%= render 'shared/logo', size: :large, collapsible_text: true %>
         <!-- Right Nav Links -->
         <div class="flex items-center space-x-8 absolute right-0">
-          <a href="#about" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">About</a>
-          <a href="#team" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">Team</a>
-          <a href="#testimonials" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">Reviews</a>
-          <a href="#contact" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">Contact</a>
+          <a href="<%= root_path(anchor: 'about') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#about">About</a>
+          <a href="<%= root_path(anchor: 'team') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#team">Team</a>
+          <a href="<%= root_path(anchor: 'testimonials') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#testimonials">Reviews</a>
+          <a href="<%= root_path(anchor: 'contact') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#contact">Contact</a>
           <%= render 'shared/cta_button',
                      text: 'Book Now',
                      href: booking_link,
