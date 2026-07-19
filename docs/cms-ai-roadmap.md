@@ -245,7 +245,20 @@ Hotwire/Stimulus style, so prospects never leave the site.
   fallback. Webhooks deferred to D3 (digests/no-show intelligence).
 - **Test plan:** user's fresh Square account + sandbox app end-to-end, then
   swap production token. (Prior unused account exists; not audited by choice.)
-- **STATUS (2026-07-18): built + verified as far as sandbox allows.** Live
+- **✅ VERIFIED END-TO-END ON THE FREE PLAN (2026-07-19).** With a
+  **buyer-scoped OAuth token** (minted via `/square/authorize` →
+  `SquareOauthController`; scopes exclude `APPOINTMENTS_ALL_WRITE`), the full
+  flow works against the free sandbox seller: availability → `POST /book` →
+  booking `ACCEPTED` in Square with customer + note. The earlier write
+  failure was the all-scope personal access token being classified
+  seller-level — not a free-plan block on customer self-booking.
+  **Go-live steps:** production OAuth app credentials + redirect
+  `https://elite-nails-rails.fly.dev/square/callback`, mint a production
+  buyer token against the real Elite Nails account (creds parked as
+  `SQUARE_*_PROD` in dev `.env`, verified), `fly secrets set` the SQUARE_*
+  vars. **Follow-up owed:** automatic token refresh (~30-day expiry; refresh
+  token in env — first real Solid Queue job, or refresh-on-401).
+- Earlier status (2026-07-18): built + verified as far as sandbox allows. Live
   against sandbox: catalog services render, staff list, real availability
   slots (75 over 7 days), full wizard UX in browser, graceful error paths.
   **⚠️ Blocked at the final write:** Square returns "Merchant subscription
