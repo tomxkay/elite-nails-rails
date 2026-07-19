@@ -42,6 +42,8 @@ Rails.application.routes.draw do
 
   # Native booking flow (Square Bookings API — Phase D2).
   get  "/book",              to: "bookings#show", as: :book
+  get  "/book/availability/options", to: "bookings#availability_options"
+  get  "/book/availability/next",    to: "bookings#next_availability"
   get  "/book/availability", to: "bookings#availability"
   post "/book",              to: "bookings#create"
 

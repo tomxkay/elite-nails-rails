@@ -46,7 +46,8 @@
                        data-booking-target="service"
                        value="<%= service[:id] %>"
                        data-version="<%= service[:version] %>"
-                       data-name="<%= service[:name] %>">
+                       data-name="<%= service[:name] %>"
+                       <%= "checked" if @preselected_service_id == service[:id].to_s %>>
                 <span>
                   <span class="block font-medium text-warm-gray-800"><%= service[:name] %></span>
                   <span class="block text-sm text-warm-gray-600">
@@ -68,14 +69,14 @@
                       class="w-full rounded-xl border border-cream-200 bg-white px-3 py-2.5 text-warm-gray-800">
                 <option value="">Anyone available</option>
                 <% @staff.each do |member| %>
-                  <option value="<%= member[:id] %>"><%= member[:name] %></option>
+                  <option value="<%= member[:id] %>" <%= "selected" if @preselected_team_member_id == member[:id].to_s %>><%= member[:name] %></option>
                 <% end %>
               </select>
             </div>
             <div>
               <label for="booking-date" class="mb-1 block text-sm font-medium text-warm-gray-700">Day</label>
               <input id="booking-date" type="date" data-booking-target="date" data-action="booking#loadSlots"
-                     min="<%= Date.current.iso8601 %>" value="<%= Date.current.iso8601 %>"
+                     min="<%= Date.current.iso8601 %>" value="<%= @preselected_date.iso8601 %>"
                      class="w-full rounded-xl border border-cream-200 bg-white px-3 py-2.5 text-warm-gray-800">
             </div>
           </div>

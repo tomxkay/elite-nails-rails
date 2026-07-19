@@ -11,7 +11,7 @@ class BookingsController < ApplicationController
   # Generous per-IP caps: high enough that real customers (even several on one
   # shared mobile/office IP) never hit them, low enough to stop an automated
   # flood. Throttling fails open if the cache is down (see RateLimiter).
-  before_action :throttle_availability, only: :availability
+  before_action :throttle_availability, only: %i[availability availability_options next_availability]
   before_action :throttle_create,       only: :create
   before_action :reject_honeypot,       only: :create
 
@@ -31,6 +31,10 @@ class BookingsController < ApplicationController
       []
     end
 
+    @preselected_service_id = params[:service_id].presence
+    @preselected_team_member_id = params[:team_member_id].presence
+    @preselected_date = parse_date(params[:date]) || Date.current
+
     track_event("book_page_opened", service_count: @services.size, staff_count: @staff.size) if @services.any?
   rescue SquareApi::Error => e
     @error = e.message
@@ -40,11 +44,7 @@ class BookingsController < ApplicationController
 
   # GET /book/availability?service_id=&service_version=&date=YYYY-MM-DD&team_member_id=
   def availability
-    date = begin
-      Date.iso8601(params[:date].to_s)
-    rescue Date::Error
-      Date.current
-    end
+    date = parse_date(params[:date]) || Date.current
     window_start = [ date.in_time_zone.beginning_of_day, Time.current + 30.minutes ].max
     window_end = date.in_time_zone.end_of_day
 
@@ -57,6 +57,73 @@ class BookingsController < ApplicationController
     render json: { slots: slots }
   rescue ActionController::ParameterMissing
     render json: { error: "Pick a service first" }, status: :unprocessable_entity
+  rescue SquareApi::Error => e
+    render json: { error: e.message }, status: :bad_gateway
+  end
+
+  # GET /book/availability/options
+  def availability_options
+    return render_square_unavailable unless SquareApi.configured?
+
+    payload = Rails.cache.fetch(availability_options_cache_key, expires_in: 5.minutes) do
+      services = SquareApi.services
+      staff = begin
+        SquareApi.bookable_staff
+      rescue SquareApi::Error
+        []
+      end
+      { services: services, staff: staff }
+    end
+
+    render json: payload
+  rescue SquareApi::Error => e
+    render json: { error: e.message }, status: :bad_gateway
+  end
+
+  # GET /book/availability/next?service_id=&date=&days=
+  def next_availability
+    return render_square_unavailable unless SquareApi.configured?
+
+    service_id = params.require(:service_id).to_s
+    date = params[:date].present? ? parse_date(params[:date]) : Date.current
+    return render_invalid_availability_date unless date
+
+    days = params[:days].presence&.to_i || 14
+    days = days.clamp(1, 14)
+    return render_invalid_availability_date if date < Date.current
+
+    slots = Rails.cache.fetch(
+      next_availability_cache_key(service_id: service_id, date: date, days: days),
+      expires_in: 30.seconds
+    ) do
+      window_start = [ date.in_time_zone.beginning_of_day, Time.current + 30.minutes ].max
+      window_end = (date + (days - 1).days).in_time_zone.end_of_day
+      SquareApi.availability(
+        service_variation_id: service_id,
+        start_at: window_start.utc,
+        end_at: window_end.utc
+      )
+    end
+
+    staff = cached_bookable_staff
+    slots_by_staff = slots.select { |slot| slot[:team_member_id].present? }.group_by { |slot| slot[:team_member_id].to_s }
+    technicians = staff.map do |member|
+      slot = earliest_slot(slots_by_staff[member[:id].to_s])
+      {
+        id: member[:id],
+        name: member[:name],
+        next_slot: serialize_availability_slot(slot)
+      }
+    end
+
+    render json: {
+      technicians: technicians,
+      anyone_next_slot: serialize_availability_slot(earliest_slot(slots)),
+      start_date: date.iso8601,
+      days: days
+    }
+  rescue ActionController::ParameterMissing
+    render json: { error: "Choose a service first" }, status: :unprocessable_entity
   rescue SquareApi::Error => e
     render json: { error: e.message }, status: :bad_gateway
   end
@@ -96,6 +163,56 @@ class BookingsController < ApplicationController
 
   def throttle_availability
     throttle(scope: "book:availability", limit: 60, period: 1.minute)
+  end
+
+  def parse_date(value)
+    Date.iso8601(value.to_s)
+  rescue Date::Error
+    nil
+  end
+
+  def cached_bookable_staff
+    Rails.cache.fetch(availability_staff_cache_key, expires_in: 5.minutes) do
+      SquareApi.bookable_staff
+    end
+  rescue SquareApi::Error
+    []
+  end
+
+  def earliest_slot(slots)
+    Array(slots).min_by { |slot| Time.iso8601(slot[:start_at].to_s) }
+  rescue ArgumentError
+    nil
+  end
+
+  def serialize_availability_slot(slot)
+    return nil unless slot
+
+    {
+      start_at: slot[:start_at],
+      team_member_id: slot[:team_member_id],
+      service_variation_version: slot[:service_variation_version]
+    }
+  end
+
+  def availability_options_cache_key
+    "square:availability:options:#{SquareApi.environment}:#{SquareApi.location_id}"
+  end
+
+  def availability_staff_cache_key
+    "square:availability:staff:#{SquareApi.environment}:#{SquareApi.location_id}"
+  end
+
+  def next_availability_cache_key(service_id:, date:, days:)
+    "square:availability:next:#{SquareApi.environment}:#{SquareApi.location_id}:#{service_id}:#{date}:#{days}"
+  end
+
+  def render_square_unavailable
+    render json: { error: "Online availability is unavailable right now." }, status: :service_unavailable
+  end
+
+  def render_invalid_availability_date
+    render json: { error: "Choose today or a future date." }, status: :unprocessable_entity
   end
 
   def throttle_create

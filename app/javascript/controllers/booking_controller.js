@@ -22,6 +22,8 @@ export default class extends Controller {
     this.selectedSlot = null
     this.selectedSlotKey = null
     this.idempotencyKey = this.newIdempotencyKey()
+
+    if (this.selectedService) this.loadSlots()
   }
 
   serviceChanged() {

@@ -1,0 +1,78 @@
+<div data-quick-availability-target="backdrop"
+     data-action="click->quick-availability#closeOnBackdrop"
+     class="fixed inset-0 z-[80] hidden items-end justify-center bg-warm-gray-900/45 p-0 backdrop-blur-sm sm:items-center sm:p-6"
+     aria-hidden="true">
+  <div data-quick-availability-target="dialog"
+       id="quickAvailabilityDialog"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="quickAvailabilityHeading"
+       class="flex max-h-[min(90vh,46rem)] w-full max-w-2xl flex-col overflow-hidden rounded-t-[28px] bg-cream-50 shadow-2xl sm:rounded-3xl">
+    <div class="flex items-start justify-between gap-6 border-b border-cream-200 px-5 py-5 sm:px-7">
+      <div>
+        <p class="text-xs uppercase tracking-[0.2em] text-terracotta-700">Square availability</p>
+        <h2 id="quickAvailabilityHeading"
+            data-quick-availability-target="heading"
+            tabindex="-1"
+            class="mt-1 font-serif text-2xl text-warm-gray-900 sm:text-3xl">Find your next opening</h2>
+      </div>
+      <button type="button"
+              aria-label="Close availability"
+              data-action="click->quick-availability#dismiss"
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-warm-gray-700 transition-colors hover:bg-cream-200 hover:text-terracotta-700">
+        <%= icon "x-mark", classes: "h-5 w-5" %>
+      </button>
+    </div>
+
+    <div class="overflow-y-auto px-5 py-5 sm:px-7 sm:py-6">
+      <p class="text-sm leading-relaxed text-warm-gray-700">
+        Choose a service to see the next available opening for each technician.
+      </p>
+
+      <div class="mt-5 grid gap-4 sm:grid-cols-[1fr_auto]">
+        <div>
+          <label for="quick-availability-service" class="mb-1 block text-sm font-medium text-warm-gray-800">Service</label>
+          <select id="quick-availability-service"
+                  data-quick-availability-target="service"
+                  data-action="change->quick-availability#serviceChanged"
+                  class="w-full rounded-xl border border-cream-200 bg-white px-3 py-2.5 text-warm-gray-800">
+            <option value="">Loading services...</option>
+          </select>
+        </div>
+        <div>
+          <label for="quick-availability-date" class="mb-1 block text-sm font-medium text-warm-gray-800">Starting</label>
+          <input id="quick-availability-date"
+                 type="date"
+                 data-quick-availability-target="date"
+                 data-action="change->quick-availability#dateChanged"
+                 min="<%= Date.current.iso8601 %>"
+                 value="<%= Date.current.iso8601 %>"
+                 class="w-full rounded-xl border border-cream-200 bg-white px-3 py-2.5 text-warm-gray-800">
+        </div>
+      </div>
+
+      <p data-quick-availability-target="message" class="mt-6 text-sm text-warm-gray-600" aria-live="polite">Loading services...</p>
+      <p data-quick-availability-target="loading" class="hidden mt-6 text-sm text-warm-gray-600" aria-live="polite">Checking open times...</p>
+      <p data-quick-availability-target="error" class="hidden mt-6 rounded-xl border border-terracotta-200 bg-terracotta-50 px-4 py-3 text-sm text-terracotta-800" role="alert"></p>
+
+      <div data-quick-availability-target="results" class="mt-4 hidden space-y-3" aria-live="polite"></div>
+
+      <div data-quick-availability-target="fallback" class="mt-6 hidden rounded-2xl border border-cream-200 bg-white/70 p-4 text-sm text-warm-gray-700">
+        <p>Online availability is unavailable right now. You can continue to booking or call us directly.</p>
+        <div class="mt-3 flex flex-wrap gap-3">
+          <a data-quick-availability-target="fallbackLink"
+             href="<%= booking_link %>"
+             class="inline-flex items-center gap-2 font-semibold text-terracotta-700 hover:text-terracotta-900">
+            Continue to booking
+            <%= icon "arrow-right", classes: "h-4 w-4" %>
+          </a>
+          <a href="tel:<%= salon.phone %>" class="font-semibold text-terracotta-700 hover:text-terracotta-900"><%= salon.phone_display %></a>
+        </div>
+        <button type="button"
+                data-quick-availability-target="retry"
+                data-action="click->quick-availability#loadOptions"
+                class="mt-3 hidden text-sm font-semibold text-warm-gray-700 underline underline-offset-4">Try again</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,12 @@
 <!-- ===== HERO SECTION ===== -->
 <section id="home"
          class="relative overflow-hidden bg-cream-50 min-h-screen"
-         data-controller="hero">
+         data-controller="hero quick-availability"
+         data-action="keydown@window->quick-availability#keydown"
+         data-quick-availability-options-url-value="<%= book_path %>/availability/options"
+         data-quick-availability-next-url-value="<%= book_path %>/availability/next"
+         data-quick-availability-booking-url-value="<%= book_path %>"
+         data-quick-availability-fallback-url-value="<%= booking_link %>">
   <div class="absolute inset-0 hero-ambient"></div>
   <div class="absolute inset-0 hero-grid-lines pointer-events-none"></div>
   <div class="absolute left-4 top-4 h-72 w-72 rounded-full hero-orb-terra blur-3xl"></div>
@@ -81,20 +86,29 @@
         <div class="absolute inset-0 hero-photo-overlay pointer-events-none"></div>
       </div>
 
-      <div class="absolute -bottom-10 left-10 w-[280px] glass-warm rounded-2xl px-5 py-4 shadow-warm-lg" data-hero-target="cta">
-        <p class="text-xs uppercase tracking-[0.18em] text-terracotta-700 mb-2">Next availability</p>
-        <div class="flex items-center justify-between text-warm-gray-900">
+      <button type="button"
+              class="absolute -bottom-10 left-10 w-[280px] glass-warm rounded-2xl px-5 py-4 text-left shadow-warm-lg transition-transform duration-300 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-terracotta-500 focus:ring-offset-2"
+              data-hero-target="cta"
+              data-quick-availability-target="trigger"
+              data-action="click->quick-availability#open"
+              aria-controls="quickAvailabilityDialog"
+              aria-haspopup="dialog"
+              aria-expanded="false">
+        <p class="text-xs uppercase tracking-[0.18em] text-terracotta-700">Check availability</p>
+        <div class="mt-2 flex items-center justify-between text-warm-gray-900">
           <div>
-            <p class="font-serif text-2xl leading-tight">This Week</p>
-            <p class="text-sm text-warm-gray-600">Reserve by phone or online</p>
+            <p class="font-serif text-2xl leading-tight">Find your next opening</p>
+            <p class="text-sm text-warm-gray-600">See times by technician</p>
           </div>
           <div class="h-12 w-12 rounded-full bg-terracotta-700 text-cream-50 flex items-center justify-center shadow-warm-md">
-            <%= icon 'phone', classes: 'w-5 h-5' %>
+            <%= icon 'calendar-days', classes: 'w-5 h-5' %>
           </div>
         </div>
-      </div>
+      </button>
     </div>
   </div>
+
+  <%= render "shared/quick_availability_dialog" %>
 
   <div class="absolute bottom-8 left-0 right-0 flex justify-center z-20" data-hero-target="scroll">
     <a href="#about" class="flex items-center gap-3 text-warm-gray-700 hover:text-terracotta-700 transition-colors" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">

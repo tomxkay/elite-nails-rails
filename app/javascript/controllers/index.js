@@ -37,3 +37,6 @@ application.register("mobile-menu", MobileMenuController)
 
 import BookingController from "./booking_controller"
 application.register("booking", BookingController)
+
+import QuickAvailabilityController from "./quick_availability_controller"
+application.register("quick-availability", QuickAvailabilityController)

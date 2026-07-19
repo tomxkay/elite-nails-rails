@@ -29,6 +29,20 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
     assert_select "footer a[href='/#pricing']"
   end
 
+  test "show honors availability preselection" do
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:services, SERVICES) do
+        SquareApi.stub(:bookable_staff, STAFF) do
+          get book_path, params: { service_id: "VAR1", team_member_id: "TM1", date: (Date.current + 2).iso8601 }
+        end
+      end
+    end
+    assert_response :success
+    assert_select "input[data-booking-target='service'][checked]"
+    assert_select "option[value='TM1'][selected]"
+    assert_select "input[data-booking-target='date'][value=?]", (Date.current + 2).iso8601
+  end
+
   test "show redirects to BOOKING_URL when square is not configured" do
     original = ENV["BOOKING_URL"]
     ENV["BOOKING_URL"] = "https://square.example/book"
@@ -62,6 +76,57 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
 
   test "availability without a service is a 422" do
     get "/book/availability", params: { date: "2026-07-20" }
+    assert_response :unprocessable_entity
+  end
+
+  test "availability options returns square services and staff" do
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:services, SERVICES) do
+        SquareApi.stub(:bookable_staff, STAFF) do
+          get "/book/availability/options"
+        end
+      end
+    end
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal "Gel Manicure", body.dig("services", 0, "name")
+    assert_equal "Michael K", body.dig("staff", 0, "name")
+  end
+
+  test "availability options reports when square is unavailable" do
+    SquareApi.stub(:configured?, false) do
+      get "/book/availability/options"
+    end
+    assert_response :service_unavailable
+  end
+
+  test "next availability groups the earliest slot by technician" do
+    date = Date.current + 1
+    slots = [
+      { start_at: (date + 1).in_time_zone.change(hour: 14).iso8601, team_member_id: "TM1", service_variation_version: 7 },
+      { start_at: date.in_time_zone.change(hour: 15).iso8601, team_member_id: "TM1", service_variation_version: 7 },
+      { start_at: date.in_time_zone.change(hour: 11).iso8601, team_member_id: "TM2", service_variation_version: 7 }
+    ]
+    staff = [ { id: "TM1", name: "Michael K" }, { id: "TM2", name: "Nhan Ka" } ]
+
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:availability, slots) do
+        SquareApi.stub(:bookable_staff, staff) do
+          get "/book/availability/next", params: { service_id: "VAR1", date: date.iso8601, days: 14 }
+        end
+      end
+    end
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal date.in_time_zone.change(hour: 15).iso8601, body.dig("technicians", 0, "next_slot", "start_at")
+    assert_equal date.in_time_zone.change(hour: 11).iso8601, body.dig("technicians", 1, "next_slot", "start_at")
+    assert_equal date.in_time_zone.change(hour: 11).iso8601, body.dig("anyone_next_slot", "start_at")
+  end
+
+  test "next availability rejects an invalid date" do
+    SquareApi.stub(:configured?, true) do
+      get "/book/availability/next", params: { service_id: "VAR1", date: "not-a-date" }
+    end
     assert_response :unprocessable_entity
   end
 
