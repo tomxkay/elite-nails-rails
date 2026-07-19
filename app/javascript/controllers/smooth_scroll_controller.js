@@ -9,7 +9,8 @@ export default class extends Controller {
   static values = {
     target: String,
     offset: Number,
-    duration: { type: Number, default: 1 }
+    duration: { type: Number, default: 1 },
+    native: { type: Boolean, default: false }
   }
 
   scroll(event) {
@@ -41,7 +42,18 @@ export default class extends Controller {
 
     // Calculate scroll position with offset - use getBoundingClientRect for accurate positioning
     const rect = targetElement.getBoundingClientRect()
-    const targetPosition = rect.top + window.pageYOffset - this.scrollOffset
+    const targetPosition = Math.max(0, rect.top + this.currentScrollY - this.scrollOffset)
+
+    if (this.nativeValue) {
+      // Give the mobile drawer time to release its body scroll lock before
+      // asking Safari to animate the document's scroll root.
+      requestAnimationFrame(() => {
+        window.setTimeout(() => this.scrollDocument(targetPosition), 0)
+      })
+
+      this.updateHash(targetSelector)
+      return
+    }
 
     // Smooth scroll with GSAP
     gsap.to(window, {
@@ -52,10 +64,7 @@ export default class extends Controller {
       duration: this.durationValue,
       ease: "power2.inOut",
       onComplete: () => {
-        // Update URL hash without jumping
-        if (targetSelector.startsWith("#")) {
-          history.pushState(null, null, targetSelector)
-        }
+        this.updateHash(targetSelector)
 
         // Trigger highlight on matching pricing card
         if (pricingCategory && targetSelector === "#pricing") {
@@ -80,6 +89,34 @@ export default class extends Controller {
         }
       }
     })
+  }
+
+  get prefersReducedMotion() {
+    return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false
+  }
+
+  get currentScrollY() {
+    return window.scrollY || window.pageYOffset || document.scrollingElement?.scrollTop || 0
+  }
+
+  scrollDocument(targetPosition) {
+    const options = {
+      top: targetPosition,
+      behavior: this.prefersReducedMotion ? "auto" : "smooth"
+    }
+    const scrollRoot = document.scrollingElement || document.documentElement
+
+    try {
+      scrollRoot.scrollTo(options)
+    } catch {
+      window.scrollTo(0, targetPosition)
+    }
+  }
+
+  updateHash(targetSelector) {
+    if (targetSelector.startsWith("#")) {
+      history.pushState(null, null, targetSelector)
+    }
   }
 
   get scrollOffset() {
