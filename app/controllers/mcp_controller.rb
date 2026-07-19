@@ -41,6 +41,7 @@ class McpController < ActionController::Base
     UpdateSiteSettingsTool
     GetBusinessHoursTool
     SetBusinessHoursTool
+    GetAnalyticsSummaryTool
   ].freeze
 
   def handle

@@ -61,6 +61,24 @@ class McpControllerTest < ActionDispatch::IntegrationTest
     assert_equal false, body.dig("result", "isError")
   end
 
+  test "tools/call GetAnalyticsSummaryTool returns a KPI overview" do
+    visit = Ahoy::Visit.create!(
+      visit_token: SecureRandom.uuid, visitor_token: SecureRandom.uuid,
+      started_at: 2.days.ago, device_type: "Mobile", referring_domain: "google.com"
+    )
+    Ahoy::Event.create!(visit: visit, name: "book_page_opened", time: 2.days.ago, properties: {})
+    Ahoy::Event.create!(visit: visit, name: "booking_completed", time: 2.days.ago, properties: {})
+
+    body = rpc("tools/call", params: { name: "GetAnalyticsSummaryTool", arguments: { days: 30 } })
+    assert_equal false, body.dig("result", "isError")
+    data = JSON.parse(body.dig("result", "content", 0, "text"))
+    assert_equal 1, data["visits"]
+    assert_equal 1, data["bookings"]
+    assert_equal 100.0, data["conversion_rate"]
+    assert_equal 1, data.dig("funnel", "booking_completed")
+    assert_equal({ "google.com" => 1 }, data["top_sources"])
+  end
+
   test "tools/call with invalid arguments returns isError content, not a crash" do
     body = rpc("tools/call", params: { name: "CreatePromotionTool", arguments: { title: "" } })
     assert_equal true, body.dig("result", "isError")

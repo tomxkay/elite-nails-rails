@@ -123,7 +123,13 @@ Small, self-contained PR:
    funnel drop-off, top sources) are a method call, not raw SQL.
 
 ### Deferred (not in the first slice)
-- Owner-facing dashboard / reporting UI (query in console or add Blazer later).
+- Owner-facing dashboard / reporting UI (query in console, ask Claude via the MCP
+  tool, or add Blazer later).
 - Richer engagement instrumentation (scroll depth, section views, heatmaps).
 - Off-site (hosted Square) conversion attribution.
-- Exposing metrics through the MCP server.
+
+### Added after the first slice
+- **MCP tool `GetAnalyticsSummaryTool`** (read-only, registered in
+  `McpController::TOOL_CLASS_NAMES`) — exposes `Analytics::Summary#overview` for a
+  `days` window so the owner can get KPIs / a dashboard by asking Claude, no
+  console needed.
