@@ -1,0 +1,42 @@
+<% promotion = Promotion.primary_for_display %>
+
+<% if promotion %>
+  <% promotion_href = booking_link %>
+  <% promotion_headline = [ promotion.deal, promotion.title ].compact_blank.join(" ") %>
+  <% link_options = {} %>
+  <% if promotion_href.start_with?("http") %>
+    <% link_options[:target] = "_blank" %>
+    <% link_options[:rel] = "noopener" %>
+  <% end %>
+
+  <div class="relative overflow-hidden border-b border-cream-200/80 bg-[linear-gradient(90deg,rgba(254,249,245,0.86),rgba(253,243,235,0.9),rgba(244,246,244,0.82))] backdrop-blur-xl">
+    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-terracotta-300/60 to-transparent" aria-hidden="true"></div>
+    <div class="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-2.5 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+      <div class="flex min-w-0 items-start gap-3 lg:items-center">
+        <span class="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-terracotta-700 text-cream-50 shadow-warm-sm lg:mt-0">
+          <%= icon 'sparkles', classes: 'h-4 w-4' %>
+        </span>
+        <p class="min-w-0 text-sm leading-snug text-warm-gray-800">
+          <span class="font-semibold uppercase tracking-[0.16em] text-terracotta-700">Current Special</span>
+          <span class="mx-2 hidden text-terracotta-300 sm:inline">/</span>
+          <span class="block font-serif text-lg leading-tight text-warm-gray-900 sm:inline"><%= promotion_headline %></span>
+          <% if promotion.badge.present? %>
+            <span class="ml-0 mt-1 inline-flex rounded-full border border-terracotta-200 bg-white/55 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-terracotta-700 sm:ml-2 sm:mt-0"><%= promotion.badge %></span>
+          <% end %>
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 pl-11 lg:flex-nowrap lg:pl-0">
+        <% if promotion.fine_print.present? %>
+          <span class="hidden text-xs leading-snug text-warm-gray-600 sm:inline"><%= promotion.fine_print %></span>
+        <% end %>
+        <%= link_to promotion_href,
+                    class: "inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold uppercase tracking-[0.16em] text-terracotta-700 transition-colors hover:text-terracotta-900",
+                    **link_options do %>
+          <span>Book & Save</span>
+          <%= icon 'arrow-right', classes: 'h-3.5 w-3.5' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

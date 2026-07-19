@@ -224,6 +224,24 @@
   width: 100%;
 }
 
+.hero-with-promo-offset {
+  padding-top: 15rem;
+  padding-bottom: 6rem;
+}
+
+@media (min-width: 640px) {
+  .hero-with-promo-offset {
+    padding-top: 13rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-with-promo-offset {
+    padding-top: 11rem;
+    padding-bottom: 8rem;
+  }
+}
+
 /* GSAP Animation Utilities */
 [data-controller*="scroll-reveal"] {
   opacity: 0;

@@ -61,4 +61,9 @@ class Promotion < ApplicationRecord
   rescue ActiveRecord::ActiveRecordError
     defaults
   end
+
+  def self.primary_for_display
+    promotions = for_display
+    promotions.find(&:featured) || promotions.first
+  end
 end
