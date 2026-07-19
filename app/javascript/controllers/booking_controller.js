@@ -6,7 +6,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [
     "service", "staff", "date", "slots", "slotsHint",
-    "form", "name", "phone", "email", "note",
+    "form", "name", "phone", "email", "note", "honeypot",
     "summary", "error", "submitBtn", "wizard", "confirmation",
     "confirmationHeading", "confirmationService", "confirmationDate",
     "confirmationTechnicianRow", "confirmationTechnician"
@@ -132,7 +132,8 @@ export default class extends Controller {
           name: this.nameTarget.value,
           phone: this.phoneTarget.value,
           email: this.emailTarget.value,
-          note: this.noteTarget.value
+          note: this.noteTarget.value,
+          website: this.hasHoneypotTarget ? this.honeypotTarget.value : ""
         })
       })
       const data = await response.json()

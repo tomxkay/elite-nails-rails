@@ -2,6 +2,19 @@
 # GET /book renders the wizard; availability + create are called by the
 # `booking` Stimulus controller as JSON.
 class BookingsController < ApplicationController
+  include RateLimiter
+
+  # Hidden form field no human sees or fills. If it arrives populated, the
+  # request is an automated submission — drop it before touching Square.
+  HONEYPOT_FIELD = :website
+
+  # Generous per-IP caps: high enough that real customers (even several on one
+  # shared mobile/office IP) never hit them, low enough to stop an automated
+  # flood. Throttling fails open if the cache is down (see RateLimiter).
+  before_action :throttle_availability, only: :availability
+  before_action :throttle_create,       only: :create
+  before_action :reject_honeypot,       only: :create
+
   # GET /book
   def show
     unless SquareApi.configured?
@@ -68,5 +81,40 @@ class BookingsController < ApplicationController
     render json: { ok: false, error: "Missing required field: #{e.param}" }, status: :unprocessable_entity
   rescue SquareApi::Error => e
     render json: { ok: false, error: e.message }, status: :unprocessable_entity
+  end
+
+  private
+
+  def throttle_availability
+    throttle(scope: "book:availability", limit: 60, period: 1.minute)
+  end
+
+  def throttle_create
+    throttle(
+      scope: "book:create",
+      limit: 10,
+      period: 1.hour,
+      message: "You've made several booking attempts. Please wait a bit and try again, or call us to book."
+    )
+  end
+
+  # Silently reject automated submissions caught by the honeypot. We return a
+  # generic 422 (never naming the trap) rather than a fake success, so that in
+  # the rare event a real submission trips it — e.g. aggressive autofill — the
+  # customer sees a clear "call us" path instead of thinking they booked.
+  def reject_honeypot
+    return if params[HONEYPOT_FIELD].blank?
+
+    Rails.logger.warn("[Booking] honeypot triggered from #{request.remote_ip}")
+    render json: {
+      ok: false,
+      error: "We couldn't complete that booking online. Please call us at #{support_phone} to book."
+    }, status: :unprocessable_entity
+  end
+
+  def support_phone
+    helpers.salon.phone_display
+  rescue StandardError
+    "the salon"
   end
 end

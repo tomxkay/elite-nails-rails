@@ -92,6 +92,13 @@
         <section class="rounded-3xl bg-white p-6 sm:p-8 shadow-warm border border-cream-200">
           <h2 class="font-serif text-xl text-warm-gray-800 mb-4"><span class="text-terracotta-500 mr-2">4.</span>Your details</h2>
           <form data-action="submit->booking#submit" data-booking-target="form" class="grid gap-4 sm:grid-cols-2">
+            <%# Honeypot: hidden from humans (off-screen, out of tab order and the
+                a11y tree). Bots that fill every field trip it; see BookingsController. %>
+            <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;height:1px;width:1px;overflow:hidden;">
+              <label for="booking-website">Leave this field empty</label>
+              <input id="booking-website" type="text" name="website" tabindex="-1" autocomplete="off"
+                     data-booking-target="honeypot">
+            </div>
             <div>
               <label for="booking-name" class="mb-1 block text-sm font-medium text-warm-gray-700">First name</label>
               <input id="booking-name" type="text" required data-booking-target="name" autocomplete="given-name"

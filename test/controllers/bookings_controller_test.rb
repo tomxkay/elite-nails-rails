@@ -98,4 +98,84 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
     assert_match "Missing required field", JSON.parse(response.body)["error"]
   end
+
+  test "create rejects a filled honeypot without touching square" do
+    SquareApi.stub(:upsert_customer, ->(**) { flunk "bot submission reached Square" }) do
+      post book_path, params: valid_booking_params.merge(website: "http://spam.example"), as: :json
+    end
+    assert_response :unprocessable_entity
+    assert_match "call us", JSON.parse(response.body)["error"].downcase
+  end
+
+  test "create ignores an empty honeypot" do
+    SquareApi.stub(:upsert_customer, { "id" => "CUST1" }) do
+      SquareApi.stub(:create_booking, { "id" => "BK1", "start_at" => "2026-07-20T14:00:00Z", "status" => "ACCEPTED" }) do
+        post book_path, params: valid_booking_params.merge(website: ""), as: :json
+      end
+    end
+    assert_response :success
+    assert JSON.parse(response.body)["ok"]
+  end
+
+  test "create is throttled after the per-IP cap" do
+    booking = { "id" => "BK1", "start_at" => "2026-07-20T14:00:00Z", "status" => "ACCEPTED" }
+    with_counting_cache do
+      SquareApi.stub(:upsert_customer, { "id" => "CUST1" }) do
+        SquareApi.stub(:create_booking, booking) do
+          10.times do |i|
+            post book_path, params: valid_booking_params.merge(idempotency_key: "key-#{i}"), as: :json
+            assert_response :success
+          end
+          post book_path, params: valid_booking_params.merge(idempotency_key: "key-over"), as: :json
+        end
+      end
+    end
+    assert_response :too_many_requests
+    assert_equal "3600", response.headers["Retry-After"]
+    assert_match(/wait/i, JSON.parse(response.body)["error"])
+  end
+
+  test "availability is throttled after the per-IP cap" do
+    with_counting_cache do
+      SquareApi.stub(:availability, SLOTS) do
+        60.times do
+          get "/book/availability", params: { service_id: "VAR1", date: "2026-07-20" }
+          assert_response :success
+        end
+        get "/book/availability", params: { service_id: "VAR1", date: "2026-07-20" }
+      end
+    end
+    assert_response :too_many_requests
+  end
+
+  test "throttling fails open when the cache is unavailable" do
+    # The test env uses a null cache store whose increment is unsupported; the
+    # limiter must swallow that and let every request through.
+    booking = { "id" => "BK1", "start_at" => "2026-07-20T14:00:00Z", "status" => "ACCEPTED" }
+    SquareApi.stub(:upsert_customer, { "id" => "CUST1" }) do
+      SquareApi.stub(:create_booking, booking) do
+        20.times do |i|
+          post book_path, params: valid_booking_params.merge(idempotency_key: "open-#{i}"), as: :json
+          assert_response :success
+        end
+      end
+    end
+  end
+
+  private
+
+  def valid_booking_params
+    {
+      service_id: "VAR1", service_version: 7, start_at: "2026-07-20T14:00:00Z",
+      team_member_id: "TM1", idempotency_key: "booking-attempt", name: "Sarah", phone: "7045551234"
+    }
+  end
+
+  # Swap in a real counting store so throttle limits actually accumulate (the
+  # test env's null store no-ops, which is what "fails open" relies on).
+  def with_counting_cache
+    Rails.stub(:cache, ActiveSupport::Cache::MemoryStore.new) do
+      yield
+    end
+  end
 end
