@@ -245,10 +245,24 @@ Hotwire/Stimulus style, so prospects never leave the site.
   fallback. Webhooks deferred to D3 (digests/no-show intelligence).
 - **Test plan:** user's fresh Square account + sandbox app end-to-end, then
   swap production token. (Prior unused account exists; not audited by choice.)
-- **Cost (verify at signup; figures early-2026):** Square Free tier $0, APIs
-  $0, existing Fly infra ~$5-10/mo total. Conditional: Appointments Plus
-  ~$29/mo only for card-on-file/no-show fees/prepay; processing % only on
-  money charged through Square. D3 Claude API later: ~$5-15/mo at salon scale.
+- **STATUS (2026-07-18): built + verified as far as sandbox allows.** Live
+  against sandbox: catalog services render, staff list, real availability
+  slots (75 over 7 days), full wizard UX in browser, graceful error paths.
+  **⚠️ Blocked at the final write:** Square returns "Merchant subscription
+  does not support write operations" — **Bookings API writes (CreateBooking)
+  require Appointments Plus (~$29/mo); the free plan is read-only via API**
+  (bookings only through Square's own hosted page). Sandbox cannot simulate a
+  Plus subscription (upgrade flow errors server-side), so the CreateBooking
+  call gets verified during a **production Appointments Plus free trial** when
+  the salon's real account is set up. Fallback is automatic: without API creds
+  `booking_link` uses the hosted page (free plan), so the salon can launch $0
+  and upgrade later. Gotchas: services need `team_member_ids` assigned on the
+  variation or availability returns "no team member performs this service";
+  staff working hours drive slots (no Sunday hours → no Sunday slots).
+- **Cost (CORRECTED):** hosted-page booking $0; **native on-site booking (and
+  D3 AI-booked appointments) require Appointments Plus ~$29/mo** — total stack
+  then ~$35/mo. Reads (availability/catalog) are free either way. Processing %
+  only on money charged through Square. D3 Claude API later: ~$5-15/mo.
 
 **D3 — AI layers (the differentiator):**
 - **Client-facing:** on-site booking assistant (Claude API + availability/
