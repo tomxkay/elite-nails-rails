@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Elite Nails | Luxury Nail Salon & Spa in Cramerton, NC" %></title>
-    <meta name="description" content="Family-owned nail salon in Cramerton, NC since 2003. Manicures, pedicures, gel, dip powder, acrylics, and custom nail art. Call (704) 824-9032 or book online.">
+    <% default_title = "Elite Nails | A Welcoming Nail Salon in Cramerton, NC" %>
+    <% default_description = "A welcoming neighborhood nail salon in Cramerton, NC, serving the community since 2003 with manicures, pedicures, gel, dip, acrylics, and custom nail art. Call (704) 824-9032 or book online." %>
+    <title><%= content_for(:title).presence || default_title %></title>
+    <meta name="description" content="<%= content_for(:description).presence || default_description %>">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= render "shared/meta_tags" %>
+    <%= render "shared/meta_tags", default_title: default_title, default_description: default_description %>
     <%= render "shared/structured_data" %>
 
     <!-- Fonts -->
@@ -22,8 +24,7 @@
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="/icon.png" type="image/png" sizes="250x250">
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
