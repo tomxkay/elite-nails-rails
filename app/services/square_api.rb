@@ -134,9 +134,9 @@ class SquareApi
     end
 
     def create_booking(customer_id:, start_at:, service_variation_id:, service_variation_version:,
-                       team_member_id:, note: nil)
+                       team_member_id:, idempotency_key:, note: nil)
       data = post("/v2/bookings", {
-        idempotency_key: SecureRandom.uuid,
+        idempotency_key: idempotency_key,
         booking: {
           location_id: location_id,
           start_at: start_at,

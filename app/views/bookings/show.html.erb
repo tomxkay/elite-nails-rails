@@ -31,7 +31,9 @@
       <div data-controller="booking"
            data-booking-availability-url-value="<%= book_path %>/availability"
            data-booking-create-url-value="<%= book_path %>"
-           class="mt-10 space-y-8">
+           class="mt-10">
+
+        <div data-booking-target="wizard" class="space-y-8">
 
         <!-- Step 1: Service -->
         <section class="rounded-3xl bg-white p-6 sm:p-8 shadow-warm border border-cream-200">
@@ -121,12 +123,55 @@
           </form>
         </section>
 
+        </div>
+
         <!-- Confirmation -->
-        <section data-booking-target="confirmation" class="hidden rounded-3xl border border-sage-200 bg-white p-8 text-center shadow-warm">
-          <h2 class="font-serif text-2xl text-warm-gray-800">You're booked! 💅</h2>
-          <p data-booking-target="confirmationDetails" class="mt-3 text-warm-gray-700"></p>
-          <p class="mt-2 text-warm-gray-600">We've saved your appointment — you'll get a reminder before your visit. See you soon!</p>
-          <a href="/" class="mt-6 inline-block font-medium text-terracotta-600 underline underline-offset-4">Back to the site</a>
+        <section data-booking-target="confirmation"
+                 aria-hidden="true"
+                 class="hidden rounded-3xl border border-sage-200 bg-white p-8 text-center shadow-warm"
+                 aria-live="polite">
+          <h2 data-booking-target="confirmationHeading" tabindex="-1" class="font-serif text-3xl text-warm-gray-800">Appointment confirmed</h2>
+          <p class="mt-3 text-warm-gray-700">We have your appointment reserved. Here are the details:</p>
+
+          <dl class="mx-auto mt-8 max-w-sm divide-y divide-cream-200 rounded-2xl border border-cream-200 bg-cream-50/70 text-left">
+            <div class="flex items-start justify-between gap-6 px-5 py-4">
+              <dt class="text-sm text-warm-gray-600">Service</dt>
+              <dd data-booking-target="confirmationService" class="text-right font-semibold text-warm-gray-800"></dd>
+            </div>
+            <div class="flex items-start justify-between gap-6 px-5 py-4">
+              <dt class="text-sm text-warm-gray-600">Date and time</dt>
+              <dd data-booking-target="confirmationDate" class="text-right font-semibold text-warm-gray-800"></dd>
+            </div>
+            <div data-booking-target="confirmationTechnicianRow" class="hidden flex items-start justify-between gap-6 px-5 py-4">
+              <dt class="text-sm text-warm-gray-600">Technician</dt>
+              <dd data-booking-target="confirmationTechnician" class="text-right font-semibold text-warm-gray-800"></dd>
+            </div>
+            <div class="flex items-start justify-between gap-6 px-5 py-4">
+              <dt class="text-sm text-warm-gray-600">Location</dt>
+              <dd class="text-right font-semibold text-warm-gray-800"><%= salon.street %><br><%= salon.city %>, <%= salon.region %> <%= salon.postal_code %></dd>
+            </div>
+          </dl>
+
+          <p class="mx-auto mt-6 max-w-md text-sm text-warm-gray-600">
+            Need to make a change? Call us at
+            <a href="tel:<%= salon.phone %>" class="font-semibold text-terracotta-600 underline underline-offset-4"><%= salon.phone_display %></a>.
+          </p>
+
+          <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <%= render "shared/cta_button",
+                       text: "Book another appointment",
+                       href: book_path,
+                       style: :solid,
+                       size: :md,
+                       icon: "calendar-days",
+                       data: { turbo: false } %>
+            <%= render "shared/cta_button",
+                       text: "Back to home",
+                       href: root_path(anchor: "home"),
+                       style: :outline,
+                       size: :md,
+                       icon: "arrow-left" %>
+          </div>
         </section>
       </div>
     <% end %>

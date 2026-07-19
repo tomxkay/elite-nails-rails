@@ -7,7 +7,9 @@ export default class extends Controller {
   static targets = [
     "service", "staff", "date", "slots", "slotsHint",
     "form", "name", "phone", "email", "note",
-    "summary", "error", "submitBtn", "confirmation", "confirmationDetails"
+    "summary", "error", "submitBtn", "wizard", "confirmation",
+    "confirmationHeading", "confirmationService", "confirmationDate",
+    "confirmationTechnicianRow", "confirmationTechnician"
   ]
 
   static values = {
@@ -17,6 +19,8 @@ export default class extends Controller {
 
   connect() {
     this.selectedSlot = null
+    this.selectedSlotKey = null
+    this.idempotencyKey = this.newIdempotencyKey()
   }
 
   serviceChanged() {
@@ -79,6 +83,11 @@ export default class extends Controller {
   }
 
   selectSlot(slot, button = null) {
+    const slotKey = slot ? [slot.start_at, slot.team_member_id, slot.service_variation_version].join("|") : null
+    if (slotKey !== this.selectedSlotKey) {
+      this.idempotencyKey = this.newIdempotencyKey()
+      this.selectedSlotKey = slotKey
+    }
     this.selectedSlot = slot
     this.slotsTarget.querySelectorAll("button").forEach((el) => delete el.dataset.selected)
     if (button) button.dataset.selected = "true"
@@ -119,6 +128,7 @@ export default class extends Controller {
           service_version: service.version,
           start_at: this.selectedSlot.start_at,
           team_member_id: this.selectedSlot.team_member_id,
+          idempotency_key: this.idempotencyKey,
           name: this.nameTarget.value,
           phone: this.phoneTarget.value,
           email: this.emailTarget.value,
@@ -127,12 +137,27 @@ export default class extends Controller {
       })
       const data = await response.json()
       if (!response.ok || !data.ok) throw new Error(data.error || "Something went wrong")
+      if (!data.booking?.start_at) throw new Error("Your booking may have been created, but confirmation details are unavailable. Please call us before trying again.")
 
-      this.confirmationDetailsTarget.textContent =
-        `${service.name} on ${this.formatDay(data.booking.start_at)} at ${this.formatTime(data.booking.start_at)}`
+      this.confirmationServiceTarget.textContent = service.name
+      this.confirmationDateTarget.textContent =
+        `${this.formatDay(data.booking.start_at)} at ${this.formatTime(data.booking.start_at)}`
+
+      const technician = this.technicianNameFor(this.selectedSlot)
+      this.confirmationTechnicianTarget.textContent = technician
+      this.confirmationTechnicianRowTarget.classList.toggle("hidden", !technician)
+
+      this.formTarget.reset()
+      this.serviceTargets.forEach((radio) => (radio.checked = false))
+      this.selectedSlot = null
+      this.selectedSlotKey = null
+      this.idempotencyKey = this.newIdempotencyKey()
+      this.wizardTarget.classList.add("hidden")
+      this.wizardTarget.setAttribute("aria-hidden", "true")
       this.confirmationTarget.classList.remove("hidden")
+      this.confirmationTarget.removeAttribute("aria-hidden")
       this.confirmationTarget.scrollIntoView({ behavior: "smooth", block: "center" })
-      this.formTarget.querySelectorAll("input, textarea, button, select").forEach((el) => (el.disabled = true))
+      window.requestAnimationFrame(() => this.confirmationHeadingTarget.focus({ preventScroll: true }))
     } catch (error) {
       this.showError(`${error.message}. The time may have just been taken — refresh the times and try again, or call us.`)
       this.submitBtnTarget.disabled = false
@@ -148,6 +173,18 @@ export default class extends Controller {
 
   hideError() {
     this.errorTarget.classList.add("hidden")
+  }
+
+  technicianNameFor(slot) {
+    if (!slot?.team_member_id) return ""
+
+    const option = Array.from(this.staffTarget.options).find((candidate) => candidate.value === slot.team_member_id)
+    return option?.textContent.trim() || ""
+  }
+
+  newIdempotencyKey() {
+    if (window.crypto?.randomUUID) return window.crypto.randomUUID()
+    return `${Date.now()}-${Math.random().toString(16).slice(2)}`
   }
 
   formatTime(iso) {

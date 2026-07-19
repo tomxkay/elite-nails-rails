@@ -64,11 +64,12 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
 
   test "create books through square and returns the booking" do
     created = { "id" => "BK1", "start_at" => "2026-07-20T14:00:00Z", "status" => "ACCEPTED" }
+    captured = nil
     SquareApi.stub(:upsert_customer, { "id" => "CUST1" }) do
-      SquareApi.stub(:create_booking, created) do
+      SquareApi.stub(:create_booking, ->(**args) { captured = args; created }) do
         post book_path, params: {
           service_id: "VAR1", service_version: 7, start_at: "2026-07-20T14:00:00Z",
-          team_member_id: "TM1", name: "Sarah", phone: "7045551234"
+          team_member_id: "TM1", idempotency_key: "booking-attempt-1", name: "Sarah", phone: "7045551234"
         }, as: :json
       end
     end
@@ -76,6 +77,7 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
     body = JSON.parse(response.body)
     assert body["ok"]
     assert_equal "BK1", body.dig("booking", "id")
+    assert_equal "booking-attempt-1", captured[:idempotency_key]
   end
 
   test "create surfaces square errors as 422 with a message" do
@@ -83,7 +85,7 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
       SquareApi.stub(:create_booking, ->(**) { raise SquareApi::Error, "That time is no longer available" }) do
         post book_path, params: {
           service_id: "VAR1", service_version: 7, start_at: "2026-07-20T14:00:00Z",
-          team_member_id: "TM1", name: "Sarah", phone: "7045551234"
+          team_member_id: "TM1", idempotency_key: "booking-attempt-2", name: "Sarah", phone: "7045551234"
         }, as: :json
       end
     end

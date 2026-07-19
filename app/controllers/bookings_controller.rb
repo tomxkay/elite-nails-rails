@@ -48,6 +48,7 @@ class BookingsController < ApplicationController
 
   # POST /book
   def create
+    idempotency_key = params.require(:idempotency_key)
     customer = SquareApi.upsert_customer(
       given_name: params.require(:name),
       phone: params.require(:phone),
@@ -59,6 +60,7 @@ class BookingsController < ApplicationController
       service_variation_id: params.require(:service_id),
       service_variation_version: params.require(:service_version),
       team_member_id: params.require(:team_member_id),
+      idempotency_key: idempotency_key,
       note: params[:note].presence
     )
     render json: { ok: true, booking: { id: booking["id"], start_at: booking["start_at"], status: booking["status"] } }
