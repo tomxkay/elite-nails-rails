@@ -222,6 +222,43 @@ content. This is the intended control surface (MCP-only, no admin UI).
   (hide via `SetPromotionActiveTool`). Add new tools following this pattern and
   register them in `TOOL_CLASS_NAMES`.
 
+## Booking (Square — Phase D2)
+
+Native on-site booking at **`/book`** (wizard: service → tech → slot → details),
+backed by the **Square Bookings API**. Verified end-to-end on Square's **free**
+plan (2026-07-19).
+
+- **`SquareApi`** (`app/services/square_api.rb`) — dependency-free Net::HTTP
+  client: catalog services, bookable staff, availability search, customer
+  upsert, `CreateBooking` (idempotency keys). `BookingsController` proxies it
+  as JSON for the `booking` Stimulus controller.
+- **Auth model (the critical part):** Square gates Bookings API *writes* by
+  token scope, not by API access. A **buyer-scoped OAuth token** (scopes
+  `APPOINTMENTS_WRITE`/`READ`, `APPOINTMENTS_ALL_READ`,
+  `APPOINTMENTS_BUSINESS_SETTINGS_READ`, `CUSTOMERS_*`, `ITEMS_READ` — never
+  `APPOINTMENTS_ALL_WRITE`) can create customer self-bookings **on the free
+  plan**. An all-scope personal access token is classified seller-level and
+  403s without Appointments Plus ($49/mo) — Plus is only needed for future
+  staff-side booking tools.
+- **Token lifecycle:** mint once via `GET /square/authorize` →
+  `SquareOauthController` (needs `SQUARE_APP_ID`/`SQUARE_APP_SECRET` + the
+  redirect URL registered in the Square developer console). The callback
+  persists tokens to **`SquareCredential`** (one encrypted row per
+  environment; AR encryption keys live in Rails credentials). `SquareApi`
+  prefers the stored credential and **lazily refreshes** it ~3 days before its
+  ~30-day expiry on the next request (chosen over a cron job because Fly
+  machines auto-stop). `ENV["SQUARE_ACCESS_TOKEN"]` is a fallback when no row
+  exists.
+- **Env:** `SQUARE_ENVIRONMENT` (`sandbox` unless `production`),
+  `SQUARE_LOCATION_ID`, `SQUARE_APP_ID`, `SQUARE_APP_SECRET`, optional
+  `SQUARE_ACCESS_TOKEN` fallback. Dev `.env` holds the sandbox set.
+- **CTAs:** `booking_link` prefers `/book` when `SquareApi.configured?`, else
+  `BOOKING_URL` (hosted Square page), else `tel:`. Production stays on the
+  hosted page until Square secrets are set there.
+- **Square gotchas:** service variations must have `team_member_ids` assigned
+  or availability errors; staff working hours drive slots; sandbox can't
+  simulate paid plans; sandbox sends no real notification emails/SMS.
+
 ## Deployment
 
 **Deploys to Fly.io** (this is the chosen host). Config in `fly.toml`:

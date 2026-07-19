@@ -14,20 +14,53 @@ class SquareApi
   READ_TIMEOUT = 15
 
   class << self
+    # Cheap check used on every page render (booking_link) — must not trigger
+    # a token refresh, just detect that some credential exists.
     def configured?
-      ENV["SQUARE_ACCESS_TOKEN"].present? && ENV["SQUARE_LOCATION_ID"].present?
+      return false if location_id.blank?
+
+      ENV["SQUARE_ACCESS_TOKEN"].present? || SquareCredential.current&.access_token.present?
     end
 
     def location_id
       ENV["SQUARE_LOCATION_ID"]
     end
 
+    def environment
+      ENV["SQUARE_ENVIRONMENT"].to_s == "production" ? "production" : "sandbox"
+    end
+
     def base_url
-      if ENV["SQUARE_ENVIRONMENT"].to_s == "production"
+      if environment == "production"
         "https://connect.squareup.com"
       else
         "https://connect.squareupsandbox.com"
       end
+    end
+
+    # The bearer token for API calls: the stored OAuth credential (refreshed
+    # lazily when near its ~30-day expiry) or the SQUARE_ACCESS_TOKEN env var.
+    def access_token
+      credential = SquareCredential.current
+      if credential&.needs_refresh?
+        begin
+          credential = credential.refresh!
+        rescue Error => e
+          # A failed renewal shouldn't take booking down while the current
+          # token still works; the next call retries the refresh.
+          Rails.logger.error("Square token refresh failed: #{e.message}")
+        end
+      end
+      credential&.access_token.presence || ENV["SQUARE_ACCESS_TOKEN"].presence
+    end
+
+    # OAuth token endpoint (authorization_code mint + refresh_token renewals).
+    def oauth_token(**params)
+      post_oauth("/oauth2/token", {
+        client_id: ENV["SQUARE_APP_ID"],
+        client_secret: ENV["SQUARE_APP_SECRET"],
+        **params
+      })
     end
 
     # Bookable services (catalog items with product_type APPOINTMENTS_SERVICE).
@@ -147,14 +180,25 @@ class SquareApi
       request(req)
     end
 
+    # OAuth endpoints authenticate with the app secret in the body, not a
+    # bearer token (and must work before any token exists).
+    def post_oauth(path, body)
+      req = Net::HTTP::Post.new(full_uri(path))
+      req.body = JSON.generate(body)
+      request(req, bearer: false)
+    end
+
     def full_uri(path)
       URI("#{base_url}#{path}")
     end
 
-    def request(req)
-      raise Error, "Square is not configured (missing env vars)" unless configured?
+    def request(req, bearer: true)
+      if bearer
+        token = access_token
+        raise Error, "Square is not configured (missing credentials)" if token.blank? || location_id.blank?
 
-      req["Authorization"] = "Bearer #{ENV['SQUARE_ACCESS_TOKEN']}"
+        req["Authorization"] = "Bearer #{token}"
+      end
       req["Square-Version"] = API_VERSION
       req["Content-Type"] = "application/json"
 
@@ -167,7 +211,8 @@ class SquareApi
       response = http.request(req)
       json = JSON.parse(response.body.presence || "{}") rescue {}
       unless response.is_a?(Net::HTTPSuccess)
-        detail = json.dig("errors", 0, "detail") || json.dig("errors", 0, "code")
+        detail = json.dig("errors", 0, "detail") || json.dig("errors", 0, "code") ||
+                 json["error_description"] || json["error"]
         raise Error, detail || "Square API error (HTTP #{response.code})"
       end
       json

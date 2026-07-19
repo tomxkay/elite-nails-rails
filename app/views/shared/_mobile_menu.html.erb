@@ -1,26 +1,26 @@
 <!-- Mobile Menu Overlay -->
-<div id="mobileOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300 lg:hidden"></div>
+<div id="mobileOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300 xl:hidden" data-mobile-menu-target="overlay" data-action="click->mobile-menu#close"></div>
 
 <!-- Mobile Menu Drawer -->
-<div id="mobileMenu" class="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-cream-50 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-out lg:hidden">
+<div id="mobileMenu" class="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-cream-50 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-out xl:hidden" data-mobile-menu-target="panel">
   <div class="flex flex-col h-full">
     <div class="flex items-center justify-between p-6 border-b border-cream-200">
       <span class="font-script text-lg text-warm-gray-800">Menu</span>
-      <button type="button" id="closeMenuBtn" class="p-2 -mr-2 text-warm-gray-700 hover:text-terracotta-600 transition-colors" aria-label="Close menu">
+      <button type="button" id="closeMenuBtn" class="p-2 -mr-2 text-warm-gray-700 hover:text-terracotta-600 transition-colors" aria-label="Close menu" data-action="click->mobile-menu#close">
         <%= icon 'x-mark', classes: 'w-6 h-6' %>
       </button>
     </div>
     <nav class="flex-1 px-6 py-8 overflow-y-auto">
       <ul class="space-y-1">
-        <li><a href="#home" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors">Home</a></li>
-        <li><a href="#story" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors">Our Story</a></li>
-        <li><a href="#services" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors">Services</a></li>
-        <li><a href="#pricing" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors">Pricing</a></li>
-        <li><a href="#gallery" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors">Gallery</a></li>
-        <li><a href="#about" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors">About</a></li>
-        <li><a href="#team" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors">Team</a></li>
-        <li><a href="#testimonials" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors">Reviews</a></li>
-        <li><a href="#contact" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors">Contact</a></li>
+        <li><a href="#home" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll click->mobile-menu#close">Home</a></li>
+        <li><a href="#story" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll click->mobile-menu#close">Our Story</a></li>
+        <li><a href="#services" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll click->mobile-menu#close">Services</a></li>
+        <li><a href="#pricing" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll click->mobile-menu#close">Pricing</a></li>
+        <li><a href="#gallery" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll click->mobile-menu#close">Gallery</a></li>
+        <li><a href="#about" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll click->mobile-menu#close">About</a></li>
+        <li><a href="#team" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll click->mobile-menu#close">Team</a></li>
+        <li><a href="#testimonials" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll click->mobile-menu#close">Reviews</a></li>
+        <li><a href="#contact" class="mobile-link block py-3 text-warm-gray-800 hover:text-terracotta-600 font-medium tracking-wide transition-colors" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll click->mobile-menu#close">Contact</a></li>
       </ul>
     </nav>
     <div class="p-6 border-t border-cream-200 bg-cream-100">

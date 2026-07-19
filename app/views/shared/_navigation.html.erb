@@ -1,9 +1,9 @@
-<header id="navbar" data-controller="navbar" data-action="scroll@window->navbar#toggleLabel" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-cream-50/80 backdrop-blur-md border-b border-cream-200/70 shadow-warm-sm">
+<header id="navbar" data-controller="navbar mobile-menu" data-action="scroll@window->navbar#toggleLabel keydown@window->mobile-menu#closeOnEscape resize@window->mobile-menu#closeForDesktop" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-cream-50/80 backdrop-blur-md border-b border-cream-200/70 shadow-warm-sm">
   <%= render 'shared/promotion_banner' %>
 
   <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Desktop Navigation -->
-    <div class="hidden lg:flex items-center justify-center py-4 relative" data-navbar-target="navRow">
+    <div class="hidden xl:flex items-center justify-center py-4 relative" data-navbar-target="navRow">
       <!-- Left Nav Links -->
       <div class="flex items-center space-x-8 absolute left-0">
         <a href="#home" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll">Home</a>
@@ -29,8 +29,8 @@
     </div>
 
     <!-- Mobile Navigation Header -->
-    <div class="lg:hidden flex items-center justify-between py-4" data-navbar-target="navRow">
-      <button type="button" id="mobileMenuBtn" class="p-2 -ml-2 text-warm-gray-700 hover:text-terracotta-600 transition-colors" aria-label="Toggle menu">
+    <div class="xl:hidden flex items-center justify-between py-4" data-navbar-target="navRow">
+      <button type="button" id="mobileMenuBtn" class="p-2 -ml-2 text-warm-gray-700 hover:text-terracotta-600 transition-colors" aria-label="Toggle menu" aria-controls="mobileMenu" aria-expanded="false" data-mobile-menu-target="button" data-action="click->mobile-menu#open">
         <%= icon 'bars-3', classes: 'w-6 h-6' %>
       </button>
       <%= render 'shared/logo', size: :small, collapsible_text: true %>

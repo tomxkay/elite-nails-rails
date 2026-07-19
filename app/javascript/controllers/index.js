@@ -32,5 +32,8 @@ application.register("stagger", StaggerController)
 import NavbarController from "./navbar_controller"
 application.register("navbar", NavbarController)
 
+import MobileMenuController from "./mobile_menu_controller"
+application.register("mobile-menu", MobileMenuController)
+
 import BookingController from "./booking_controller"
 application.register("booking", BookingController)

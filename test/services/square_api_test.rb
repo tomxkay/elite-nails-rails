@@ -13,12 +13,44 @@ class SquareApiTest < ActiveSupport::TestCase
     ]
   }.freeze
 
-  test "configured? requires token and location" do
+  test "configured? requires a location plus either env token or stored credential" do
     with_env("SQUARE_ACCESS_TOKEN" => "t", "SQUARE_LOCATION_ID" => "L") do
       assert SquareApi.configured?
     end
     with_env("SQUARE_ACCESS_TOKEN" => nil, "SQUARE_LOCATION_ID" => "L") do
       assert_not SquareApi.configured?
+      SquareCredential.store_oauth!({ "access_token" => "db-token" }, environment: "sandbox")
+      assert SquareApi.configured?
+    end
+  end
+
+  test "access_token prefers the stored credential and lazily refreshes near expiry" do
+    with_env("SQUARE_ACCESS_TOKEN" => "env-token") do
+      assert_equal "env-token", SquareApi.access_token
+
+      SquareCredential.store_oauth!(
+        { "access_token" => "db-token", "refresh_token" => "r", "expires_at" => 20.days.from_now.iso8601 },
+        environment: "sandbox"
+      )
+      assert_equal "db-token", SquareApi.access_token
+
+      SquareCredential.sole.update!(expires_at: 1.day.from_now)
+      renewed = { "access_token" => "renewed-token", "expires_at" => 40.days.from_now.iso8601 }
+      SquareApi.stub(:oauth_token, renewed) do
+        assert_equal "renewed-token", SquareApi.access_token
+      end
+    end
+  end
+
+  test "access_token falls back to the stale stored token when refresh fails" do
+    with_env("SQUARE_ACCESS_TOKEN" => nil) do
+      SquareCredential.store_oauth!(
+        { "access_token" => "stale-token", "refresh_token" => "r", "expires_at" => 1.day.from_now.iso8601 },
+        environment: "sandbox"
+      )
+      SquareApi.stub(:oauth_token, ->(**) { raise SquareApi::Error, "down" }) do
+        assert_equal "stale-token", SquareApi.access_token
+      end
     end
   end
 

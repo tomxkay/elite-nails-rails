@@ -40,8 +40,15 @@ class SquareOauthController < ApplicationController
       return render plain: "State mismatch — start again at /square/authorize", status: :unprocessable_entity
     end
 
-    response = exchange_code(params.require(:code))
-    render :callback, locals: { token: response }
+    payload = SquareApi.oauth_token(
+      grant_type: "authorization_code",
+      code: params.require(:code),
+      redirect_uri: square_callback_url
+    )
+    # Persist so SquareApi uses (and lazily refreshes) it from the DB — no
+    # env-var paste needed after this.
+    SquareCredential.store_oauth!(payload, environment: SquareApi.environment)
+    render :callback, locals: { token: payload }
   rescue SquareApi::Error => e
     render plain: "Token exchange failed: #{e.message}", status: :bad_gateway
   end
@@ -56,27 +63,5 @@ class SquareOauthController < ApplicationController
 
   def oauth_base
     SquareApi.base_url
-  end
-
-  def exchange_code(code)
-    uri = URI("#{oauth_base}/oauth2/token")
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    req = Net::HTTP::Post.new(uri)
-    req["Content-Type"] = "application/json"
-    req["Square-Version"] = SquareApi::API_VERSION
-    req.body = JSON.generate(
-      client_id: ENV["SQUARE_APP_ID"],
-      client_secret: ENV["SQUARE_APP_SECRET"],
-      code: code,
-      grant_type: "authorization_code",
-      redirect_uri: square_callback_url
-    )
-    res = http.request(req)
-    json = JSON.parse(res.body.presence || "{}") rescue {}
-    unless res.is_a?(Net::HTTPSuccess)
-      raise SquareApi::Error, json["error_description"] || json["error"] || "HTTP #{res.code}"
-    end
-    json
   end
 end

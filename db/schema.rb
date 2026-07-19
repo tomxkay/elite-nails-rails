@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_18_184907) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_19_043628) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -152,6 +152,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_18_184907) do
     t.integer "review_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "square_credentials", force: :cascade do |t|
+    t.string "environment", null: false
+    t.text "access_token"
+    t.text "refresh_token"
+    t.datetime "expires_at"
+    t.string "merchant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["environment"], name: "index_square_credentials_on_environment", unique: true
   end
 
   create_table "team_members", force: :cascade do |t|
