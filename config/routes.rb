@@ -32,6 +32,11 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  # Native booking flow (Square Bookings API — Phase D2).
+  get  "/book",              to: "bookings#show", as: :book
+  get  "/book/availability", to: "bookings#availability"
+  post "/book",              to: "bookings#create"
+
   # Defines the root path route ("/")
   root "pages#home"
 end

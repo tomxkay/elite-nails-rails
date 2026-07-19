@@ -17,7 +17,8 @@
 <% classes = local_assigns[:classes] %>
 <% options = local_assigns.except(:text, :href, :style, :size, :icon, :icon_name, :icon_classes, :classes) %>
 
-<% if href == booking_link %>
+<%# External booking pages open in a new tab; the native /book flow stays in-app. %>
+<% if href == booking_link && href.start_with?("http") %>
   <% options[:target] ||= "_blank" %>
   <% options[:rel] = [options[:rel], "noopener"].compact.join(" ").presence %>
 <% end %>

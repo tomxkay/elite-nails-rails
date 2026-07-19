@@ -20,7 +20,12 @@ module ApplicationHelper
   end
 
   # Centralized booking URL with sensible fallback to phone
+  # Booking CTA target, best available first: the native on-site flow (when
+  # Square API creds are configured), else the external Square booking page
+  # (BOOKING_URL), else the phone line.
   def booking_link
+    return book_path if SquareApi.configured?
+
     ENV["BOOKING_URL"].presence || "tel:+17048249032"
   end
 
