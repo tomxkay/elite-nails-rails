@@ -5,8 +5,17 @@ answer real business questions ("is the website driving bookings, and where do
 customers come from?") and accumulate raw behavioral data to mine for KPIs over
 time.
 
-_Created: 2026-07-19. Status: PLANNING (no code written yet)._
+_Created: 2026-07-19. Status: FIRST SLICE IMPLEMENTED (2026-07-19)._
 Parent planning doc: [`../PROJECT.md`](../PROJECT.md) · Related: [`cms-ai-roadmap.md`](cms-ai-roadmap.md).
+
+> **Implemented (first slice):** `ahoy_matey` with anonymized config
+> (`config/initializers/ahoy.rb`), server-side page-view tracking
+> (`ApplicationController#track_pageview`, honors DNT/GPC, skips Turbo prefetch &
+> health checks), a locked-down client events endpoint (`EventsController`,
+> allow-list + rate-limited + sanitized), booking funnel events (server-side in
+> `BookingsController`; client-side in `analytics.js` + `booking_controller.js`),
+> and the `Analytics::Summary` query object for owner-facing KPIs. Read the
+> numbers from a Rails console: `Analytics::Summary.new.overview`.
 
 ## Goal
 

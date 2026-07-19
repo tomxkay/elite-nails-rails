@@ -45,6 +45,9 @@ Rails.application.routes.draw do
   get  "/book/availability", to: "bookings#availability"
   post "/book",              to: "bookings#create"
 
+  # First-party analytics: client-reported KPI events (see docs/analytics-plan.md).
+  post "/events", to: "events#create"
+
   # Defines the root path route ("/")
   root "pages#home"
 end

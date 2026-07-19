@@ -74,3 +74,7 @@ gem "aws-sdk-s3", "~> 1.206", :require => false
 gem "fast-mcp", "~> 1.6"
 
 gem "doorkeeper", "~> 5.9"
+
+# First-party visitor analytics — visits + events stored in our own Postgres
+# (see docs/analytics-plan.md).
+gem "ahoy_matey", "~> 5.2"

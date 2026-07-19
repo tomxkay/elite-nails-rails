@@ -30,6 +30,8 @@ class BookingsController < ApplicationController
     rescue SquareApi::Error
       []
     end
+
+    track_event("book_page_opened", service_count: @services.size, staff_count: @staff.size) if @services.any?
   rescue SquareApi::Error => e
     @error = e.message
     @services = []
@@ -62,6 +64,7 @@ class BookingsController < ApplicationController
   # POST /book
   def create
     idempotency_key = params.require(:idempotency_key)
+    track_event("booking_submitted", service_id: params[:service_id])
     customer = SquareApi.upsert_customer(
       given_name: params.require(:name),
       phone: params.require(:phone),
@@ -75,6 +78,12 @@ class BookingsController < ApplicationController
       team_member_id: params.require(:team_member_id),
       idempotency_key: idempotency_key,
       note: params[:note].presence
+    )
+    track_event(
+      "booking_completed",
+      service_id: params[:service_id],
+      team_member_id: params[:team_member_id],
+      has_email: params[:email].present?
     )
     render json: { ok: true, booking: { id: booking["id"], start_at: booking["start_at"], status: booking["status"] } }
   rescue ActionController::ParameterMissing => e
@@ -116,5 +125,13 @@ class BookingsController < ApplicationController
     helpers.salon.phone_display
   rescue StandardError
     "the salon"
+  end
+
+  # Record a funnel event via Ahoy. Properties only — never customer PII (name,
+  # phone, email values). Analytics must never break a booking.
+  def track_event(name, **properties)
+    ahoy.track(name, properties)
+  rescue StandardError => e
+    Rails.logger.warn("[Analytics] #{name} tracking failed: #{e.class}: #{e.message}")
   end
 end

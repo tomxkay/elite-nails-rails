@@ -7,6 +7,9 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
   SERVICES = [ { id: "VAR1", version: 7, name: "Gel Manicure", price: "$40", duration_minutes: 45 } ].freeze
   STAFF = [ { id: "TM1", name: "Michael K" } ].freeze
   SLOTS = [ { start_at: "2026-07-20T14:00:00Z", team_member_id: "TM1", service_variation_version: 7 } ].freeze
+  # Ahoy skips bot/blank-UA traffic, so event-tracking tests send a browser UA.
+  BROWSER_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " \
+               "(KHTML, like Gecko) Chrome/120.0 Safari/537.36".freeze
 
   test "show renders the wizard with services and staff" do
     SquareApi.stub(:configured?, true) do
@@ -160,6 +163,37 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
         end
       end
     end
+  end
+
+  test "show tracks a page view and book_page_opened" do
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:services, SERVICES) do
+        SquareApi.stub(:bookable_staff, STAFF) do
+          assert_difference -> { Ahoy::Event.where(name: "book_page_opened").count }, 1 do
+            get book_path, headers: { "User-Agent" => BROWSER_UA }
+          end
+        end
+      end
+    end
+    assert Ahoy::Event.where(name: "page_viewed").exists?
+    assert_equal 1, Ahoy::Event.find_by(name: "book_page_opened").properties["service_count"]
+  end
+
+  test "create tracks booking_submitted and booking_completed without PII" do
+    created = { "id" => "BK1", "start_at" => "2026-07-20T14:00:00Z", "status" => "ACCEPTED" }
+    SquareApi.stub(:upsert_customer, { "id" => "CUST1" }) do
+      SquareApi.stub(:create_booking, created) do
+        assert_difference -> { Ahoy::Event.where(name: %w[booking_submitted booking_completed]).count }, 2 do
+          post book_path, params: valid_booking_params, as: :json, headers: { "User-Agent" => BROWSER_UA }
+        end
+      end
+    end
+    assert_response :success
+    completed = Ahoy::Event.find_by(name: "booking_completed")
+    assert_equal "VAR1", completed.properties["service_id"]
+    assert_equal false, completed.properties["has_email"]
+    refute completed.properties.key?("phone"), "must not store PII"
+    refute completed.properties.key?("name"), "must not store PII"
   end
 
   private

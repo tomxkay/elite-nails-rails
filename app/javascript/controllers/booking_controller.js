@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { trackEvent } from "../analytics"
 
 // Drives the native booking wizard (/book): loads open slots for the chosen
 // service/tech/day from the server (which proxies Square), then submits the
@@ -24,6 +25,7 @@ export default class extends Controller {
   }
 
   serviceChanged() {
+    trackEvent("service_selected", { service: this.selectedService?.name })
     this.loadSlots()
   }
 
@@ -87,6 +89,7 @@ export default class extends Controller {
     if (slotKey !== this.selectedSlotKey) {
       this.idempotencyKey = this.newIdempotencyKey()
       this.selectedSlotKey = slotKey
+      if (slot) trackEvent("slot_selected", { service: this.selectedService?.name })
     }
     this.selectedSlot = slot
     this.slotsTarget.querySelectorAll("button").forEach((el) => delete el.dataset.selected)

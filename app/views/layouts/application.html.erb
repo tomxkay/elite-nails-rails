@@ -10,6 +10,8 @@
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <%# Lets analytics.js classify a booking-CTA click as native vs Square fallback. %>
+    <meta name="booking-url" content="<%= booking_link %>">
 
     <%= render "shared/meta_tags", default_title: default_title, default_description: default_description %>
     <%= render "shared/structured_data" %>
