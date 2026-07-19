@@ -201,6 +201,41 @@ gems removed. What I **can't** do (requires your Fly account):
    and boot. ⚠️ **Unverified locally** — I can't run a real Fly Postgres deploy, so
    treat the first deploy as the verification step.
 
+## Booking plan (Phase D, started 2026-07-18)
+
+**Reality today: the salon takes bookings by phone only.** No Square
+Appointments account exists yet (`BOOKING_URL` was provisioned in advance; the
+site currently falls back to `tel:`). Decision: **don't build a booking engine**
+— availability rules, reminders, no-show handling, and (critically) staff
+adoption are Square's product. Use **Square as the booking backend** and layer
+our experience/AI on top.
+
+**D1 — Make booking work (no code):**
+1. Owner signs up for **Square Appointments** (free tier — verify current
+   pricing/limits at signup) and configures: services w/ durations & prices
+   (mirror the site's pricing menu), each tech as staff with working hours,
+   salon hours, reminder settings. ~30-60 min, needs the owner.
+2. Get the public booking-page URL → `fly secrets set BOOKING_URL=<url>` (and
+   dev `.env`). Every CTA on the site flips from `tel:` to real online booking
+   automatically via the `booking_link` helper.
+3. Verify: site CTAs open the booking page; make + cancel a test appointment;
+   techs see it in the Square Appointments app.
+4. Keep site content (services/pricing DB) consistent with the Square catalog —
+   manual for now; API sync is a later phase.
+
+**D2 — Native booking flow (Bookings API):** custom on-site flow
+(service → tech → real-time slot → confirm) via Square's Bookings/Catalog/
+Availability APIs, so prospects never leave the site. Needs seller API
+credentials (start in Square sandbox). Verify current API scopes/plan
+requirements at build time.
+
+**D3 — AI layers (the differentiator):**
+- **Client-facing:** on-site booking assistant (Claude API + availability/
+  booking tools) — "gel mani Thursday after 4" → offered slots → booked.
+- **Staff-facing:** booking tools on the existing MCP connector ("what's my
+  Thursday?", "cancel my 3pm"), morning digest, no-show flags, slow-day promo
+  suggestions (ties into Phase C).
+
 ## What's next — launch checklist (2026-07-18)
 
 Milestone 2 core is **live**: site + MCP + OAuth deployed and verified at
