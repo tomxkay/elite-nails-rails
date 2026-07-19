@@ -1,0 +1,77 @@
+<!-- ===== FAQ SECTION ===== -->
+<%#
+  Frequently asked questions. The `faqs` array is the single source of truth for
+  both the visible accordion and the FAQPage JSON-LD below it, so they never
+  drift. Questions/answers are written with local keywords (Cramerton, Belmont,
+  Gaston County + service names) to match long-tail "near me" searches.
+  Answers are plain text so they can be reused verbatim in structured data.
+%>
+<%
+  faqs = [
+    {
+      question: "Where is Elite Nails located?",
+      answer: "Elite Nails is at #{salon.street}, #{salon.city}, #{salon.region} #{salon.postal_code}, on Market Street in downtown Cramerton. We proudly serve Cramerton, Belmont, Mount Holly, and the greater Gaston County area."
+    },
+    {
+      question: "Do I need an appointment, or do you take walk-ins?",
+      answer: "Both! You can book an appointment online in under a minute, or call us at #{salon.phone_display}. Walk-ins are always welcome based on availability, but booking ahead guarantees your preferred time and technician."
+    },
+    {
+      question: "What nail services do you offer in Cramerton?",
+      answer: "We offer manicures and pedicures, gel and dip powder nails, acrylic full sets and fills, custom nail art, and spa treatments — all in a clean, family-owned salon that's been serving Cramerton since 2003."
+    },
+    {
+      question: "Do you do gel and dip powder nails?",
+      answer: "Yes. Gel manicures and dip powder are two of our most popular services, along with acrylics and classic polish. Our technicians can help you choose the best option for your nails and lifestyle."
+    },
+    {
+      question: "How do I book an appointment at Elite Nails?",
+      answer: "The fastest way is to book online through the 'Book Now' button on this page. You can also call the salon directly at #{salon.phone_display} and we'll find a time that works for you."
+    },
+    {
+      question: "Is Elite Nails clean and hygienic?",
+      answer: "Absolutely. We use hospital-grade disinfectants on tools and stations, and every guest gets fresh liners and sanitized bowls. Cleanliness and gentle, hygienic care come first at Elite Nails."
+    }
+  ]
+%>
+
+<section id="faq" class="py-24 lg:py-32 bg-cream-50">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <%= render 'shared/section_header',
+               eyebrow: 'Good to Know',
+               title: 'Frequently Asked',
+               title_accent: 'Questions',
+               subtitle: 'Everything you need to know before your visit to our Cramerton nail salon.' %>
+
+    <div class="mt-12 space-y-4"
+         data-controller="scroll-reveal"
+         data-scroll-reveal-animation-value="fadeInUp">
+      <% faqs.each do |faq| %>
+        <details class="group rounded-2xl border border-cream-200 bg-white/80 shadow-warm-sm backdrop-blur transition-colors open:border-terracotta-200">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 px-6 py-5 list-none">
+            <h3 class="font-serif text-lg text-warm-gray-900"><%= faq[:question] %></h3>
+            <%= icon 'chevron-down', classes: 'w-5 h-5 shrink-0 text-terracotta-600 transition-transform group-open:rotate-180' %>
+          </summary>
+          <p class="px-6 pb-6 -mt-1 text-warm-gray-700 font-light leading-relaxed">
+            <%= faq[:answer] %>
+          </p>
+        </details>
+      <% end %>
+    </div>
+  </div>
+
+  <%# FAQPage structured data — built from the same `faqs` array so it always
+      matches the visible content (a Google requirement for FAQ markup). %>
+  <% faq_ld = {
+       "@context" => "https://schema.org",
+       "@type" => "FAQPage",
+       "mainEntity" => faqs.map do |faq|
+         {
+           "@type" => "Question",
+           "name" => faq[:question],
+           "acceptedAnswer" => { "@type" => "Answer", "text" => faq[:answer] }
+         }
+       end
+     } %>
+  <script type="application/ld+json"><%= raw faq_ld.to_json %></script>
+</section>
