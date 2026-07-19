@@ -22,9 +22,6 @@
       <%# ===== Featured offer (full width) ===== %>
       <% if featured %>
         <div class="lg:col-span-3 relative overflow-hidden rounded-3xl warm-gradient-peach ring-1 ring-cream-200 shadow-warm-lg">
-          <% if featured.badge.present? %>
-            <span class="absolute right-6 top-6 rounded-full bg-terracotta-700 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-cream-50 shadow-warm-md"><%= featured.badge %></span>
-          <% end %>
           <div class="flex flex-col gap-6 p-8 sm:flex-row sm:items-center sm:gap-10 lg:p-10">
             <div class="flex-shrink-0 text-center sm:text-left">
               <p class="font-serif text-6xl leading-none text-terracotta-700 lg:text-7xl"><%= featured.deal %></p>
@@ -32,6 +29,11 @@
             </div>
             <div class="hidden w-px self-stretch border-l border-dashed border-terracotta-300 sm:block"></div>
             <div class="flex-1">
+              <% if featured.badge.present? %>
+                <div class="mb-3 flex justify-end">
+                  <span class="rounded-full bg-terracotta-700 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-cream-50 shadow-warm-md"><%= featured.badge %></span>
+                </div>
+              <% end %>
               <p class="text-warm-gray-700 leading-relaxed"><%= featured.description %></p>
               <div class="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
                 <%= render 'shared/cta_button',

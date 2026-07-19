@@ -9,7 +9,7 @@ export default class extends Controller {
 
   open() {
     this.overlayTarget.classList.remove("hidden")
-    this.panelTarget.classList.remove("translate-x-full")
+    this.panelTarget.classList.remove("-translate-x-full")
     this.buttonTarget.setAttribute("aria-expanded", "true")
     document.body.classList.add("overflow-hidden")
 
@@ -22,12 +22,12 @@ export default class extends Controller {
     if (!this.hasOverlayTarget || !this.hasPanelTarget || !this.hasButtonTarget) return
 
     this.overlayTarget.classList.add("opacity-0")
-    this.panelTarget.classList.add("translate-x-full")
+    this.panelTarget.classList.add("-translate-x-full")
     this.buttonTarget.setAttribute("aria-expanded", "false")
     document.body.classList.remove("overflow-hidden")
 
     window.setTimeout(() => {
-      if (this.panelTarget.classList.contains("translate-x-full")) {
+      if (this.panelTarget.classList.contains("-translate-x-full")) {
         this.overlayTarget.classList.add("hidden")
       }
     }, 300)
