@@ -3,29 +3,35 @@
     - size: :small, :medium, :large (default: :medium)
     - linkable: boolean (default: true)
     - link_target: string (default: root home anchor)
+    - image: asset name (default: 'logo.png')
+    - image_classes: extra image classes
 %>
 <% size ||= :medium %>
 <% linkable = local_assigns.fetch(:linkable, true) %>
 <% link_target ||= root_path(anchor: 'home') %>
+<% image ||= 'logo.png' %>
+<% image_classes = local_assigns.fetch(:image_classes, '') %>
 <% collapsible_text = local_assigns.fetch(:collapsible_text, false) %>
 
 <% sizes = {
   small: { logo: 'h-10' },
   medium: { logo: 'h-12' },
-  large: { logo: 'h-14' }
+  large: { logo: 'h-14' },
+  header_small: { logo: 'h-20' },
+  header_large: { logo: 'h-28' }
 } %>
 <% size_classes = sizes[size] %>
 
 <% if linkable %>
   <a href="<%= link_target %>" class="inline-flex items-center group">
-    <%= image_tag "logo.png",
+    <%= image_tag image,
                   alt: "Elite Nails",
-                  class: "#{size_classes[:logo]} w-auto transition-transform duration-300 group-hover:scale-105" %>
+                  class: "#{size_classes[:logo]} w-auto object-contain transition-transform duration-300 group-hover:scale-105 #{image_classes}" %>
   </a>
 <% else %>
   <div class="inline-flex items-center">
-    <%= image_tag "logo.png",
+    <%= image_tag image,
                   alt: "Elite Nails",
-                  class: "#{size_classes[:logo]} w-auto" %>
+                  class: "#{size_classes[:logo]} w-auto object-contain #{image_classes}" %>
   </div>
 <% end %>

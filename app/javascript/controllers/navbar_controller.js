@@ -22,7 +22,7 @@ export default class extends Controller {
 
     this.navRowTargets.forEach((row) => {
       row.classList.toggle("py-2", scrolled)
-      row.classList.toggle("py-4", !scrolled)
+      row.classList.toggle("py-3", !scrolled)
     })
 
     this.updateHeaderOffset()
