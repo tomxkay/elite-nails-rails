@@ -312,8 +312,12 @@ attached to production. Remaining work, in priority order:
       Maps search link).
 
 **Client-ready polish**
-- [ ] **Custom domain** — `fly certs add <domain>` + DNS once the salon has one;
-      fly.dev URL is fine for testing, not for a business card.
+- [x] **Custom domain (2026-07-19)** — https://elitenailscramerton.com live
+      (Namecheap DNS → Fly certs; old Heroku CNAME removed). `CanonicalHost`
+      middleware 308s www/fly.dev → apex, exempting `/mcp`, `/oauth`,
+      `/.well-known`, `/owner`, `/up` so the claude.ai connector (still on
+      fly.dev) keeps working. Consider migrating the MCP connector to the
+      apex domain later, then dropping the exemptions.
 - [ ] **Owner handoff doc** — one page: how to add the connector, where the
       password lives, example phrases ("add a promo", "change Saturday hours",
       "hide that review"), what the approval prompts mean, who to call when
