@@ -12,10 +12,12 @@
     <%# Content from the DB (Service), with in-code DEFAULTS fallback. %>
     <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10" data-controller="stagger" data-stagger-amount-value="0.1" data-stagger-from-value="bottom" data-stagger-start-value="top 95%">
       <% Service.for_display.each_with_index do |service, i| %>
+        <% image_sources = service.image.present? ? responsive_service_image_sources(service.image) : {} %>
         <%= render 'shared/service_card',
                    title: service.title,
                    description: service.description,
-                   image_url: (asset_path(service.image) if service.image.present?),
+                   image_url: image_sources[:src],
+                   image_srcset: image_sources[:srcset],
                    featured: service.featured,
                    pricing_category: service.pricing_category,
                    index: i %>

@@ -5,48 +5,48 @@ class Service < ApplicationRecord
   scope :visible, -> { where(active: true) }
 
   # In-code backup / canonical seed source (see Promotion for the pattern).
-  # `image` is an asset filename resolved via asset_path in the view.
+  # `image` is an asset filename resolved via responsive_service_image_sources.
   DEFAULTS = [
     {
       title: "Gel & Dip Powder",
       description: "Long-lasting, chip-resistant color with gel polish or dip powder systems. Up to 3 weeks of gorgeous nails.",
       featured: true,
-      image: "manicure-service.jpg",
+      image: "manicure-service-768.webp",
       pricing_category: "hands",
       position: 0
     },
     {
       title: "Manicures",
       description: "Classic and spa manicures featuring premium products, cuticle care, nail shaping, and your choice of polish.",
-      image: "manicure-service.jpg",
+      image: "manicure-service-768.webp",
       pricing_category: "hands",
       position: 1
     },
     {
       title: "Pedicures",
       description: "Relax with our signature pedicures including foot soak, exfoliation, massage, and polish.",
-      image: "pedicure-service.jpg",
+      image: "pedicure-service-768.webp",
       pricing_category: "feet",
       position: 2
     },
     {
       title: "Acrylic & Extensions",
       description: "Custom acrylic nail enhancements, tips, and sculpted extensions for length and strength.",
-      image: "manicure-service.jpg",
+      image: "manicure-service-768.webp",
       pricing_category: "add-ons",
       position: 3
     },
     {
       title: "Nail Art & Design",
       description: "Express yourself with custom nail art, hand-painted designs, gems, foils, and trending styles.",
-      image: "nail-art-service.png",
+      image: "nail-art-service-768.webp",
       pricing_category: "add-ons",
       position: 4
     },
     {
       title: "Waxing Services",
       description: "Professional waxing services for brows, lip, chin, and more with gentle techniques.",
-      image: "pedicure-service.jpg",
+      image: "pedicure-service-768.webp",
       pricing_category: "add-ons",
       position: 5
     }

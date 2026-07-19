@@ -19,10 +19,13 @@
 
         <div class="relative">
           <div class="relative z-10 h-[58vh] max-h-[560px] w-[clamp(16rem,34vw,24rem)] overflow-hidden rounded-t-[999px] rounded-b-[2.5rem] ring-1 ring-cream-200 shadow-warm-xl">
-            <%= image_tag "salon-interior.png",
+            <%= image_tag "salon-interior.webp",
                           alt: "Inside the Elite Nails salon",
                           class: "h-full w-full object-cover saturate-[1.08]",
-                          loading: "lazy" %>
+                          loading: "lazy",
+                          decoding: "async",
+                          width: 380,
+                          height: 373 %>
             <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-warm-gray-900/20 via-transparent to-transparent"></div>
           </div>
 

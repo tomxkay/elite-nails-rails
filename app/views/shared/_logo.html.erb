@@ -3,13 +3,13 @@
     - size: :small, :medium, :large (default: :medium)
     - linkable: boolean (default: true)
     - link_target: string (default: root home anchor)
-    - image: asset name (default: 'header-logo.png')
+    - image: asset name (default: 'header-logo-250.webp')
     - image_classes: extra image classes
 %>
 <% size ||= :medium %>
 <% linkable = local_assigns.fetch(:linkable, true) %>
 <% link_target ||= root_path(anchor: 'home') %>
-<% image ||= 'header-logo.png' %>
+<% image ||= 'header-logo-250.webp' %>
 <% image_classes = local_assigns.fetch(:image_classes, '') %>
 <% collapsible_text = local_assigns.fetch(:collapsible_text, false) %>
 
@@ -27,12 +27,18 @@
   <a href="<%= link_target %>" class="inline-flex items-center group">
     <%= image_tag image,
                   alt: "Elite Nails",
-                  class: "#{size_classes[:logo]} w-auto object-contain transition-transform duration-300 group-hover:scale-105 #{image_classes}" %>
+                  class: "#{size_classes[:logo]} w-auto object-contain transition-transform duration-300 group-hover:scale-105 #{image_classes}",
+                  width: 250,
+                  height: 250,
+                  decoding: "async" %>
   </a>
 <% else %>
   <div class="inline-flex items-center">
     <%= image_tag image,
                   alt: "Elite Nails",
-                  class: "#{size_classes[:logo]} w-auto object-contain #{image_classes}" %>
+                  class: "#{size_classes[:logo]} w-auto object-contain #{image_classes}",
+                  width: 250,
+                  height: 250,
+                  decoding: "async" %>
   </div>
 <% end %>

@@ -10,9 +10,11 @@
   <div class="pointer-events-none hidden md:block absolute -top-10 left-0 -translate-y-[12%] -translate-x-[8%] z-0" aria-hidden="true">
     <div class="relative">
       <div class="absolute -top-6 -right-6 h-24 w-24 rounded-full hero-orb-sage blur-3xl opacity-70"></div>
-      <%= image_tag "hand-flower.png",
+      <%= image_tag "hand-flower.webp",
                     alt: "Decorative floral hand",
-                    class: "relative max-w-none object-contain drop-shadow-[0_25px_80px_-40px_rgba(104,72,57,0.55)]" %>
+                    class: "relative max-w-none object-contain drop-shadow-[0_25px_80px_-40px_rgba(104,72,57,0.55)]",
+                    loading: "lazy",
+                    decoding: "async" %>
     </div>
   </div>
 </div>

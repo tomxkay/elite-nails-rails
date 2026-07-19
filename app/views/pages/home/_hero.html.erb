@@ -68,10 +68,16 @@
         est. 2003
       </div>
       <div class="relative overflow-hidden rounded-[28px] shadow-[0_30px_80px_-40px_rgba(104,72,57,0.6)] ring-1 ring-cream-200 bg-warm-gray-900/5">
-        <%= image_tag "hero.png",
+        <%= image_tag "hero-768.webp",
                       alt: "Elite Nails Salon interior",
                       class: "w-full h-full object-cover brightness-95 contrast-105",
-                      loading: "eager" %>
+                      loading: "eager",
+                      fetchpriority: "high",
+                      decoding: "async",
+                      width: 1536,
+                      height: 1024,
+                      srcset: "#{asset_path('hero-768.webp')} 768w, #{asset_path('hero-1536.webp')} 1536w",
+                      sizes: "(min-width: 1024px) 45vw, 100vw" %>
         <div class="absolute inset-0 hero-photo-overlay pointer-events-none"></div>
       </div>
 
@@ -102,9 +108,11 @@
   <div class="pointer-events-none hidden md:block absolute bottom-0 right-20 translate-y-[12%] translate-x-[8%] z-10" aria-hidden="true" data-hero-target="hand">
     <div class="relative">
       <div class="absolute -top-6 -left-6 h-24 w-24 rounded-full hero-orb-terra blur-3xl opacity-70"></div>
-      <%= image_tag "nails-hand.png",
+      <%= image_tag "nails-hand.webp",
                     alt: "Polished hand with manicure",
-                    class: "relative max-w-none object-contain drop-shadow-[0_25px_80px_-40px_rgba(104,72,57,0.55)]" %>
+                    class: "relative max-w-none object-contain drop-shadow-[0_25px_80px_-40px_rgba(104,72,57,0.55)]",
+                    loading: "lazy",
+                    decoding: "async" %>
     </div>
   </div>
 </section>

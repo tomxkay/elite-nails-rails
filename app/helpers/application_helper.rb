@@ -50,6 +50,21 @@ module ApplicationHelper
     "https://www.google.com/maps?q=#{ERB::Util.url_encode(query)}&output=embed"
   end
 
+  # Existing service records retain their legacy image filename while the site
+  # serves the matching responsive WebP variants.
+  def responsive_service_image_sources(image)
+    base_name = File.basename(image.to_s, File.extname(image.to_s)).sub(/-(?:480|768)\z/, "")
+    return { src: asset_path(image) } unless %w[manicure-service pedicure-service nail-art-service].include?(base_name)
+
+    {
+      src: asset_path("#{base_name}-768.webp"),
+      srcset: [
+        "#{asset_path("#{base_name}-480.webp")} 480w",
+        "#{asset_path("#{base_name}-768.webp")} 768w"
+      ].join(", ")
+    }
+  end
+
   # Placeholder image helper (currently disabled - returns nil)
   # Kept for future use when actual images are added
   #

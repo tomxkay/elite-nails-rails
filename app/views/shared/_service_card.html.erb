@@ -9,6 +9,7 @@
 %>
 <% featured ||= false %>
 <% image_url = local_assigns[:image_url] %>
+<% image_srcset = local_assigns[:image_srcset] %>
 <% pricing_category = local_assigns[:pricing_category] || '' %>
 <% index = local_assigns[:index] || 0 %>
 <% number = format("%02d", index + 1) %>
@@ -23,7 +24,9 @@
       <img src="<%= image_url %>"
            alt="<%= title %> at Elite Nails"
            class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-           loading="lazy">
+           loading="lazy"
+           decoding="async"
+           <% if image_srcset.present? %>srcset="<%= image_srcset %>" sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 100vw"<% end %>>
     <% else %>
       <div class="absolute inset-0 bg-gradient-to-br from-peach-100 via-cream-100 to-sage-100"></div>
     <% end %>
