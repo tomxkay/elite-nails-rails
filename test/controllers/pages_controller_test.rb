@@ -23,4 +23,13 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "header", text: /20% Off Summer Hands/
     assert_select "header", text: /Limited Time/
   end
+
+  test "does not render the promotion banner when no persisted promotion is visible" do
+    Promotion.create!(title: "Paused Special", active: false)
+
+    get root_url
+
+    assert_response :success
+    assert_select "header", text: /Current Special/, count: 0
+  end
 end

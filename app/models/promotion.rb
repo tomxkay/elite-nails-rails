@@ -63,7 +63,18 @@ class Promotion < ApplicationRecord
   end
 
   def self.primary_for_display
-    promotions = for_display
+    promotions = primary_candidates
     promotions.find(&:featured) || promotions.first
+  end
+
+  def self.primary_candidates
+    return defaults unless table_exists?
+
+    records = visible.ordered.to_a
+    return records if exists?
+
+    records.presence || defaults
+  rescue ActiveRecord::ActiveRecordError
+    defaults
   end
 end

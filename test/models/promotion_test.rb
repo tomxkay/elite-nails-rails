@@ -51,4 +51,15 @@ class PromotionTest < ActiveSupport::TestCase
 
     assert_equal "First", Promotion.primary_for_display.title
   end
+
+  test "primary_for_display returns nil when persisted promotions exist but none are visible" do
+    Promotion.create!(title: "Inactive", active: false)
+    Promotion.create!(title: "Future", starts_on: Date.current + 1)
+
+    assert_nil Promotion.primary_for_display
+  end
+
+  test "primary_for_display falls back to defaults when table is empty" do
+    assert_equal "Your First Visit", Promotion.primary_for_display.title
+  end
 end

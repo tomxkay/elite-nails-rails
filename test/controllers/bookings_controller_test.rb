@@ -19,6 +19,7 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match "Gel Manicure", response.body
     assert_match "Michael K", response.body
+    assert_select "main.page-with-fixed-header-offset"
   end
 
   test "show redirects to BOOKING_URL when square is not configured" do

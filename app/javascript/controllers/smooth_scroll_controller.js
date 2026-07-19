@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollToPlugin)
 export default class extends Controller {
   static values = {
     target: String,
-    offset: { type: Number, default: 80 }, // Offset for fixed header
+    offset: Number,
     duration: { type: Number, default: 1 }
   }
 
@@ -39,7 +39,7 @@ export default class extends Controller {
 
     // Calculate scroll position with offset - use getBoundingClientRect for accurate positioning
     const rect = targetElement.getBoundingClientRect()
-    const targetPosition = rect.top + window.pageYOffset - this.offsetValue
+    const targetPosition = rect.top + window.pageYOffset - this.scrollOffset
 
     // Smooth scroll with GSAP
     gsap.to(window, {
@@ -78,5 +78,14 @@ export default class extends Controller {
         }
       }
     })
+  }
+
+  get scrollOffset() {
+    if (this.hasOffsetValue) return this.offsetValue
+
+    const header = document.getElementById("navbar")
+    if (!header) return 0
+
+    return Math.ceil(header.getBoundingClientRect().height) + 24
   }
 }
