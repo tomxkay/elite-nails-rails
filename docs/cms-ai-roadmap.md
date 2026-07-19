@@ -203,25 +203,31 @@ gems removed. What I **can't** do (requires your Fly account):
 
 ## Booking plan (Phase D, started 2026-07-18)
 
-**Reality today: the salon takes bookings by phone only.** No Square
-Appointments account exists yet (`BOOKING_URL` was provisioned in advance; the
-site currently falls back to `tel:`). Decision: **don't build a booking engine**
-— availability rules, reminders, no-show handling, and (critically) staff
-adoption are Square's product. Use **Square as the booking backend** and layer
-our experience/AI on top.
+**Reality today (corrected 2026-07-18): the salon operates phone-only, BUT a
+Square Appointments account already exists and its booking page is LIVE** —
+production `BOOKING_URL` points at
+`app.squareup.com/appointments/book/om60ott7gxguyk/LMVWSPW855746/start`
+(HTTP 200), and 13 CTAs on the live site link to it. ⚠️ **Risk: online
+bookings may be landing in a calendar nobody monitors.** Decision: **don't
+build a booking engine** — availability rules, reminders, no-show handling,
+and (critically) staff adoption are Square's product. Use **Square as the
+booking backend** and layer our experience/AI on top.
 
-**D1 — Make booking work (no code):**
-1. Owner signs up for **Square Appointments** (free tier — verify current
-   pricing/limits at signup) and configures: services w/ durations & prices
-   (mirror the site's pricing menu), each tech as staff with working hours,
-   salon hours, reminder settings. ~30-60 min, needs the owner.
-2. Get the public booking-page URL → `fly secrets set BOOKING_URL=<url>` (and
-   dev `.env`). Every CTA on the site flips from `tel:` to real online booking
-   automatically via the `booking_link` helper.
-3. Verify: site CTAs open the booking page; make + cancel a test appointment;
-   techs see it in the Square Appointments app.
-4. Keep site content (services/pricing DB) consistent with the Square catalog —
+**D1 — Make booking actually work (audit + adopt, no code):**
+1. **Urgent check with the salon:** log into their Square account — have any
+   online bookings been made that nobody saw? Who has the login?
+2. Audit the existing setup: services w/ durations & prices (mirror the site's
+   pricing menu), each tech as staff with working hours, salon hours,
+   SMS/email reminder settings, notification settings (owner's phone must ping
+   on new bookings). Fix gaps. Needs the owner's Square login.
+3. Staff adoption: techs install the Square Appointments app; phone bookings
+   get entered there too, so the calendar is the single source of truth.
+4. Verify end-to-end: book + cancel a test appointment from the live site;
+   confirm the notification and calendar entry.
+5. Keep site content (services/pricing DB) consistent with the Square catalog —
    manual for now; API sync is a later phase.
+   (If the salon decides NOT to adopt online booking yet: unset `BOOKING_URL`
+   so CTAs fall back to `tel:` and no bookings land in a void.)
 
 **D2 — Native booking flow (Bookings API):** custom on-site flow
 (service → tech → real-time slot → confirm) via Square's Bookings/Catalog/
