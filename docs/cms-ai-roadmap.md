@@ -259,13 +259,22 @@ Hotwire/Stimulus style, so prospects never leave the site.
   and upgrade later. Gotchas: services need `team_member_ids` assigned on the
   variation or availability returns "no team member performs this service";
   staff working hours drive slots (no Sunday hours → no Sunday slots).
-- **Cost (CORRECTED 2026-07-19, web-verified):** hosted-page booking $0;
-  **native on-site booking (and D3 AI-booked appointments) require Appointments
-  Plus, now $49/mo per location** (2026 pricing — Free / Plus $49 / Premium
-  $149; the earlier $29 figure was outdated training data). Total stack with
-  native booking ≈ $55/mo. Reads (availability/catalog) are free either way.
-  Processing % only on money charged through Square (2.5%+15¢ in person,
-  2.9%+30¢ online on Plus). D3 Claude API later: ~$5-15/mo.
+- **Cost + plan model (RE-CORRECTED 2026-07-19 against Square's dev docs):**
+  there is **no developer fee** — the subscription lives on the seller account
+  (2026 tiers: Free / Plus **$49/mo** / Premium $149; the $29 figure was
+  outdated). The paid gate is by **booking level, not API access**: docs state
+  "With the free subscription plan, you can call the Bookings API to create,
+  update or cancel **buyer-level** bookings." Buyer-level = customer books
+  *themselves* (our `/book` flow, and a future client-facing AI assistant) →
+  **works on the FREE plan**, but the token must carry ONLY buyer-level scopes
+  (`APPOINTMENTS_WRITE`, `APPOINTMENTS_READ`, `CUSTOMERS_*`) via **Square
+  OAuth** — a personal access token has all scopes and gets classified
+  seller-level, which is exactly why our sandbox write 403'd. Seller-level
+  writes (staff-side MCP booking tools, back-office ops) are what require
+  Plus. **Next implementation step: mint a buyer-scoped OAuth token (one-time
+  authorize + ~30-day refresh handling — first real Solid Queue job) and
+  retest CreateBooking on the free sandbox seller.** Reads free either way;
+  processing % only on charged payments; D3 Claude API ~$5-15/mo.
 
 **D3 — AI layers (the differentiator):**
 - **Client-facing:** on-site booking assistant (Claude API + availability/
