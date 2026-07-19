@@ -16,3 +16,8 @@ require "fast_mcp"
 
 require Rails.root.join("lib/middleware/mcp_dual_auth")
 Rails.application.config.middleware.use McpDualAuth
+
+# Canonical-domain redirect (www/fly.dev → CANONICAL_HOST) for the public
+# site; exempts MCP/OAuth/discovery endpoints. See the class for rationale.
+require Rails.root.join("lib/middleware/canonical_host")
+Rails.application.config.middleware.insert_before McpDualAuth, CanonicalHost
