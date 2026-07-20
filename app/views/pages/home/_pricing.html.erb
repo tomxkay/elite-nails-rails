@@ -7,7 +7,12 @@
     <%= render 'shared/section_header',
                eyebrow: 'Transparent Pricing',
                title: 'Pricing',
-               subtitle: 'Clear, honest pricing for hands, feet, and add-ons. Call for full menu and seasonal specials.' %>
+               subtitle: 'Clear, honest pricing — no surprises at the counter.' %>
+
+    <p class="mt-6 flex flex-wrap items-center justify-center gap-2 text-center text-sm text-warm-gray-600">
+      <%= icon "calendar-days", classes: "h-4 w-4 text-terracotta-400", "aria-hidden": true %>
+      <span>Services marked with a calendar can be booked online — everything else is walk-in or by phone.</span>
+    </p>
 
     <%# Content from the DB (PricingItem), grouped by category, with in-code
         DEFAULTS fallback. %>
@@ -20,15 +25,29 @@
             <h3 class="font-serif text-2xl text-warm-gray-900"><%= category %></h3>
             <span class="font-serif text-lg text-terracotta-200" aria-hidden="true"><%= format("%02d", i + 1) %></span>
           </div>
+          <%# Only `bookable` items link to /book. Short/add-on work (polish
+              changes, repairs, trims, waxing) is walk-in, so those rows are
+              plain text — linking them would promise a booking path that
+              doesn't exist. %>
           <ul class="mt-2 divide-y divide-cream-200 text-sm text-warm-gray-700">
             <% items.each do |item| %>
               <li>
-                <a href="<%= book_path(service_name: item.name) %>"
-                   class="group/row flex justify-between gap-3 py-3 transition-colors hover:text-terracotta-700"
-                   aria-label="Book <%= item.name %>">
-                  <span class="underline-offset-4 group-hover/row:underline"><%= item.name %></span>
-                  <span class="text-terracotta-600 font-semibold"><%= item.price %></span>
-                </a>
+                <% if item.bookable %>
+                  <a href="<%= book_path(service_name: item.name) %>"
+                     class="group/row flex items-center justify-between gap-3 py-3 transition-colors hover:text-terracotta-700"
+                     aria-label="Book <%= item.name %>">
+                    <span class="flex min-w-0 items-center gap-2">
+                      <span class="underline-offset-4 group-hover/row:underline"><%= item.name %></span>
+                      <%= icon "calendar-days", classes: "h-3.5 w-3.5 shrink-0 text-terracotta-400", "aria-hidden": true %>
+                    </span>
+                    <span class="shrink-0 font-semibold text-terracotta-600"><%= item.price %></span>
+                  </a>
+                <% else %>
+                  <div class="flex items-center justify-between gap-3 py-3">
+                    <span class="min-w-0"><%= item.name %></span>
+                    <span class="shrink-0 font-semibold text-terracotta-600"><%= item.price %></span>
+                  </div>
+                <% end %>
               </li>
             <% end %>
           </ul>

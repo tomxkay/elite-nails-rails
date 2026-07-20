@@ -6,29 +6,38 @@ class TeamMember < ApplicationRecord
 
   # In-code backup / canonical seed source (see Promotion for the pattern).
   # image is nil for now (renders the placeholder portrait until real photos land).
+  #
+  # Bios and specialty tags name only services that actually exist on the menu
+  # (docs/service-menu-reconciliation.md) — the previous copy advertised a
+  # "Spa Pedicure" the salon never offered.
+  #
+  # `bookable` gates online booking. Only Michael takes /book appointments for
+  # now; the rest of the team books by phone or walk-in and will opt in as they
+  # get comfortable with it.
   DEFAULTS = [
     {
-      name: "Michael K",
-      role: "Owner & Lead Nail Artist",
+      name: "Michael",
+      role: "Owner & Lead Technician",
       quote: "Every set should feel like it was made just for you.",
-      bio: "Specializes in gel, dip, and fine-line nail art. Known for a gentle touch and calming demeanor.",
-      specialties: ["Gel Art", "Dip Powder", "Fine Line"],
+      bio: "Specializes in sculpted acrylic full sets and fills. Known for a gentle touch and a calming demeanor.",
+      specialties: ["Acrylic Full Set", "Acrylic Fill", "Gel Manicure"],
+      bookable: true,
       position: 0
     },
     {
-      name: "Nhan Ka",
+      name: "Nhan",
       role: "Senior Technician",
       quote: "Color is where I get to play — let's find yours.",
-      bio: "Loves creative color palettes and spa pedicures. Guests rave about her relaxing massages.",
-      specialties: ["Spa Pedicure", "Color Pairing", "Massage"],
+      bio: "Loves creative color work and deluxe pedicures. Guests rave about her relaxing massages.",
+      specialties: ["Deluxe Pedicure", "Gel Polish", "Dip Powder"],
       position: 1
     },
     {
-      name: "Lien Ka",
+      name: "Lien",
       role: "Nail Technician",
       quote: "Clean shapes, strong nails, and a warm welcome every time.",
-      bio: "Precise shaping and durable acrylics with a friendly, welcoming vibe.",
-      specialties: ["Acrylics", "Nail Shaping", "Natural Looks"],
+      bio: "Precise shaping and durable acrylic work with a friendly, welcoming vibe.",
+      specialties: ["Acrylic Full Set", "Gel Manicure", "Natural Looks"],
       position: 2
     }
   ].freeze

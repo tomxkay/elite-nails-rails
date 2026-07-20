@@ -6,48 +6,53 @@ class Service < ApplicationRecord
 
   # In-code backup / canonical seed source (see Promotion for the pattern).
   # `image` is an asset filename resolved via responsive_service_image_sources.
+  #
+  # One card per PricingItem category, and `pricing_category` must stay equal to
+  # that category downcased — the pricing_highlight Stimulus controller matches
+  # on it to flash the right price panel. See PricingItem::CATEGORY_ORDER and
+  # docs/service-menu-reconciliation.md.
   DEFAULTS = [
     {
-      title: "Gel & Dip Powder",
-      description: "Long-lasting, chip-resistant color with gel polish or dip powder systems. Up to 3 weeks of gorgeous nails.",
+      title: "Manicures",
+      description: "Nail shaping, cuticle care, and a relaxing hand massage — finished with classic or long-wearing gel polish.",
       featured: true,
       image: "manicure-service-768.webp",
-      pricing_category: "hands",
+      pricing_category: "manicures",
       position: 0
     },
     {
-      title: "Manicures",
-      description: "Classic and spa manicures featuring premium products, cuticle care, nail shaping, and your choice of polish.",
-      image: "manicure-service-768.webp",
-      pricing_category: "hands",
+      title: "Pedicures",
+      description: "A warm soak, scrub, and massage. Go deluxe for callus treatment, paraffin wax, and extra time to unwind.",
+      image: "pedicure-service-768.webp",
+      pricing_category: "pedicures",
       position: 1
     },
     {
-      title: "Pedicures",
-      description: "Relax with our signature pedicures including foot soak, exfoliation, massage, and polish.",
-      image: "pedicure-service-768.webp",
-      pricing_category: "feet",
+      title: "Acrylic, Dip & Extensions",
+      description: "Sculpted acrylic sets, fills, and dip powder — built for length and strength, finished your way.",
+      image: "manicure-service-768.webp",
+      pricing_category: "acrylic, dip & extensions",
       position: 2
     },
     {
-      title: "Acrylic & Extensions",
-      description: "Custom acrylic nail enhancements, tips, and sculpted extensions for length and strength.",
-      image: "manicure-service-768.webp",
-      pricing_category: "add-ons",
+      title: "Polish & Color",
+      description: "Gel color, French tips, quick polish changes, and hand-painted nail art priced by design.",
+      image: "nail-art-service-768.webp",
+      pricing_category: "polish & color",
       position: 3
     },
     {
-      title: "Nail Art & Design",
-      description: "Express yourself with custom nail art, hand-painted designs, gems, foils, and trending styles.",
-      image: "nail-art-service-768.webp",
-      pricing_category: "add-ons",
+      title: "Nail Care",
+      description: "Trims and shaping for fingers and toes, plus quick repairs when a nail needs rescuing.",
+      image: "manicure-service-768.webp",
+      pricing_category: "nail care",
       position: 4
     },
     {
-      title: "Waxing Services",
-      description: "Professional waxing services for brows, lip, chin, and more with gentle techniques.",
+      title: "Waxing",
+      description: "Gentle brow, lip, and chin waxing — book the brow and lip together and save.",
       image: "pedicure-service-768.webp",
-      pricing_category: "add-ons",
+      pricing_category: "waxing",
       position: 5
     }
   ].freeze

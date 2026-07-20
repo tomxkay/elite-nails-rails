@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_19_175750) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_20_180807) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -123,6 +123,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_19_175750) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "bookable", default: false, null: false
     t.index ["active", "position"], name: "index_pricing_items_on_active_and_position"
   end
 
@@ -211,6 +212,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_19_175750) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "bookable", default: false, null: false
     t.index ["active", "position"], name: "index_team_members_on_active_and_position"
   end
 

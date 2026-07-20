@@ -5,6 +5,8 @@
     - bio: string
     - quote: string (optional) — a personal line in the family's voice
     - specialties: array of strings (optional)
+    - bookable: boolean — takes online bookings via /book. Others are phone /
+      walk-in only, so they get a call CTA instead of a dead booking link.
     - image_url: string (optional) — a background-removed (cutout) portrait
     - index: integer (0-based) — drives numbering + zig-zag side
 %>
@@ -13,6 +15,7 @@
 <% bio = local_assigns[:bio] %>
 <% quote = local_assigns[:quote] %>
 <% specialties = local_assigns[:specialties] || [] %>
+<% bookable = local_assigns[:bookable] %>
 <% image_url = local_assigns[:image_url] %>
 <% index = local_assigns[:index] || 0 %>
 <% reversed = index.odd? %>
@@ -89,12 +92,26 @@
 
         <% if first_name.present? %>
           <div class="mt-8">
-            <%= render "shared/cta_button",
-                       text: "Book with #{first_name}",
-                       href: booking_link,
-                       style: :outline,
-                       size: :md,
-                       icon: "calendar-days" %>
+            <% if bookable %>
+              <%= render "shared/cta_button",
+                         text: "Book with #{first_name}",
+                         href: booking_link,
+                         style: :outline,
+                         size: :md,
+                         icon: "calendar-days" %>
+            <% else %>
+              <%# Not on online booking yet — offer the phone instead of a link
+                  that would land on someone else's calendar. %>
+              <div class="flex flex-wrap items-center gap-3">
+                <%= render "shared/cta_button",
+                           text: "Call to book with #{first_name}",
+                           href: "tel:+17048249032",
+                           style: :outline,
+                           size: :md,
+                           icon: "phone" %>
+                <span class="text-xs uppercase tracking-[0.16em] text-warm-gray-500">Phone &amp; walk-in</span>
+              </div>
+            <% end %>
           </div>
         <% end %>
       </div>
