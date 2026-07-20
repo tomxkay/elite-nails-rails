@@ -246,7 +246,31 @@ section[id] {
 
 .hero-with-promo-offset {
   padding-top: calc(var(--fixed-header-offset) + 3rem);
-  padding-bottom: 6rem;
+  padding-bottom: 1rem;
+}
+
+@keyframes hero-availability-pulse {
+  from {
+    translate: 0 0;
+  }
+
+  to {
+    translate: 0 -10px;
+  }
+}
+
+.hero-availability-pulse {
+  animation: hero-availability-pulse 1s ease-in-out infinite alternate;
+}
+
+.hero-availability-card-inner {
+  transition: transform 0.3s ease-out;
+  transform-origin: center;
+}
+
+.hero-availability-card:hover .hero-availability-card-inner,
+.hero-availability-card:focus-visible .hero-availability-card-inner {
+  transform: scale(1.05);
 }
 
 .page-with-fixed-header-offset {
@@ -263,14 +287,34 @@ section[id] {
   }
 }
 
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-with-promo-offset {
+    padding-bottom: 6rem;
+  }
+
+  .hero-availability-card {
+    margin-left: -140px;
+  }
+}
+
 @media (min-width: 1024px) {
   .hero-with-promo-offset {
     padding-top: calc(var(--fixed-header-offset) + 2rem);
     padding-bottom: 8rem;
   }
 
+  .hero-availability-card {
+    margin-left: 0;
+  }
+
   .page-with-fixed-header-offset {
     padding-top: calc(var(--fixed-header-offset) + 2rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-availability-pulse {
+    animation: none;
   }
 }
 

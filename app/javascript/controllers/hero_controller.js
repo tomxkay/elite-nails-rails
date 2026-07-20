@@ -4,7 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 // Connects to data-controller="hero"
 export default class extends Controller {
-  static targets = ["branch", "image", "hand", "heading", "subtitle", "cta", "scroll"]
+  static targets = ["branch", "image", "hand", "heading", "subtitle", "cta", "availability", "scroll"]
 
   connect() {
     // Create entrance timeline
@@ -80,10 +80,12 @@ export default class extends Controller {
     // CTA buttons
     if (this.hasCtaTarget) {
       this.ctaTargets.forEach((cta, index) => {
+        const isAvailability = this.hasAvailabilityTarget && cta === this.availabilityTarget
+
         this.timeline.from(cta, {
           opacity: 0,
-          y: 20,
-          scale: 0.95,
+          y: isAvailability ? 0 : 20,
+          scale: isAvailability ? 1 : 0.95,
           duration: 0.6
         }, 1.2 + (index * 0.1))
       })
@@ -96,16 +98,8 @@ export default class extends Controller {
         y: -10,
         duration: 0.8
       }, 1.5)
-
-      // Add continuous pulse animation
-      gsap.to(this.scrollTarget, {
-        y: 5,
-        duration: 1.5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut"
-      })
     }
+
   }
 
   createParallaxEffects() {}
