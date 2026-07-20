@@ -35,6 +35,16 @@ console_command = '/rails/bin/rails console'
   min_machines_running = 1
   processes = ['app']
 
+# Gate traffic on Puma actually being ready: fly-proxy holds a request until
+# GET /up returns 200, so a cold-starting machine (Thruster up on :8080 but Puma
+# on :3000 not yet) waits a beat instead of serving a 502.
+[[http_service.checks]]
+  grace_period = "5s"
+  interval = "10s"
+  method = "GET"
+  path = "/up"
+  timeout = "5s"
+
 [[vm]]
   memory = '512mb'
   cpu_kind = 'shared'
