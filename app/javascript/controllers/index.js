@@ -40,3 +40,6 @@ application.register("booking", BookingController)
 
 import QuickAvailabilityController from "./quick_availability_controller"
 application.register("quick-availability", QuickAvailabilityController)
+
+import DisclosureController from "./disclosure_controller"
+application.register("disclosure", DisclosureController)
