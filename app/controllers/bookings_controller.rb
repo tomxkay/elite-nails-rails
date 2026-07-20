@@ -31,7 +31,7 @@ class BookingsController < ApplicationController
       []
     end
 
-    @preselected_service_id = params[:service_id].presence
+    @preselected_service_id = params[:service_id].presence || match_service_id(params[:service_name])
     @preselected_team_member_id = params[:team_member_id].presence
     @preselected_date = parse_date(params[:date]) || Date.current
 
@@ -169,6 +169,34 @@ class BookingsController < ApplicationController
     Date.iso8601(value.to_s)
   rescue Date::Error
     nil
+  end
+
+  # Best-effort match of a marketing name (home-page Service/PricingItem title)
+  # to a Square catalog service, so ?service_name= deep links can preselect
+  # step 1. Marketing names and catalog names are maintained independently, so
+  # match loosely: exact, then substring, then shared words. An unmatched name
+  # just leaves the wizard unselected.
+  def match_service_id(name)
+    query = normalize_service_name(name)
+    return nil if query.blank?
+
+    candidates = @services.map { |service| [ service[:id], normalize_service_name(service[:name]) ] }
+
+    exact = candidates.find { |_, candidate| candidate == query }
+    return exact.first if exact
+
+    partial = candidates.find { |_, candidate| candidate.include?(query) || query.include?(candidate) }
+    return partial.first if partial
+
+    query_tokens = query.split
+    id, overlap = candidates
+      .map { |candidate_id, candidate| [ candidate_id, (candidate.split & query_tokens).size ] }
+      .max_by(&:last)
+    overlap.to_i.positive? ? id : nil
+  end
+
+  def normalize_service_name(name)
+    name.to_s.downcase.gsub(/[^a-z0-9\s]/, " ").split.map { |token| token.chomp("s") }.join(" ")
   end
 
   def cached_bookable_staff

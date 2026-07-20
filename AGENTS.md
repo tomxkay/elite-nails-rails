@@ -256,6 +256,13 @@ plan (2026-07-19).
 - **CTAs:** `booking_link` prefers `/book` when `SquareApi.configured?`, else
   `BOOKING_URL` (hosted Square page), else `tel:`. Production stays on the
   hosted page until Square secrets are set there.
+- **Deep links:** `/book?service_name=<marketing name>` fuzzy-matches home-page
+  Service/PricingItem names to a Square catalog service and preselects step 1
+  (exact → substring → shared-word match; unmatched names just leave the wizard
+  unselected). Home service cards ("Book This") and pricing rows link this way.
+  `/book` also shows a "Soonest opening" banner (via `availability/next`) when
+  no service is preselected, and a "next opening" jump button when the chosen
+  day has no slots.
 - **Square gotchas:** service variations must have `team_member_ids` assigned
   or availability errors; staff working hours drive slots; sandbox can't
   simulate paid plans; sandbox sends no real notification emails/SMS.

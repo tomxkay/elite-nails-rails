@@ -10,20 +10,24 @@ export default class extends Controller {
     "form", "name", "phone", "email", "note", "honeypot",
     "summary", "error", "submitBtn", "wizard", "confirmation",
     "confirmationHeading", "confirmationService", "confirmationDate",
-    "confirmationTechnicianRow", "confirmationTechnician"
+    "confirmationTechnicianRow", "confirmationTechnician",
+    "nextOpening", "nextOpeningText"
   ]
 
   static values = {
     availabilityUrl: String,
-    createUrl: String
+    createUrl: String,
+    nextUrl: String
   }
 
   connect() {
     this.selectedSlot = null
     this.selectedSlotKey = null
+    this.suggestion = null
     this.idempotencyKey = this.newIdempotencyKey()
 
     if (this.selectedService) this.loadSlots()
+    else this.suggestNextOpening()
   }
 
   serviceChanged() {
@@ -40,6 +44,7 @@ export default class extends Controller {
   async loadSlots() {
     const service = this.selectedService
     this.selectSlot(null)
+    this.toggleNextOpening(false)
     if (!service) {
       this.slotsHintTarget.textContent = "Select a service above to see open times."
       this.slotsTarget.innerHTML = ""
@@ -72,6 +77,7 @@ export default class extends Controller {
     this.slotsTarget.innerHTML = ""
     if (!slots || slots.length === 0) {
       this.slotsHintTarget.textContent = "No open times that day — try another day or technician."
+      this.suggestNextDay()
       return
     }
 
@@ -179,6 +185,90 @@ export default class extends Controller {
 
   hideError() {
     this.errorTarget.classList.add("hidden")
+  }
+
+  // Fetches the soonest opening (next 14 days, first catalog service) so a
+  // visitor who hasn't picked anything yet sees a concrete time to jump to.
+  // Best-effort: any failure just leaves the banner hidden.
+  async suggestNextOpening() {
+    if (!this.hasNextOpeningTarget || !this.nextUrlValue) return
+    const radio = this.serviceTargets[0]
+    if (!radio) return
+    const service = { id: radio.value, version: radio.dataset.version, name: radio.dataset.name }
+
+    const slot = await this.fetchNextSlot(service.id)
+    if (!slot || this.selectedService) return
+
+    this.suggestion = { service, slot }
+    this.nextOpeningTextTarget.textContent =
+      `${service.name} — ${this.formatDay(slot.start_at)} at ${this.formatTime(slot.start_at)}`
+    this.toggleNextOpening(true)
+  }
+
+  useNextOpening() {
+    if (!this.suggestion) return
+    const { service, slot } = this.suggestion
+    const radio = this.serviceTargets.find((el) => el.value === service.id)
+    if (radio && !radio.checked) {
+      radio.checked = true
+      trackEvent("service_selected", { service: service.name })
+    }
+    this.dateTarget.value = this.isoDate(slot.start_at)
+    this.loadSlots()
+    this.slotsHintTarget.scrollIntoView({ behavior: "smooth", block: "center" })
+  }
+
+  // When the chosen day has no slots, points at the next day that does with a
+  // one-click jump, instead of leaving the visitor to guess dates.
+  async suggestNextDay() {
+    const service = this.selectedService
+    if (!service || !this.nextUrlValue) return
+    const fromDate = this.dateTarget.value
+
+    const slot = await this.fetchNextSlot(service.id, fromDate)
+    if (!slot) return
+    // Skip if stale (the visitor changed inputs mid-fetch) or same-day.
+    if (this.selectedService?.id !== service.id || this.dateTarget.value !== fromDate) return
+    if (this.isoDate(slot.start_at) === fromDate) return
+
+    const button = document.createElement("button")
+    button.type = "button"
+    button.className = "rounded-full border border-terracotta-400 px-4 py-2 text-sm font-medium text-terracotta-700 transition-colors hover:bg-terracotta-500 hover:text-cream-50"
+    button.textContent = `Next opening: ${this.formatDay(slot.start_at)} at ${this.formatTime(slot.start_at)} →`
+    button.addEventListener("click", () => {
+      this.dateTarget.value = this.isoDate(slot.start_at)
+      this.loadSlots()
+    })
+    this.slotsTarget.appendChild(button)
+  }
+
+  async fetchNextSlot(serviceId, fromDate = null) {
+    const params = new URLSearchParams({ service_id: serviceId, days: "14" })
+    if (fromDate) params.set("date", fromDate)
+
+    try {
+      const response = await fetch(`${this.nextUrlValue}?${params}`, { headers: { Accept: "application/json" } })
+      const data = await response.json()
+      if (!response.ok) return null
+
+      const teamId = this.staffTarget.value
+      if (teamId) return (data.technicians || []).find((tech) => tech.id === teamId)?.next_slot || null
+      return data.anyone_next_slot || null
+    } catch {
+      return null
+    }
+  }
+
+  toggleNextOpening(show) {
+    if (!this.hasNextOpeningTarget) return
+    this.nextOpeningTarget.classList.toggle("hidden", !show)
+    this.nextOpeningTarget.classList.toggle("flex", show)
+  }
+
+  isoDate(iso) {
+    const date = new Date(iso)
+    const pad = (part) => String(part).padStart(2, "0")
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
   }
 
   technicianNameFor(slot) {

@@ -22,9 +22,13 @@
           </div>
           <ul class="mt-2 divide-y divide-cream-200 text-sm text-warm-gray-700">
             <% items.each do |item| %>
-              <li class="flex justify-between py-3">
-                <span><%= item.name %></span>
-                <span class="text-terracotta-600 font-semibold"><%= item.price %></span>
+              <li>
+                <a href="<%= book_path(service_name: item.name) %>"
+                   class="group/row flex justify-between gap-3 py-3 transition-colors hover:text-terracotta-700"
+                   aria-label="Book <%= item.name %>">
+                  <span class="underline-offset-4 group-hover/row:underline"><%= item.name %></span>
+                  <span class="text-terracotta-600 font-semibold"><%= item.price %></span>
+                </a>
               </li>
             <% end %>
           </ul>

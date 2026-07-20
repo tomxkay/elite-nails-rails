@@ -43,6 +43,31 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
     assert_select "input[data-booking-target='date'][value=?]", (Date.current + 2).iso8601
   end
 
+  test "show preselects a catalog service matched loosely from a marketing name" do
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:services, SERVICES) do
+        SquareApi.stub(:bookable_staff, STAFF) do
+          # "Manicures" (home-page card title) → "Gel Manicure" (catalog name).
+          get book_path, params: { service_name: "Manicures" }
+        end
+      end
+    end
+    assert_response :success
+    assert_select "input[data-booking-target='service'][value='VAR1'][checked]"
+  end
+
+  test "show leaves the wizard unselected for an unmatched service name" do
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:services, SERVICES) do
+        SquareApi.stub(:bookable_staff, STAFF) do
+          get book_path, params: { service_name: "Waxing Services" }
+        end
+      end
+    end
+    assert_response :success
+    assert_select "input[data-booking-target='service'][checked]", count: 0
+  end
+
   test "show redirects to BOOKING_URL when square is not configured" do
     original = ENV["BOOKING_URL"]
     ENV["BOOKING_URL"] = "https://square.example/book"

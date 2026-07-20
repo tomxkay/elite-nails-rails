@@ -30,8 +30,25 @@
     <% else %>
       <div data-controller="booking"
            data-booking-availability-url-value="<%= book_path %>/availability"
+           data-booking-next-url-value="<%= book_path %>/availability/next"
            data-booking-create-url-value="<%= book_path %>"
            class="mt-10">
+
+        <%# Soonest-opening suggestion, filled in by the booking controller when
+            the visitor hasn't picked a service yet. Answers "when can I get
+            in?" before asking anything. %>
+        <div data-booking-target="nextOpening"
+             class="hidden mb-8 flex-col gap-3 rounded-2xl border border-terracotta-200 bg-white p-5 shadow-warm sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.18em] text-terracotta-600 font-semibold">Soonest opening</p>
+            <p data-booking-target="nextOpeningText" class="mt-1 text-warm-gray-800"></p>
+          </div>
+          <button type="button"
+                  data-action="booking#useNextOpening"
+                  class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-terracotta-700 px-5 py-2.5 text-sm font-medium text-cream-50 transition-colors hover:bg-terracotta-800">
+            See times
+          </button>
+        </div>
 
         <div data-booking-target="wizard" class="space-y-8">
 
