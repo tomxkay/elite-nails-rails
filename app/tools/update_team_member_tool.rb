@@ -19,6 +19,9 @@ class UpdateTeamMemberTool < ApplicationTool
     optional(:quote).filled(:string)
     optional(:specialties).array(:string).description("Replaces the full specialties list")
     optional(:active).filled(:bool)
+    optional(:bookable).filled(:bool)
+      .description("Whether they take online bookings at /book. They must also be assigned to the " \
+                   "service in Square, or their availability will come back empty.")
     optional(:position).filled(:integer)
   end
 

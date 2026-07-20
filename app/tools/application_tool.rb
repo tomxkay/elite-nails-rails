@@ -45,6 +45,7 @@ class ApplicationTool < ActionTool::Base
       name: item.name,
       price: item.price,
       active: item.active,
+      bookable: item.bookable,
       position: item.position
     }
   end
@@ -58,6 +59,7 @@ class ApplicationTool < ActionTool::Base
       quote: member.quote,
       specialties: member.specialties,
       active: member.active,
+      bookable: member.bookable,
       position: member.position
     }
   end

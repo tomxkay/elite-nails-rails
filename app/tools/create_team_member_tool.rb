@@ -18,6 +18,10 @@ class CreateTeamMemberTool < ApplicationTool
     optional(:quote).filled(:string).description("Personal quote shown on the card")
     optional(:specialties).array(:string).description("List of specialties, e.g. ['Gel X', 'Nail Art']")
     optional(:active).filled(:bool).description("Whether they are shown (default true)")
+    optional(:bookable).filled(:bool)
+      .description("Whether they take online bookings at /book (default false). Others show a " \
+                   "'call to book' CTA instead. They must also be assigned to the service in " \
+                   "Square, or their availability will come back empty.")
     optional(:position).filled(:integer).description("Sort order (lower first); defaults to appended")
   end
 

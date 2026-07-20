@@ -18,6 +18,9 @@ class UpdatePricingItemTool < ApplicationTool
     optional(:name).filled(:string)
     optional(:price).filled(:string).description("Display price, e.g. '$35', '$40+', '+$5'")
     optional(:active).filled(:bool)
+    optional(:bookable).filled(:bool)
+      .description("Whether it can be booked online at /book. A service must also exist in the " \
+                   "Square catalog for booking to actually work.")
     optional(:position).filled(:integer)
   end
 

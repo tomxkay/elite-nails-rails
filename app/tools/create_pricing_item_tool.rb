@@ -17,6 +17,10 @@ class CreatePricingItemTool < ApplicationTool
     required(:name).filled(:string).description("Item name, e.g. 'Gel Manicure'")
     optional(:price).filled(:string).description("Display price, e.g. '$35', '$40+', '+$5'")
     optional(:active).filled(:bool).description("Whether it is live (default true)")
+    optional(:bookable).filled(:bool)
+      .description("Whether it can be booked online at /book (default false). Only longer services " \
+                   "are bookable; short/add-on work (polish changes, repairs, trims, waxing) is walk-in. " \
+                   "A service must also exist in the Square catalog for booking to actually work.")
     optional(:position).filled(:integer).description("Sort order (lower first); defaults to appended")
   end
 
