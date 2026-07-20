@@ -55,6 +55,19 @@
         <!-- Step 1: Service -->
         <section class="rounded-3xl bg-white p-6 sm:p-8 shadow-warm border border-cream-200">
           <h2 class="font-serif text-xl text-warm-gray-800 mb-4"><span class="text-terracotta-500 mr-2">1.</span>Choose a service</h2>
+          <% if @services.size > 6 %>
+            <div class="relative mb-4">
+              <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-warm-gray-500">
+                <%= icon 'magnifying-glass', classes: 'w-5 h-5' %>
+              </span>
+              <input type="search"
+                     placeholder="Search services (e.g. gel, pedicure)…"
+                     aria-label="Search services"
+                     data-booking-target="serviceFilter"
+                     data-action="input->booking#filterServices"
+                     class="w-full rounded-xl border border-cream-200 bg-cream-50/60 py-2.5 pl-10 pr-3 text-warm-gray-800 placeholder:text-warm-gray-500">
+            </div>
+          <% end %>
           <div class="grid gap-3 sm:grid-cols-2">
             <% @services.each do |service| %>
               <label class="flex cursor-pointer items-start gap-3 rounded-2xl border border-cream-200 p-4 transition-colors hover:border-peach-300 has-[:checked]:border-terracotta-500 has-[:checked]:bg-cream-100">
@@ -65,15 +78,22 @@
                        data-version="<%= service[:version] %>"
                        data-name="<%= service[:name] %>"
                        <%= "checked" if @preselected_service_id == service[:id].to_s %>>
-                <span>
-                  <span class="block font-medium text-warm-gray-800"><%= service[:name] %></span>
-                  <span class="block text-sm text-warm-gray-600">
-                    <%= service[:price] %><% if service[:duration_minutes].to_i.positive? %> · <%= service[:duration_minutes] %> min<% end %>
+                <span class="min-w-0 flex-1">
+                  <span class="flex items-baseline justify-between gap-3">
+                    <span class="font-medium text-warm-gray-800"><%= service[:name] %></span>
+                    <span class="whitespace-nowrap font-semibold text-terracotta-600"><%= service[:price] %></span>
                   </span>
+                  <% if service[:duration_minutes].to_i.positive? %>
+                    <span class="block text-sm text-warm-gray-600"><%= service[:duration_minutes] %> min</span>
+                  <% end %>
                 </span>
               </label>
             <% end %>
           </div>
+          <p data-booking-target="serviceFilterEmpty" class="hidden mt-3 text-warm-gray-600">
+            No services match — try a different word, or call
+            <a href="tel:<%= salon.phone %>" class="font-medium text-terracotta-600 underline underline-offset-4"><%= salon.phone_display %></a>.
+          </p>
         </section>
 
         <!-- Step 2: Tech + day -->

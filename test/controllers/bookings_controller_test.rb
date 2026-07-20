@@ -43,6 +43,28 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
     assert_select "input[data-booking-target='date'][value=?]", (Date.current + 2).iso8601
   end
 
+  test "show renders the service search filter only when the list is long" do
+    many = (1..8).map { |i| { id: "VAR#{i}", version: 1, name: "Service #{i}", price: "$10", duration_minutes: 30 } }
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:services, many) do
+        SquareApi.stub(:bookable_staff, STAFF) do
+          get book_path
+        end
+      end
+    end
+    assert_response :success
+    assert_select "input[data-booking-target='serviceFilter']"
+
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:services, SERVICES) do
+        SquareApi.stub(:bookable_staff, STAFF) do
+          get book_path
+        end
+      end
+    end
+    assert_select "input[data-booking-target='serviceFilter']", count: 0
+  end
+
   test "show preselects a catalog service matched loosely from a marketing name" do
     SquareApi.stub(:configured?, true) do
       SquareApi.stub(:services, SERVICES) do

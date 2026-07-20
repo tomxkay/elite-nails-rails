@@ -11,7 +11,8 @@ export default class extends Controller {
     "summary", "error", "submitBtn", "wizard", "confirmation",
     "confirmationHeading", "confirmationService", "confirmationDate",
     "confirmationTechnicianRow", "confirmationTechnician",
-    "nextOpening", "nextOpeningText"
+    "nextOpening", "nextOpeningText",
+    "serviceFilter", "serviceFilterEmpty"
   ]
 
   static values = {
@@ -33,6 +34,19 @@ export default class extends Controller {
   serviceChanged() {
     trackEvent("service_selected", { service: this.selectedService?.name })
     this.loadSlots()
+  }
+
+  // Hides service options whose name doesn't contain the query. The checked
+  // option always stays visible so an active selection can't silently vanish.
+  filterServices() {
+    const query = this.serviceFilterTarget.value.trim().toLowerCase()
+    let visible = 0
+    this.serviceTargets.forEach((radio) => {
+      const match = radio.checked || !query || (radio.dataset.name || "").toLowerCase().includes(query)
+      radio.closest("label").hidden = !match
+      if (match) visible++
+    })
+    if (this.hasServiceFilterEmptyTarget) this.serviceFilterEmptyTarget.classList.toggle("hidden", visible > 0)
   }
 
   get selectedService() {
