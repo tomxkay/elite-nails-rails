@@ -32,4 +32,34 @@ namespace :content do
 
     puts "Menu content reset."
   end
+
+  desc "Export services to CSV for Square's service-library import " \
+       "(name, description, duration, price). ALL=1 includes walk-in-only " \
+       "services; by default only bookable ones are exported."
+  task square_csv: :environment do
+    require "csv"
+
+    scope = ENV["ALL"] == "1" ? PricingItem.visible : PricingItem.visible.where(bookable: true)
+    items = scope.ordered
+
+    path = Rails.root.join("tmp", "square-services.csv")
+    FileUtils.mkdir_p(path.dirname)
+
+    CSV.open(path, "w") do |csv|
+      csv << [ "Service name", "Service description", "Service duration", "Service price" ]
+      items.each do |item|
+        # Square wants a bare number for price; our display strings carry "$"
+        # and sometimes a "+" (variable pricing) that has to come off.
+        csv << [
+          item.name,
+          item.description,
+          item.duration_minutes,
+          item.price.to_s.delete("$+").strip
+        ]
+      end
+    end
+
+    puts "Wrote #{items.size} services to #{path}"
+    puts "Square caps imports at 100 services." if items.size > 100
+  end
 end
