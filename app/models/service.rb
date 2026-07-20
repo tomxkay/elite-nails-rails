@@ -30,7 +30,7 @@ class Service < ApplicationRecord
     {
       title: "Acrylic, Dip & Extensions",
       description: "Sculpted acrylic sets, fills, and dip powder — built for length and strength, finished your way.",
-      image: "manicure-service-768.webp",
+      image: "acrylic-service-768.webp",
       pricing_category: "acrylic, dip & extensions",
       position: 2
     },
@@ -44,14 +44,14 @@ class Service < ApplicationRecord
     {
       title: "Nail Care",
       description: "Trims and shaping for fingers and toes, plus quick repairs when a nail needs rescuing.",
-      image: "manicure-service-768.webp",
+      image: "nail-care-service-768.webp",
       pricing_category: "nail care",
       position: 4
     },
     {
       title: "Waxing",
       description: "Gentle brow, lip, and chin waxing — book the brow and lip together and save.",
-      image: "pedicure-service-768.webp",
+      image: "waxing-service-768.webp",
       pricing_category: "waxing",
       position: 5
     }

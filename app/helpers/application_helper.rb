@@ -54,7 +54,16 @@ module ApplicationHelper
   # serves the matching responsive WebP variants.
   def responsive_service_image_sources(image)
     base_name = File.basename(image.to_s, File.extname(image.to_s)).sub(/-(?:480|768)\z/, "")
-    return { src: asset_path(image) } unless %w[manicure-service pedicure-service nail-art-service].include?(base_name)
+    # Every name here must have BOTH a -480.webp and a -768.webp in
+    # app/assets/images, at exactly those pixel widths — the srcset descriptors
+    # below are hardcoded, so a mismatch tells the browser the wrong size.
+    # A name missing from this list still renders, but silently loses its
+    # srcset and serves the full 768 to phones.
+    responsive = %w[
+      manicure-service pedicure-service nail-art-service
+      acrylic-service nail-care-service waxing-service
+    ]
+    return { src: asset_path(image) } unless responsive.include?(base_name)
 
     {
       src: asset_path("#{base_name}-768.webp"),
