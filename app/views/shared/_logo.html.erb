@@ -2,13 +2,13 @@
   Parameters:
     - size: :small, :medium, :large (default: :medium)
     - linkable: boolean (default: true)
-    - link_target: string (default: root home anchor)
+    - link_target: string (default: root path)
     - image: asset name (default: 'header-logo-250.webp')
     - image_classes: extra image classes
 %>
 <% size ||= :medium %>
 <% linkable = local_assigns.fetch(:linkable, true) %>
-<% link_target ||= root_path(anchor: 'home') %>
+<% link_target ||= root_path %>
 <% image ||= 'header-logo-250.webp' %>
 <% image_classes = local_assigns.fetch(:image_classes, '') %>
 <% collapsible_text = local_assigns.fetch(:collapsible_text, false) %>

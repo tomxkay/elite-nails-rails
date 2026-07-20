@@ -25,7 +25,7 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
     assert_select "main.page-with-fixed-header-offset"
     assert_select "header a[href='#home']", count: 0
     assert_select "header a[href='/#services']"
-    assert_select "header a[href='/#home']"
+    assert_select "header a[href='/']"
     assert_select "footer a[href='/#pricing']"
   end
 

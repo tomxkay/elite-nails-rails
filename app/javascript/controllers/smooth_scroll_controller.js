@@ -114,9 +114,16 @@ export default class extends Controller {
   }
 
   updateHash(targetSelector) {
-    if (targetSelector.startsWith("#")) {
-      history.pushState(null, null, targetSelector)
+    if (!targetSelector.startsWith("#")) return
+
+    // The home section is the top of the page — keep the URL clean ("/")
+    // instead of pushing "/#home".
+    if (targetSelector === "#home") {
+      history.pushState(null, null, window.location.pathname)
+      return
     }
+
+    history.pushState(null, null, targetSelector)
   }
 
   get scrollOffset() {
