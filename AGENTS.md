@@ -254,8 +254,9 @@ plan (2026-07-19).
   `SQUARE_LOCATION_ID`, `SQUARE_APP_ID`, `SQUARE_APP_SECRET`, optional
   `SQUARE_ACCESS_TOKEN` fallback. Dev `.env` holds the sandbox set.
 - **CTAs:** `booking_link` prefers `/book` when `SquareApi.configured?`, else
-  `BOOKING_URL` (hosted Square page), else `tel:`. Production stays on the
-  hosted page until Square secrets are set there.
+  `BOOKING_URL` (hosted Square page), else `tel:`. ✅ Square secrets **are** set
+  in production — native `/book` is live and serving CTAs there (verified
+  2026-07-20).
 - **Deep links:** `/book?service_name=<marketing name>` fuzzy-matches home-page
   Service/PricingItem names to a Square catalog service and preselects step 1
   (exact → substring → shared-word match; unmatched names just leave the wizard
@@ -315,6 +316,36 @@ pending items:
 | `analytics-plan.md` | Implemented (Ahoy + `GetAnalyticsSummaryTool`); reference for KPI definitions. |
 | `cms-ai-roadmap.md` | Milestone 2 vision doc; largely delivered (DB content + MCP tools). |
 | `connecting-to-production-db.md` | Reference — how to reach Fly Postgres via `fly proxy`. |
+
+### ⏸️ Pending owner confirmation — gel / dip / acrylic / nail-art menu (2026-07-20)
+
+The owner needs to confirm which enhancement services the salon actually
+offers. For now, **the default `<title>` and `<meta name="description">` are
+optimized for search-result clicks**: exact brand, Cramerton, nail salon, book
+online, and the configured services (`gel`, `dip`, `acrylics`, and `nail art`).
+This is defined in `app/views/layouts/application.html.erb` and mirrored in
+`app/views/shared/_meta_tags.html.erb`.
+
+These services are named in many other places, and removing them was judged
+riskier than leaving them:
+
+- They are **live, bookable services in the owner's Square catalog** (verified
+  in production 2026-07-20): `Gel Manicure`, `Gel Pedicure`, `Dip Powder`,
+  `Acrylic Full Set`, `Acrylic Fill`, `Nail Art (per nail)`. Square only makes
+  a service bookable once staff are assigned to it, so these were configured
+  deliberately. Scrubbing the site while `/book` still sells them would hide
+  real services.
+- `Service` / `PricingItem` records (3 of 6 service cards, 6 priced items),
+  `TeamMember` bios + specialties, an active `Tues–Thurs Gel Special`
+  `Promotion`, and two `_faq.html.erb` entries all reference them.
+- One `Review` quote mentions gel manicures — **never edit customer
+  testimonials**; altering a real review is fabrication regardless of intent.
+
+**If the owner confirms these are not offered**, the fix is to remove them at
+the source (Square catalog) first, then hide the corresponding records via the
+MCP `Set*ActiveTool` tools, then update the meta description. Do not edit
+marketing copy alone. Note the content is DB-backed, so editing `DEFAULTS` in
+code will not change production.
 
 ## Conventions
 

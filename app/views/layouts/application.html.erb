@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <% default_title = "Elite Nails | A Welcoming Nail Salon in Cramerton, NC" %>
-    <% default_description = "A welcoming neighborhood nail salon in Cramerton, NC, serving the community since 2003 with manicures, pedicures, gel, dip, acrylics, and custom nail art. Call (704) 824-9032 or book online." %>
+    <% default_title = "Elite Nails | Cramerton Nail Salon - Book Online" %>
+    <%# Keep under ~155 chars: Google truncates past that, and the CTA is the
+        first thing lost. Phone is omitted on purpose — the Business Profile
+        panel already shows it directly above the search result.
+        Named services are pending owner confirmation — see AGENTS.md
+        "Pending Follow-Ups". %>
+    <% default_description = "Family-owned in Cramerton since 2003. Manicures, pedicures, gel, dip, acrylics, and nail art. Walk-ins welcome or book online." %>
     <title><%= content_for(:title).presence || default_title %></title>
     <meta name="description" content="<%= content_for(:description).presence || default_description %>">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -26,8 +31,13 @@
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-    <link rel="icon" href="/icon.png" type="image/png" sizes="250x250">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <%# Filename is versioned on purpose: /icon.png is served with a ~1yr
+        immutable cache header, so changing the artwork requires a new URL for
+        caches (and Google's favicon crawler) to pick it up. Bump to -v3 etc.
+        if the logo changes again. 480px = multiple of 48, per Google's guidance. %>
+    <link rel="icon" href="/icon-v2.png" type="image/png" sizes="480x480">
+    <link rel="icon" href="/favicon.ico" sizes="48x48 32x32 16x16">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
