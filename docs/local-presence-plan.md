@@ -1,5 +1,8 @@
 # Local Presence Plan — Domain & Social Media
 
+Status: Decided; site wiring pending (blocked on owner creating the accounts
+and taking over the Google Business Profile)
+
 Findings and decisions from the 2026-07-20 review. Goal: get prospects into the
 salon. Context: site analytics (30 days to 2026-07-20) showed ~24 visits, 22 of
 them direct — discovery, not on-site UX, is the bottleneck.

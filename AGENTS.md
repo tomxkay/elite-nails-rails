@@ -299,6 +299,23 @@ container's non-root user.
 > `_cache`/`_queue`/`_cable` databases). Site, OAuth flow, and all 24 MCP tools
 > verified in production.
 
+## Docs & Pending Follow-Ups
+
+Plans and reference docs live in `docs/`. Each plan carries a `Status:` line
+near the top — **keep it updated when work lands**, and when the user asks
+"what's next?" (or finishes related work), check this index and suggest the
+pending items:
+
+| Doc | Status / pending follow-up |
+|-----|---------------------------|
+| `local-presence-plan.md` | Decided (IG + FB only). **Pending:** social links wiring — gallery link, footer icons, JSON-LD `sameAs` for the knowledge panel; blocked on owner creating accounts. Also: optional `elitenailsnc.com` redirect; GBP takeover → point website/booking fields at the domain and `/book`. |
+| `quick-availability-plan.md` | Implemented. **Pending:** automated browser coverage. |
+| `deal-alerts-plan.md` | Exploration only — suggest when marketing/email comes up; not yet approved to build. |
+| `vip-membership-plan.md` | Exploration only — suggest when loyalty/retention comes up; not yet approved to build. |
+| `analytics-plan.md` | Implemented (Ahoy + `GetAnalyticsSummaryTool`); reference for KPI definitions. |
+| `cms-ai-roadmap.md` | Milestone 2 vision doc; largely delivered (DB content + MCP tools). |
+| `connecting-to-production-db.md` | Reference — how to reach Fly Postgres via `fly proxy`. |
+
 ## Conventions
 
 - **Ruby:** 2-space indent, snake_case methods, CamelCase classes; rails-omakase
