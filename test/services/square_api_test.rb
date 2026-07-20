@@ -6,6 +6,7 @@ class SquareApiTest < ActiveSupport::TestCase
     "objects" => [
       { "type" => "ITEM", "item_data" => {
         "name" => "Gel Manicure", "product_type" => "APPOINTMENTS_SERVICE",
+        "description" => "A full manicure finished with gel polish.",
         "variations" => [ { "id" => "VAR1", "version" => 7, "item_variation_data" => {
           "price_money" => { "amount" => 4000, "currency" => "USD" }, "service_duration" => 2_700_000
         } } ] } },
@@ -67,7 +68,9 @@ class SquareApiTest < ActiveSupport::TestCase
     SquareApi.stub(:post, CATALOG) do
       services = SquareApi.services
       assert_equal 1, services.size
-      assert_equal({ id: "VAR1", version: 7, name: "Gel Manicure", price: "$40", duration_minutes: 45 },
+      assert_equal({ id: "VAR1", version: 7, name: "Gel Manicure",
+                     description: "A full manicure finished with gel polish.",
+                     price: "$40", duration_minutes: 45 },
                    services.first)
     end
   end

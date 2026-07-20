@@ -42,7 +42,11 @@ export default class extends Controller {
     const query = this.serviceFilterTarget.value.trim().toLowerCase()
     let visible = 0
     this.serviceTargets.forEach((radio) => {
-      const match = radio.checked || !query || (radio.dataset.name || "").toLowerCase().includes(query)
+      // Search the description too, now that it's shown — it lets guests find a
+      // service by what it includes ("callus", "paraffin") rather than by a
+      // name they'd have to know already.
+      const haystack = `${radio.dataset.name || ""} ${radio.dataset.description || ""}`.toLowerCase()
+      const match = radio.checked || !query || haystack.includes(query)
       radio.closest("label").hidden = !match
       if (match) visible++
     })

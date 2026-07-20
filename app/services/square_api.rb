@@ -80,6 +80,7 @@ class SquareApi
           id: variation["id"],
           version: variation["version"],
           name: item_data["name"],
+          description: item_data["description"],
           price: format_money(vdata["price_money"]),
           duration_minutes: (vdata["service_duration"] || 0) / 60_000
         }

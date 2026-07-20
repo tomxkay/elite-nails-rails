@@ -11,6 +11,40 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
   BROWSER_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " \
                "(KHTML, like Gecko) Chrome/120.0 Safari/537.36".freeze
 
+  test "show backfills a missing Square description from the site menu" do
+    PricingItem.create!(category: "Manicures", name: "Gel Manicure", price: "$40",
+                        description: "Cured to a high shine that resists chips.")
+
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:services, SERVICES) do
+        SquareApi.stub(:bookable_staff, STAFF) do
+          get book_path
+        end
+      end
+    end
+
+    assert_response :success
+    assert_match "Cured to a high shine that resists chips.", response.body
+  end
+
+  test "show prefers Square's own description over the site menu" do
+    PricingItem.create!(category: "Manicures", name: "Gel Manicure", price: "$40",
+                        description: "Site copy that should lose.")
+    from_square = [ SERVICES.first.merge(description: "Square copy that should win.") ]
+
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:services, from_square) do
+        SquareApi.stub(:bookable_staff, STAFF) do
+          get book_path
+        end
+      end
+    end
+
+    assert_response :success
+    assert_match "Square copy that should win.", response.body
+    assert_no_match "Site copy that should lose.", response.body
+  end
+
   test "show renders the wizard with services and staff" do
     SquareApi.stub(:configured?, true) do
       SquareApi.stub(:services, SERVICES) do

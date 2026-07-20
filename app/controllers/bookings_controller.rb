@@ -22,7 +22,7 @@ class BookingsController < ApplicationController
       return
     end
 
-    @services = SquareApi.services
+    @services = with_menu_descriptions(SquareApi.services)
     # Staff list is optional ("Anyone available" works without it) — e.g. it
     # 401s until the Square account finishes Appointments onboarding.
     @staff = begin
@@ -197,6 +197,25 @@ class BookingsController < ApplicationController
 
   def normalize_service_name(name)
     name.to_s.downcase.gsub(/[^a-z0-9\s]/, " ").split.map { |token| token.chomp("s") }.join(" ")
+  end
+
+  # Square's own catalog description wins, but a service imported without one
+  # would leave step 1 with nothing but a name and a price — and that step is
+  # where nearly all booking drop-off happens. Backfill from the site's menu
+  # copy (PricingItem#description), matched on the same normalized name used
+  # for deep links.
+  def with_menu_descriptions(services)
+    lookup = PricingItem.visible
+      .where.not(description: [ nil, "" ])
+      .index_by { |item| normalize_service_name(item.name) }
+    return services if lookup.empty?
+
+    services.map do |service|
+      next service if service[:description].present?
+
+      match = lookup[normalize_service_name(service[:name])]
+      match ? service.merge(description: match.description) : service
+    end
   end
 
   def cached_bookable_staff

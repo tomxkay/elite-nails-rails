@@ -77,6 +77,7 @@
                        value="<%= service[:id] %>"
                        data-version="<%= service[:version] %>"
                        data-name="<%= service[:name] %>"
+                       data-description="<%= service[:description] %>"
                        <%= "checked" if @preselected_service_id == service[:id].to_s %>>
                 <span class="min-w-0 flex-1">
                   <span class="flex items-baseline justify-between gap-3">
@@ -85,6 +86,12 @@
                   </span>
                   <% if service[:duration_minutes].to_i.positive? %>
                     <span class="block text-sm text-warm-gray-600"><%= service[:duration_minutes] %> min</span>
+                  <% end %>
+                  <%# Always visible, never truncated: this is the decision point
+                      of the whole funnel, so cost of a taller card < cost of a
+                      guest bouncing because they can't tell two services apart. %>
+                  <% if service[:description].present? %>
+                    <span class="mt-1.5 block text-sm leading-relaxed text-warm-gray-600"><%= service[:description] %></span>
                   <% end %>
                 </span>
               </label>
