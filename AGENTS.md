@@ -316,6 +316,7 @@ pending items:
 | `analytics-plan.md` | Implemented (Ahoy + `GetAnalyticsSummaryTool`); reference for KPI definitions. |
 | `cms-ai-roadmap.md` | Milestone 2 vision doc; largely delivered (DB content + MCP tools). |
 | `connecting-to-production-db.md` | Reference — how to reach Fly Postgres via `fly proxy`. |
+| `service-menu-reconciliation.md` | 🔴 **Active.** Live site + Square catalog carry placeholder services; only 2 of 12 match the salon's real board. Includes 3 live overcharges. **Pending:** owner descriptions/durations, then fix Square → then site via MCP tools. |
 
 ### ⏸️ Pending owner confirmation — gel / dip / acrylic / nail-art menu (2026-07-20)
 
