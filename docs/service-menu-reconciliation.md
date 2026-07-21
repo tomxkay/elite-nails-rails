@@ -137,11 +137,20 @@ walk-in/phone until they opt in.
 
 **Roster expanded 2026-07-21** — three technicians were missing from the site:
 
+Experience confirmed 2026-07-21: **five of the six technicians have 20+ years**
+(Michael, Thai, Trang, Nhan, Lien); Mui has 10+. That is well over a century of
+combined experience — an underused selling point for a salon whose competitors
+are mostly newer.
+
 | First name | Experience | Strengths |
 |---|---|---|
+| **Michael** | 20+ years | Acrylic sets and fills; the one bookable tech |
 | **Thai** | 20+ years | Same range as Michael — acrylic sets, fills, gel |
 | **Trang** | 20+ years | The whole menu; specialises in **nail art** |
 | **Mui** | 10+ years | **Pedicures** (the deluxe in particular) and **waxing** |
+
+| **Nhan** | 20+ years | Color work and deluxe pedicures |
+| **Lien** | 20+ years | Precise shaping, durable acrylic work |
 
 Six technicians now: Michael, Thai, Trang, Mui, Nhan, Lien. Only first names are
 displayed (2026-07-20 decision); surnames live in a comment in
