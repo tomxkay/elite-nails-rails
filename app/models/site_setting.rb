@@ -17,8 +17,12 @@ class SiteSetting < ApplicationRecord
     longitude: -81.0737,
     price_range: "$$",
     established: 2003,
-    aggregate_rating: 4.9,
-    review_count: 120
+    # Real figures from the salon's Google Business Profile (owner-confirmed
+    # 2026-07-21). These previously held an invented 4.9 / 120 — never put a
+    # number here that isn't on the actual profile: it feeds the LocalBusiness
+    # JSON-LD, so an inflated value is a false claim in structured data.
+    aggregate_rating: 4.2,
+    review_count: 154
   }.freeze
 
   # The singleton settings row — the persisted record, or an unsaved in-code

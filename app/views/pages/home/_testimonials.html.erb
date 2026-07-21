@@ -4,25 +4,49 @@
   <div class="pointer-events-none absolute inset-0 hero-grid-lines opacity-30" aria-hidden="true"></div>
 
   <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <% reviews = Review.for_display %>
+
     <%= render 'shared/section_header',
                eyebrow: 'What Our Guests Say',
                title: 'Kind Words',
-               subtitle: 'Real reviews from the neighbors who keep coming back.' %>
+               subtitle: reviews.any? ?
+                 'Real reviews from the neighbors who keep coming back.' :
+                 'Read what our neighbors say — and tell us how we did.' %>
 
     <%# ===== Aggregate rating trust panel =====
-        NOTE: rating value + review count are placeholders until the salon's
-        Google Business profile is confirmed (see PROJECT.md open questions). %>
+        Rating and count are the salon's REAL Google Business figures, stored on
+        SiteSetting (owner-confirmed 2026-07-21). Never round up or invent them:
+        this same value feeds the LocalBusiness JSON-LD. %>
     <div class="mt-14 flex flex-col items-center gap-8 rounded-3xl border border-cream-200 bg-cream-50/90 px-8 py-8 shadow-warm-lg backdrop-blur md:flex-row md:justify-between"
          data-controller="scroll-reveal" data-scroll-reveal-animation-value="fadeInUp">
       <div class="flex items-center gap-6">
         <p class="font-serif text-6xl leading-none text-warm-gray-900"><%= salon.aggregate_rating %></p>
         <div>
+          <%# Stars must reflect the real rating. This used to draw five solid
+              stars unconditionally, which showed a perfect score beside a
+              number that wasn't one. Filled = whole stars, remainder rounds to
+              a half, the rest stay outlined. %>
+          <% rating = salon.aggregate_rating.to_f %>
+          <% filled = rating.floor %>
+          <% half = (rating - filled) >= 0.25 && (rating - filled) < 0.75 %>
+          <% filled += 1 if (rating - rating.floor) >= 0.75 %>
           <div class="flex" aria-label="Average rating <%= salon.aggregate_rating %> out of 5">
-            <% 5.times do %>
-              <%= icon 'star', variant: :solid, classes: 'w-6 h-6 text-gold-500 drop-shadow-sm' %>
+            <% 5.times do |i| %>
+              <% if i < filled %>
+                <%= icon 'star', variant: :solid, classes: 'w-6 h-6 text-gold-500 drop-shadow-sm' %>
+              <% elsif i == filled && half %>
+                <span class="relative inline-block w-6 h-6" aria-hidden="true">
+                  <%= icon 'star', variant: :outline, classes: 'absolute inset-0 w-6 h-6 text-gold-500' %>
+                  <span class="absolute inset-0 overflow-hidden" style="width:50%">
+                    <%= icon 'star', variant: :solid, classes: 'w-6 h-6 text-gold-500 drop-shadow-sm' %>
+                  </span>
+                </span>
+              <% else %>
+                <%= icon 'star', variant: :outline, classes: 'w-6 h-6 text-gold-400/70' %>
+              <% end %>
             <% end %>
           </div>
-          <p class="mt-2 text-sm text-warm-gray-700">Based on <span class="font-semibold text-warm-gray-900"><%= salon.review_count %>+ reviews</span> from happy guests</p>
+          <p class="mt-2 text-sm text-warm-gray-700">Based on <span class="font-semibold text-warm-gray-900"><%= salon.review_count %> reviews</span> on Google</p>
         </div>
       </div>
 
@@ -46,18 +70,23 @@
       </div>
     </div>
 
-    <%# ===== Review cards (organic masonry) — from the DB (Review), with
-        in-code DEFAULTS fallback. ===== %>
-    <div class="mt-12 gap-6 [column-fill:_balance] sm:columns-2 lg:columns-3"
-         data-controller="stagger" data-stagger-amount-value="0.12" data-stagger-from-value="bottom">
-      <% Review.for_display.each do |review| %>
-        <%= render 'shared/testimonial_card',
-                   quote: review.quote,
-                   name: review.author_name,
-                   rating: review.rating,
-                   date: review.relative_date,
-                   source: review.source %>
-      <% end %>
-    </div>
+    <%# ===== Review cards (organic masonry) — from the DB (Review). =====
+        Renders nothing when there are no reviews, by design: Review::DEFAULTS is
+        deliberately empty because the previous entries were fabricated. Only
+        real, verbatim reviews go here. The rating panel above still carries the
+        genuine Google score, so the section stands on its own while empty. %>
+    <% if reviews.any? %>
+      <div class="mt-12 gap-6 [column-fill:_balance] sm:columns-2 lg:columns-3"
+           data-controller="stagger" data-stagger-amount-value="0.12" data-stagger-from-value="bottom">
+        <% reviews.each do |review| %>
+          <%= render 'shared/testimonial_card',
+                     quote: review.quote,
+                     name: review.author_name,
+                     rating: review.rating,
+                     date: review.relative_date,
+                     source: review.source %>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 </section>
