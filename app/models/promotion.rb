@@ -30,22 +30,6 @@ class Promotion < ApplicationRecord
       fine_print: "Applied after their first visit.",
       position: 1
     },
-    {
-      title: "Birthday Treat",
-      deal: "Free",
-      featured: false,
-      description: "Celebrate with a complimentary nail-art add-on during your birthday month.",
-      fine_print: "Valid with any manicure.",
-      position: 2
-    },
-    {
-      title: "Tues–Thurs Gel Special",
-      deal: "Midweek",
-      featured: false,
-      description: "Book a gel manicure Tuesday through Thursday for a relaxed, quieter visit.",
-      fine_print: "Subject to availability.",
-      position: 3
-    }
   ].freeze
 
   # Unsaved instances built from the in-code backup.
