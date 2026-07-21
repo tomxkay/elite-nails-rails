@@ -47,6 +47,11 @@ module ApplicationHelper
   CONTACT_LINK_CLASSES = "font-medium text-terracotta-600 underline underline-offset-4 " \
                          "transition-colors hover:text-terracotta-700".freeze
 
+  # Prose containing this exact phrase gets it linked to booking_link by
+  # linkify_contact. Keep FAQ wording consistent with it, or the link silently
+  # won't render.
+  BOOKING_PHRASE = "book select services online".freeze
+
   # The salon's street address on one line, matching how it's written in prose.
   def salon_full_address
     "#{salon.street}, #{salon.city}, #{salon.region} #{salon.postal_code}"
@@ -135,6 +140,18 @@ module ApplicationHelper
       targets[ERB::Util.html_escape(address).to_s] =
         link_to(address, salon_map_url, target: "_blank", rel: "noopener",
                 class: CONTACT_LINK_CLASSES)
+    end
+
+    booking = booking_link.to_s
+    # Only linked when booking actually leads somewhere online. booking_link
+    # degrades to `tel:` when Square isn't configured, and pointing the words
+    # "book … online" at a phone call would contradict itself. Prose must use
+    # this exact phrase to be picked up — see the FAQ answers.
+    if booking.present? && !booking.start_with?("tel:")
+      external = booking.start_with?("http")
+      targets[BOOKING_PHRASE] =
+        link_to(BOOKING_PHRASE, booking, class: CONTACT_LINK_CLASSES,
+                **(external ? { target: "_blank", rel: "noopener" } : {}))
     end
 
     targets

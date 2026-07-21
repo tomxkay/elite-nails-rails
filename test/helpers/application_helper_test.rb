@@ -1,4 +1,5 @@
 require "test_helper"
+require "minitest/mock"
 
 class ApplicationHelperTest < ActionView::TestCase
   test "linkify_contact turns the salon number into a tel: link" do
@@ -32,6 +33,36 @@ class ApplicationHelperTest < ActionView::TestCase
 
     assert_includes result, %(href="tel:#{salon.phone}")
     assert_includes result, salon_map_url
+  end
+
+  test "linkify_contact links the booking phrase to the booking flow" do
+    stub(:booking_link, "/book") do
+      result = linkify_contact("You can also #{ApplicationHelper::BOOKING_PHRASE}.")
+
+      assert_includes result, %(href="/book")
+      assert_includes result, "#{ApplicationHelper::BOOKING_PHRASE}</a>"
+    end
+  end
+
+  test "linkify_contact opens an external booking page in a new tab" do
+    stub(:booking_link, "https://squareup.com/appointments/elite-nails") do
+      result = linkify_contact("You can also #{ApplicationHelper::BOOKING_PHRASE}.")
+
+      assert_includes result, %(target="_blank")
+      assert_includes result, %(rel="noopener")
+    end
+  end
+
+  # booking_link degrades to a tel: URL when Square isn't configured. Linking
+  # the words "book … online" to a phone call would contradict the sentence, so
+  # the phrase is left as plain text instead.
+  test "linkify_contact leaves the booking phrase unlinked when booking is phone-only" do
+    stub(:booking_link, "tel:+17048249032") do
+      result = linkify_contact("You can also #{ApplicationHelper::BOOKING_PHRASE}.")
+
+      assert_includes result, ApplicationHelper::BOOKING_PHRASE
+      assert_not_includes result, "<a"
+    end
   end
 
   test "linkify_contact links every occurrence" do
