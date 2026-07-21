@@ -24,9 +24,16 @@
         <div class="card-surface-warm rounded-2xl p-7 shadow-warm-sm hover:shadow-warm-xl transition-shadow duration-300"
              data-controller="pricing-highlight"
              data-pricing-highlight-category-value="<%= category.downcase %>">
-          <div class="flex items-baseline justify-between border-b border-cream-200 pb-4">
-            <h3 class="font-serif text-2xl text-warm-gray-900"><%= category %></h3>
-            <span class="font-serif text-lg text-terracotta-200" aria-hidden="true"><%= format("%02d", i + 1) %></span>
+          <div class="border-b border-cream-200 pb-4">
+            <div class="flex items-baseline justify-between">
+              <h3 class="font-serif text-2xl text-warm-gray-900"><%= category %></h3>
+              <span class="font-serif text-lg text-terracotta-200" aria-hidden="true"><%= format("%02d", i + 1) %></span>
+            </div>
+            <%# Category-wide note (PricingItem::CATEGORY_NOTES) — currently only
+                Waxing has one. Renders nothing when absent. %>
+            <% if (note = PricingItem.note_for_category(category)) %>
+              <p class="mt-1.5 text-xs text-warm-gray-600"><%= note %></p>
+            <% end %>
           </div>
           <%# Only `bookable` items link to /book. Short/add-on work (polish
               changes, repairs, trims, waxing) is walk-in, so those rows are

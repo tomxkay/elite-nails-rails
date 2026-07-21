@@ -4,6 +4,17 @@ class PricingItem < ApplicationRecord
   # Display order of the pricing categories (keys are the stored `category`).
   CATEGORY_ORDER = [ "Manicures", "Pedicures", "Polish & Color", "Acrylic, Dip & Extensions", "Nail Care", "Waxing" ].freeze
 
+  # Optional one-line note shown under a category heading in the pricing section.
+  # For facts that apply to a whole category rather than a single service — keep
+  # them verifiable, same bar as any other public claim.
+  CATEGORY_NOTES = {
+    "Waxing" => "Done in our private waxing room."
+  }.freeze
+
+  def self.note_for_category(category)
+    CATEGORY_NOTES[category]
+  end
+
   scope :ordered, -> { order(:position, :id) }
   scope :visible, -> { where(active: true) }
 
