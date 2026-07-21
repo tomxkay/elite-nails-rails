@@ -18,7 +18,9 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     {
       "200+ hues" => "the colour count was never verified",
       "Breathable polishes" => "the salon does not stock breathable polish",
-      "Private seating" => "there is no private seating on the salon floor"
+      "Private seating" => "there is no private seating on the salon floor",
+      "hospital-grade" => "a specific regulatory product claim the owner has not confirmed",
+      "spa treatments" => "no spa treatment has ever been on the menu"
     }.each do |claim, reason|
       assert_no_match(/#{Regexp.escape(claim)}/i, response.body,
         "Removed claim is back on the home page: #{claim.inspect} — #{reason}. " \
@@ -33,6 +35,16 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_match "Call ahead", response.body
     assert_match "Private Waxing Room", response.body
     assert_match "Done in our private waxing room", response.body
+  end
+
+  # Online booking covers one technician and a subset of the menu, so the FAQ
+  # must not promise that booking ahead secures a particular technician — only a
+  # phone call can. See docs/booking-adoption-notes.md.
+  test "faq does not promise technician choice through online booking" do
+    get root_url
+
+    assert_no_match(/guarantees your preferred time and technician/i, response.body)
+    assert_match(/only way to request a particular technician/i, response.body)
   end
 
   test "renders the primary promotion banner" do

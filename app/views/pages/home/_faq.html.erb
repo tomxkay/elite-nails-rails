@@ -13,12 +13,19 @@
       answer: "Elite Nails is at #{salon.street}, #{salon.city}, #{salon.region} #{salon.postal_code}, on Market Street in downtown Cramerton. We proudly serve Cramerton, Belmont, Mount Holly, and the greater Gaston County area."
     },
     {
+      # Phone-first, matching the rest of the site. The old answer promised that
+      # booking ahead "guarantees your preferred time and technician" — online
+      # booking cannot do that, since only one technician takes /book
+      # appointments. See docs/booking-adoption-notes.md.
       question: "Do I need an appointment, or do you take walk-ins?",
-      answer: "Both! You can book an appointment online in under a minute, or call us at #{salon.phone_display}. Walk-ins are always welcome based on availability, but booking ahead guarantees your preferred time and technician."
+      answer: "Both! Most of our guests call ahead at #{salon.phone_display}, and that's still the surest way to get the time and technician you'd like. Select services can also be booked online. Walk-ins are always welcome based on availability."
     },
     {
+      # Lists real menu categories only. This previously advertised "spa
+      # treatments", which has never been on the menu — the same wording that
+      # produced the phantom "Spa Pedicure". Waxing is real and was missing.
       question: "What nail services do you offer in Cramerton?",
-      answer: "We offer manicures and pedicures, gel and dip powder nails, acrylic full sets and fills, custom nail art, and spa treatments — all in a clean, family-owned salon that's been serving Cramerton since 2003."
+      answer: "We offer manicures and pedicures, gel and dip powder nails, acrylic full sets and fills, custom nail art, and waxing — all in a clean, family-owned salon that's been serving Cramerton since 2003."
     },
     {
       question: "Do you do gel and dip powder nails?",
@@ -26,7 +33,7 @@
     },
     {
       question: "How do I book an appointment at Elite Nails?",
-      answer: "The fastest way is to book online through the 'Book Now' button on this page. You can also call the salon directly at #{salon.phone_display} and we'll find a time that works for you."
+      answer: "Give us a call at #{salon.phone_display} and we'll find a time that works for you — that's how most appointments are made, and it's the only way to request a particular technician. You can also book select services online using the booking button on this page."
     },
     {
       question: "How do I redeem a promotion or special offer?",
@@ -37,8 +44,11 @@
       answer: "Just let us know! There are no codes or coupons to bring — simply mention the offer when you arrive and we'll take care of it at the counter."
     },
     {
+      # "Hospital-grade disinfectant" is a specific regulatory claim about a
+      # product class, not a figure of speech — dropped in favour of describing
+      # what actually happens between guests, which needs no verification.
       question: "Is Elite Nails clean and hygienic?",
-      answer: "Absolutely. We use hospital-grade disinfectants on tools and stations, and every guest gets fresh liners and sanitized bowls. Cleanliness and gentle, hygienic care come first at Elite Nails."
+      answer: "Absolutely. Tools and stations are disinfected between guests, and every pedicure gets a fresh liner and a sanitized bowl. Cleanliness is a point of pride for the family, and it's something guests mention often in our reviews."
     }
   ]
 %>
