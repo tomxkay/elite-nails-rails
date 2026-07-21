@@ -44,26 +44,37 @@ module ApplicationHelper
     SiteSetting.current
   end
 
-  # Renders plain text as HTML with the salon's phone number turned into a
-  # tel: link.
+  CONTACT_LINK_CLASSES = "font-medium text-terracotta-600 underline underline-offset-4 " \
+                         "transition-colors hover:text-terracotta-700".freeze
+
+  # The salon's street address on one line, matching how it's written in prose.
+  def salon_full_address
+    "#{salon.street}, #{salon.city}, #{salon.region} #{salon.postal_code}"
+  end
+
+  # Google Maps *directions* link (contrast with salon_map_embed_url, which is
+  # the iframe src for the contact map).
+  def salon_map_url
+    "https://maps.google.com/?q=#{ERB::Util.url_encode(salon_full_address)}"
+  end
+
+  # Renders plain text as HTML, turning the salon's phone number into a tel:
+  # link and its street address into a maps link.
   #
-  # FAQ answers are stored as plain strings because the same array feeds both
-  # the visible accordion and the FAQPage JSON-LD, and Google requires the
-  # structured data to match what's on the page. Baking an <a> into the string
-  # would push markup into the JSON-LD; adding it at render time keeps the text
-  # content identical in both places.
+  # Exists because some copy is stored as plain strings on purpose. FAQ answers
+  # feed both the visible accordion and the FAQPage JSON-LD, and Google requires
+  # the structured data to match what's on the page — baking an <a> into the
+  # string would push markup into the JSON-LD. Linking at render time keeps the
+  # text content identical in both places.
   #
-  # The source text is escaped first, so only the link we build is ever HTML.
-  def linkify_phone(text)
+  # The source text is escaped first and matched against escaped needles, so the
+  # only HTML in the result is the links built here.
+  def linkify_contact(text)
     escaped = ERB::Util.html_escape(text.to_s)
-    display = salon.phone_display.to_s
-    return escaped if display.blank?
+    targets = contact_link_targets
+    return escaped if targets.empty?
 
-    link = link_to(display, "tel:#{salon.phone}",
-                   class: "font-medium text-terracotta-600 underline underline-offset-4 " \
-                          "transition-colors hover:text-terracotta-700")
-
-    escaped.gsub(ERB::Util.html_escape(display)) { link }.html_safe
+    escaped.gsub(Regexp.union(targets.keys)) { |match| targets[match] }.html_safe
   end
 
   # Keyless Google Maps embed URL for the salon address (no API key required).
@@ -108,6 +119,26 @@ module ApplicationHelper
   end
 
   private
+
+  # Escaped needle => replacement link, for linkify_contact. Keys are escaped so
+  # they match against already-escaped source text.
+  def contact_link_targets
+    targets = {}
+
+    if salon.phone_display.present?
+      targets[ERB::Util.html_escape(salon.phone_display).to_s] =
+        link_to(salon.phone_display, "tel:#{salon.phone}", class: CONTACT_LINK_CLASSES)
+    end
+
+    if salon.street.present?
+      address = salon_full_address
+      targets[ERB::Util.html_escape(address).to_s] =
+        link_to(address, salon_map_url, target: "_blank", rel: "noopener",
+                class: CONTACT_LINK_CLASSES)
+    end
+
+    targets
+  end
 
   def render_custom_quote_icon(classes, options)
     content_tag(:svg, class: classes, fill: "currentColor", viewBox: "0 0 24 24", **options) do
