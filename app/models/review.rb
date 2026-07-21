@@ -35,7 +35,12 @@ class Review < ApplicationRecord
     { author_name: "Valerie C.", rating: 5, source: "Google", position: 2,
       quote: "It is without question the best salon I've been to. The technicians were efficient, pleasant, and professional. They were visibly keeping everything very clean and sanitary. I will definitely be back!" },
     { author_name: "Melissa K.", rating: 5, source: "Google", position: 3,
-      quote: "This was my first time, and it was a great experience. My manicure lasted more than two weeks without chipping. I only needed it redone because my nails had grown. I will definitely be back!" }
+      quote: "This was my first time, and it was a great experience. My manicure lasted more than two weeks without chipping. I only needed it redone because my nails had grown. I will definitely be back!" },
+    # Held back initially because it names "Thai", who wasn't on the team list.
+    # Owner confirmed 2026-07-21 that Thai Tran is a technician here, so the
+    # review is safe to publish — the name now matches a real team card.
+    { author_name: "Leslie D.", rating: 5, source: "Google", position: 4,
+      quote: "Elite Nails has been doing my nails for 11 years. Thai shapes them so beautifully that I am asked at least once a week if my nails are real." }
   ].freeze
 
   def self.defaults

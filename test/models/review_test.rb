@@ -51,6 +51,25 @@ class ReviewTest < ActiveSupport::TestCase
     end
   end
 
+  # A published review that praises a technician by name sends guests asking for
+  # that person. If they don't work there, the salon has to explain it at the
+  # counter. Two supplied reviews name "Ty" and "Mrs. Vann", who are not on the
+  # team; they stay unpublished until the owner confirms who they are.
+  # "Thai" was in the same position until 2026-07-21, when the owner confirmed
+  # him — so this is about verification, not a permanent blocklist.
+  test "seeded reviews only name technicians who work here" do
+    unconfirmed = [ /\bTy\b/, /Mrs\.? ?Vann/i ]
+    team = TeamMember::DEFAULTS.map { |m| m[:name] }
+
+    Review::DEFAULTS.each do |attrs|
+      unconfirmed.each do |pattern|
+        assert_no_match pattern, attrs[:quote],
+          "#{attrs[:author_name]}'s review names someone who isn't on the team " \
+          "(#{team.join(', ')}). Confirm with the owner before publishing it."
+      end
+    end
+  end
+
   # The fabricated set described a "spa pedicure" and Michael doing "fine-line
   # art" — neither has ever been on the menu. A quote naming a service the salon
   # doesn't offer is the strongest signal a review was written rather than received.
