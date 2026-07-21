@@ -18,7 +18,7 @@
       # booking cannot do that, since only one technician takes /book
       # appointments. See docs/booking-adoption-notes.md.
       question: "Do I need an appointment, or do you take walk-ins?",
-      answer: "Both! Most of our guests call ahead at #{salon.phone_display}, and that's still the surest way to get the time and technician you'd like. Select services can also be booked online. Walk-ins are always welcome based on availability."
+      answer: "Both! Most of our guests call ahead at #{salon.phone_display}, and that's still the surest way to get the time and technician you'd like. You can also #{ApplicationHelper::BOOKING_PHRASE}. Walk-ins are always welcome based on availability."
     },
     {
       # Lists real menu categories only. This previously advertised "spa
@@ -33,7 +33,7 @@
     },
     {
       question: "How do I book an appointment at Elite Nails?",
-      answer: "Give us a call at #{salon.phone_display} and we'll find a time that works for you — that's how most appointments are made, and it's the only way to request a particular technician. You can also book select services online using the booking button on this page."
+      answer: "Give us a call at #{salon.phone_display} and we'll find a time that works for you — that's how most appointments are made, and it's the only way to request a particular technician. You can also #{ApplicationHelper::BOOKING_PHRASE}."
     },
     {
       question: "How do I redeem a promotion or special offer?",
