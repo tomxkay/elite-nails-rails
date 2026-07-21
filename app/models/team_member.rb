@@ -13,7 +13,18 @@ class TeamMember < ApplicationRecord
   #
   # `bookable` gates online booking. Only Michael takes /book appointments for
   # now; the rest of the team books by phone or walk-in and will opt in as they
-  # get comfortable with it.
+  # get comfortable with it (see docs/booking-adoption-notes.md). Adding a
+  # bookable tech also requires assigning them to service variations in Square,
+  # or availability search returns nothing for them.
+  #
+  # Only first names are displayed — a 2026-07-20 decision. Surnames are kept in
+  # the comments below purely so staff can be told apart internally:
+  #   Michael Ka · Thai Tran · Trang Tran · Mui Vu · Nhan Ka · Lien Ka
+  #
+  # Several technicians are related by marriage (it's a family salon). Those
+  # relationships are deliberately NOT published — they're personal details about
+  # people who haven't been asked. Add them only if the owner confirms each
+  # person is happy to have it on a public page.
   DEFAULTS = [
     {
       name: "Michael",
@@ -25,12 +36,36 @@ class TeamMember < ApplicationRecord
       position: 0
     },
     {
+      name: "Thai",
+      role: "Senior Nail Technician",
+      quote: "Twenty years in, and I still want every shape to be perfect.",
+      bio: "More than twenty years behind the table, with the same strengths as Michael — sculpted acrylic sets, fills, and gel work. Regulars come back for his shaping.",
+      specialties: ["Acrylic Full Set", "Acrylic Fill", "Gel Manicure"],
+      position: 1
+    },
+    {
+      name: "Trang",
+      role: "Senior Technician & Nail Artist",
+      quote: "Bring me a picture — I'd love to paint it.",
+      bio: "Twenty-plus years of experience across the whole menu, with a special love for hand-painted nail art. Happy to take on a detailed design or keep it simple.",
+      specialties: ["Nail Art", "Gel Manicure", "Acrylic Full Set"],
+      position: 2
+    },
+    {
+      name: "Mui",
+      role: "Pedicure Specialist",
+      quote: "Sit back — this part is supposed to feel good.",
+      bio: "Over ten years of experience and our go-to for pedicures. Known for a thorough, unhurried deluxe pedicure that guests plan their week around.",
+      specialties: ["Deluxe Pedicure", "Gel Pedicure", "Manicure + Pedicure"],
+      position: 3
+    },
+    {
       name: "Nhan",
       role: "Senior Technician",
       quote: "Color is where I get to play — let's find yours.",
       bio: "Loves creative color work and deluxe pedicures. Guests rave about her relaxing massages.",
       specialties: ["Deluxe Pedicure", "Gel Polish", "Dip Powder"],
-      position: 1
+      position: 4
     },
     {
       name: "Lien",
@@ -38,7 +73,7 @@ class TeamMember < ApplicationRecord
       quote: "Clean shapes, strong nails, and a warm welcome every time.",
       bio: "Precise shaping and durable acrylic work with a friendly, welcoming vibe.",
       specialties: ["Acrylic Full Set", "Gel Manicure", "Natural Looks"],
-      position: 2
+      position: 5
     }
   ].freeze
 
