@@ -23,21 +23,46 @@ class ReviewTest < ActiveSupport::TestCase
     assert fallback.none?(&:persisted?)
   end
 
-  # Guard, not a style rule. DEFAULTS held six invented testimonials labelled as
-  # Google reviews until 2026-07-21 — two of them praised services the salon
-  # never offered. Seeding them again would republish fabricated praise
-  # attributed to named people. Real reviews belong in the DB (added verbatim
-  # from the Google Business Profile), never in this constant, because anything
-  # placed here is auto-seeded into every environment as a stand-in for content
-  # that doesn't exist yet.
-  test "DEFAULTS stays empty so no fabricated testimonials ship" do
-    assert_empty Review::DEFAULTS,
-      "Review::DEFAULTS must stay empty — see the comment in app/models/review.rb. " \
-      "Add real, verbatim reviews to the database instead of seeding invented ones."
+  # The six invented testimonials that shipped to production until 2026-07-21.
+  # Named here so they can never quietly return. See docs/reviews-and-ratings.md.
+  FABRICATED_AUTHORS = [
+    "Sarah M.", "Jennifer L.", "Michelle R.", "Ana P.", "Karen T.", "Denise W."
+  ].freeze
+
+  test "DEFAULTS never re-admits the fabricated testimonials" do
+    returning = Review::DEFAULTS.map { |d| d[:author_name] } & FABRICATED_AUTHORS
+
+    assert_empty returning,
+      "These author names belong to testimonials that were invented, not collected: " \
+      "#{returning.join(', ')}. Only real reviews quoted verbatim may be seeded — " \
+      "see app/models/review.rb and docs/reviews-and-ratings.md."
   end
 
-  test "renders no testimonial cards when there are no reviews" do
-    assert_equal 0, Review.count
-    assert_empty Review.for_display
+  # Guards the shape of a real review rather than its wording: a fabricated entry
+  # is easiest to spot when attribution is missing or vague.
+  test "every seeded review carries full attribution" do
+    assert Review::DEFAULTS.any?, "expected the real Google reviews to be seeded"
+
+    Review::DEFAULTS.each do |attrs|
+      assert attrs[:quote].to_s.strip.present?, "review is missing its quote: #{attrs.inspect}"
+      assert attrs[:author_name].to_s.strip.present?, "review is missing an author"
+      assert attrs[:source].to_s.strip.present?, "review must record where it came from"
+      assert_includes 1..5, attrs[:rating], "review needs a 1-5 star rating"
+    end
+  end
+
+  # The fabricated set described a "spa pedicure" and Michael doing "fine-line
+  # art" — neither has ever been on the menu. A quote naming a service the salon
+  # doesn't offer is the strongest signal a review was written rather than received.
+  test "seeded reviews do not mention services the salon has never offered" do
+    invented_services = [ /spa pedicure/i, /fine[- ]line/i ]
+
+    Review::DEFAULTS.each do |attrs|
+      invented_services.each do |pattern|
+        assert_no_match pattern, attrs[:quote],
+          "#{attrs[:author_name]}'s review mentions a service the salon doesn't offer — " \
+          "verify this is a real review and not placeholder copy."
+      end
+    end
   end
 end
