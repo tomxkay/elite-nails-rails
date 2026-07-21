@@ -30,7 +30,11 @@
     },
     {
       question: "How do I redeem a promotion or special offer?",
-      answer: "Just let us know! There are no codes or coupons to bring — simply mention the offer when you arrive, whether it's 15% off your first visit or a $10 referral credit, and we'll take care of it at the counter."
+      # Deliberately names no specific offer: promotions change, and this answer
+      # is duplicated into the FAQPage JSON-LD, so a stale one would drift in two
+      # places at once. The specials section is the source of truth for what's
+      # currently running.
+      answer: "Just let us know! There are no codes or coupons to bring — simply mention the offer when you arrive and we'll take care of it at the counter."
     },
     {
       question: "Is Elite Nails clean and hygienic?",
