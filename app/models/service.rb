@@ -50,7 +50,7 @@ class Service < ApplicationRecord
     },
     {
       title: "Waxing",
-      description: "Gentle brow, lip, and chin waxing — book the brow and lip together and save.",
+      description: "Gentle brow, lip, and chin waxing — quick, precise, and easy to add to any visit.",
       image: "waxing-service-768.webp",
       pricing_category: "waxing",
       position: 5
