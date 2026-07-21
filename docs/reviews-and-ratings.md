@@ -1,6 +1,6 @@
 # Reviews & Ratings — Integrity Rules
 
-**Status:** 🟢 Four real Google reviews are live (owner-supplied 2026-07-21).
+**Status:** 🟢 Five real Google reviews are live (owner-supplied 2026-07-21).
 Rating is the real 4.2 / 154. **Minor pending:** posting dates and confirmed
 star ratings were never captured — see "Known gaps" below.
 
@@ -38,10 +38,10 @@ rendered as 5★. Fixed to fill stars from the real value.
 1. **Never write a testimonial.** Not as a placeholder, not "for layout", not
    "we'll replace it later". Placeholder reviews are indistinguishable from real
    ones once shipped — that is exactly how these survived to production.
-2. **`Review::DEFAULTS` holds real reviews only**, quoted verbatim. Three tests
+2. **`Review::DEFAULTS` holds real reviews only**, quoted verbatim. Four tests
    in `test/models/review_test.rb` guard it: the fabricated author names can
-   never return, every entry needs full attribution, and no quote may name a
-   service the salon doesn't offer.
+   never return, every entry needs full attribution, no quote may name a service
+   the salon doesn't offer, and no quote may name an unconfirmed technician.
    > *This reverses an earlier decision to keep the constant permanently empty.
    > That rule was written while the only known reviews were fake, and it had a
    > real cost: reviews would have lived solely in the production database,
@@ -66,36 +66,40 @@ rendered as 5★. Fixed to fill stars from the real value.
 
 - **Aggregate panel** — real 4.2 rating, star fill derived from it, real count of
   154, plus "Read Reviews on Google" / "Leave a Review" buttons.
-- **Four review cards** — Dorethea H., Allison S., Valerie C., Melissa K.
-  Chosen by the owner as the strongest of ten supplied. The mix is deliberate:
-  two long-tenure clients (20 years, 10 years), one first-time visitor, and one
-  naming a technician who actually works there (Michael).
+- **Five review cards** — Dorethea H., Allison S., Valerie C., Melissa K.,
+  Leslie D. The first four were the owner's pick of ten supplied; Leslie D. was
+  added once Thai was confirmed as staff. The mix is deliberate: three
+  long-tenure clients (20, 11 and 10 years), one first-time visitor, and two
+  naming technicians who actually work here (Michael, Thai).
 
-## Known gaps in the current four
+## Known gaps in the current five
 
 Both are honest omissions, not oversights — **do not fill them by guessing.**
 
 - **No posting dates.** They weren't captured with the review text.
   `relative_date` is left blank and the card hides it. Inventing plausible dates
   is exactly what the fabricated set did.
-- **Star ratings are inferred**, not read off the profile. All four texts are
+- **Star ratings are inferred**, not read off the profile. All five texts are
   unambiguous praise, so `rating: 5` is a safe read, but it is a read. Correct
   any that differ when someone next opens the dashboard.
 
 ## Reviews supplied but not used
 
-Six more were provided and are fine to add later — but three name people who
-are **not on the current team** (`Ty`, `Mrs. Vann`, `Thai`). They may be former
-staff, family, or nicknames. Confirm with the owner before publishing those, or
-a visitor will ask for someone who isn't there:
+Five more were provided and are fine to add later — but one names people who
+are **not on the current team** (`Ty`, `Mrs. Vann`). They may be former staff,
+family, or nicknames. Confirm with the owner before publishing, or a visitor
+will ask for someone who isn't there. A test in `test/models/review_test.rb`
+blocks those two names from being seeded.
+
+> `Thai` was on this list until 2026-07-21, when the owner confirmed Thai Tran
+> is a technician here. Leslie D.'s review moved to the published set.
 
 | Reviewer | Note |
 |---|---|
-| Heidi B. | Praises a full set plus fill-in — maps cleanly to real menu services. Best of the remaining six. |
+| Heidi B. | Praises a full set plus fill-in — maps cleanly to real menu services. Best of the remaining five. |
 | Nina M. | Positive and generic; safe. |
 | Connie H. | Mentions buying a **gift certificate** — confirm the salon offers these. |
 | Amy T. | Names **"Ty" and "Mrs. Vann"** — not current team members. |
-| Leslie D. | Names **"Thai"** — not a current team member. |
 | Rosé | Single name, no surname to reduce. Generic text. |
 
 ## To add more
@@ -119,7 +123,8 @@ failure mode of the set that was just removed.
 
 ## Related
 
-- `app/models/review.rb` — the empty constant and why
-- `test/models/review_test.rb` — the guard test
+- `app/models/review.rb` — the real reviews and the rules on them
+- `test/models/review_test.rb` — the four guard tests
+- `app/models/team_member.rb` — the roster reviews are checked against
 - `app/views/pages/home/_testimonials.html.erb` — star-fill logic, empty state
 - `app/views/shared/_structured_data.html.erb` — where the rating reaches Google

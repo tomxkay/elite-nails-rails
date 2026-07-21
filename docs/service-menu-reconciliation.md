@@ -132,8 +132,30 @@ pen-and-paper and phone bookings; others opt in as they adjust. The site should
 make clear who takes online bookings so the other technicians' cards don't
 imply a booking path that doesn't exist.
 
-**Bookable technician: Michael K** (confirmed 2026-07-20). Nhan Ka and Lien Ka
-stay walk-in/phone until they opt in.
+**Bookable technician: Michael** (confirmed 2026-07-20). Everyone else stays
+walk-in/phone until they opt in.
+
+**Roster expanded 2026-07-21** — three technicians were missing from the site:
+
+| First name | Experience | Strengths |
+|---|---|---|
+| **Thai** | 20+ years | Same range as Michael — acrylic sets, fills, gel |
+| **Trang** | 20+ years | The whole menu; specialises in **nail art** |
+| **Mui** | 10+ years | **Pedicures** — the deluxe in particular |
+
+Six technicians now: Michael, Thai, Trang, Mui, Nhan, Lien. Only first names are
+displayed (2026-07-20 decision); surnames live in a comment in
+`app/models/team_member.rb` for internal reference only.
+
+Several are related by marriage — the salon is genuinely family-run. Those
+relationships are **not published**: they're personal details about people who
+haven't been asked. Add them only on the owner's confirmation that each person
+is comfortable with it.
+
+**Thai is the natural next candidate for online booking** — his skills overlap
+Michael's, so the same services could be offered without menu changes. Requires
+assigning him to the service variations in Square as well as flipping
+`bookable`, or availability search returns nothing for him.
 
 ### Team bios — rewritten against the real menu
 
