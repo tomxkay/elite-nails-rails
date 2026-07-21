@@ -40,7 +40,9 @@ class Review < ApplicationRecord
     # Owner confirmed 2026-07-21 that Thai Tran is a technician here, so the
     # review is safe to publish — the name now matches a real team card.
     { author_name: "Leslie D.", rating: 5, source: "Google", position: 4,
-      quote: "Elite Nails has been doing my nails for 11 years. Thai shapes them so beautifully that I am asked at least once a week if my nails are real." }
+      quote: "Elite Nails has been doing my nails for 11 years. Thai shapes them so beautifully that I am asked at least once a week if my nails are real." },
+    { author_name: "Heidi B.", rating: 5, source: "Google", position: 5,
+      quote: "I had an amazing set and then the best fill-in and reshaping. Clean, on time, and professional." }
   ].freeze
 
   def self.defaults

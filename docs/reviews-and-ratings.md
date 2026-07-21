@@ -1,6 +1,6 @@
 # Reviews & Ratings — Integrity Rules
 
-**Status:** 🟢 Five real Google reviews are live (owner-supplied 2026-07-21).
+**Status:** 🟢 Six real Google reviews are live (owner-supplied 2026-07-21).
 Rating is the real 4.2 / 154. **Minor pending:** posting dates and confirmed
 star ratings were never captured — see "Known gaps" below.
 
@@ -66,26 +66,28 @@ rendered as 5★. Fixed to fill stars from the real value.
 
 - **Aggregate panel** — real 4.2 rating, star fill derived from it, real count of
   154, plus "Read Reviews on Google" / "Leave a Review" buttons.
-- **Five review cards** — Dorethea H., Allison S., Valerie C., Melissa K.,
-  Leslie D. The first four were the owner's pick of ten supplied; Leslie D. was
-  added once Thai was confirmed as staff. The mix is deliberate: three
-  long-tenure clients (20, 11 and 10 years), one first-time visitor, and two
-  naming technicians who actually work here (Michael, Thai).
+- **Six review cards** — Dorethea H., Allison S., Valerie C., Melissa K.,
+  Leslie D., Heidi B. The first four were the owner's pick of ten supplied;
+  Leslie D. joined once Thai was confirmed as staff, and Heidi B. rounds the set
+  to six so the masonry grid fills evenly at two and three columns. The mix is
+  deliberate: three long-tenure clients (20, 11 and 10 years), one first-time
+  visitor, two naming technicians who actually work here (Michael, Thai), and
+  one naming real menu services (full set, fill-in).
 
-## Known gaps in the current five
+## Known gaps in the current six
 
 Both are honest omissions, not oversights — **do not fill them by guessing.**
 
 - **No posting dates.** They weren't captured with the review text.
   `relative_date` is left blank and the card hides it. Inventing plausible dates
   is exactly what the fabricated set did.
-- **Star ratings are inferred**, not read off the profile. All five texts are
+- **Star ratings are inferred**, not read off the profile. All six texts are
   unambiguous praise, so `rating: 5` is a safe read, but it is a read. Correct
   any that differ when someone next opens the dashboard.
 
 ## Reviews supplied but not used
 
-Five more were provided and are fine to add later — but one names people who
+Four more were provided and are fine to add later — but one names people who
 are **not on the current team** (`Ty`, `Mrs. Vann`). They may be former staff,
 family, or nicknames. Confirm with the owner before publishing, or a visitor
 will ask for someone who isn't there. A test in `test/models/review_test.rb`
@@ -96,8 +98,7 @@ blocks those two names from being seeded.
 
 | Reviewer | Note |
 |---|---|
-| Heidi B. | Praises a full set plus fill-in — maps cleanly to real menu services. Best of the remaining five. |
-| Nina M. | Positive and generic; safe. |
+| Nina M. | Positive and generic; safe. Best of the remaining four. |
 | Connie H. | Mentions buying a **gift certificate** — confirm the salon offers these. |
 | Amy T. | Names **"Ty" and "Mrs. Vann"** — not current team members. |
 | Rosé | Single name, no surname to reduce. Generic text. |
