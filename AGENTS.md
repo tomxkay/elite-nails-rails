@@ -109,32 +109,41 @@ The whole site is one page composed from partials. Render order lives in
 
 ```
 navigation → hero → about → story → [services + pricing] → promotions
-→ testimonials → team → gallery → contact → safety → cta_banner
+→ testimonials → team → faq → contact → safety → cta_banner
 → mobile_sticky_cta → footer
 ```
 
 **Home sections** (`app/views/pages/home/_*.html.erb`), each with an anchor `id`
-used by the nav:
+used by the nav. Content marked *(DB)* comes from the matching model with an
+in-code `DEFAULTS` fallback — **edit the DB, not the partial**:
 
 | Partial          | id             | Content |
 |------------------|----------------|---------|
-| `_hero`          | `#home`        | Headline, dual CTAs, stat cards, hero imagery, "est. 2003" |
-| `_about`         | `#about`       | "Welcome to Elite Nails" intro |
+| `_hero`          | `#home`        | Headline, dual CTAs + phone link, stat cards, hero imagery, "est. 2003" |
+| `_about`         | `#about`       | "Welcome to Elite Nails" intro, Call/Book CTA pair |
 | `_story`         | `#story`       | Family-owned since 2003, serving Cramerton/Belmont/Gaston County |
-| `_services`      | `#services`    | 6 service cards (defined inline as a Ruby array) |
-| `_pricing`       | `#pricing`     | 3 categories (Hands / Feet / Add-Ons) with prices, inline array |
-| `_promotions`    | `#specials`    | Featured offer + coupon-style specials, inline arrays (placeholders) |
-| `_testimonials`  | `#testimonials`| Client "Kind Words" |
-| `_team`          | `#team`        | 3 technicians (Michael K, Nhan Ka, Lien Ka), inline array |
-| `_gallery`       | `#gallery`     | 4 gallery items |
-| `_contact`       | `#contact`     | Address, phone, hours, Google Maps link (map is a placeholder) |
+| `_services`      | `#services`    | 6 category cards *(DB: `Service`)*, one per `PricingItem` category |
+| `_pricing`       | `#pricing`     | 6 categories with prices, durations, and tap-to-expand descriptions *(DB: `PricingItem`)* |
+| `_promotions`    | `#specials`    | Featured offer + coupon-style specials *(DB: `Promotion`)* |
+| `_testimonials`  | `#testimonials`| Client "Kind Words" *(DB: `Review`)* |
+| `_team`          | `#team`        | Technicians, first names only *(DB: `TeamMember`)*; intro line naming who takes online bookings is derived from `bookable` |
+| `_faq`           | `#faq`         | Common questions |
+| `_contact`       | `#contact`     | Address, phone, hours *(DB: `BusinessHour`)*, live Google Maps embed |
 | `_safety`        | (none)         | Sanitation / cleanliness messaging |
-| `_cta_banner`    | (none)         | Closing booking CTA |
+| `_cta_banner`    | `#final-cta`   | Closing Call/Book pair (`#final-cta` is read by `mobile_cta_controller`) |
+
+**Not currently rendered:** `_gallery` (`#gallery`) and `shared/_gallery_item`
+still exist but are **not** in `home.html.erb`. The gallery is **on hold pending
+real salon photos** — the placeholder tiles undersold the work. Re-add the
+`render` call to `home.html.erb` plus nav/mobile-menu links when photos land;
+don't delete the partials.
 
 **Shared partials** (`app/views/shared/_*.html.erb`): reusable UI components —
 `_navigation`, `_mobile_menu`, `_mobile_sticky_cta`, `_footer`, `_logo`,
 `_section_header` (eyebrow/title/subtitle), `_cta_button`, `_service_card`,
-`_team_member`, `_testimonial_card`, `_stat_card`, `_gallery_item`.
+`_team_member`, `_testimonial_card`, `_stat_card`, `_gallery_item` (unused),
+`_booking_scope_note`, `_promotion_banner`, `_quick_availability_dialog`,
+`_meta_tags`, `_structured_data`.
 
 **Editing content:** **all content is DB-backed** — edit the DB records (or the
 model's `DEFAULTS` constant + `bin/rails db:seed`). Models: `Promotion`, `Service`,
@@ -257,6 +266,15 @@ plan (2026-07-19).
   `BOOKING_URL` (hosted Square page), else `tel:`. ✅ Square secrets **are** set
   in production — native `/book` is live and serving CTAs there (verified
   2026-07-20).
+- **⚠️ CTA convention — phone is not secondary.** The salon takes most
+  appointments **by phone**; online booking is a deliberately narrow soft launch
+  (one technician, 14 of 24 menu items). So every booking surface pairs **Call
+  first, Book second, at equal visual weight** — nav, mobile sticky bar, mobile
+  menu, hero, about, pricing, safety, and the closing banner. Use `salon.phone` /
+  `salon.phone_display`, never a hardcoded number. Booking surfaces also render
+  `shared/_booking_scope_note` (single source for that wording). **Read
+  `docs/booking-adoption-notes.md` before restructuring any of this** — the
+  balance is a business decision, not a styling accident.
 - **Deep links:** `/book?service_name=<marketing name>` fuzzy-matches home-page
   Service/PricingItem names to a Square catalog service and preselects step 1
   (exact → substring → shared-word match; unmatched names just leave the wizard
