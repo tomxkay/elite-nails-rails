@@ -44,6 +44,28 @@ module ApplicationHelper
     SiteSetting.current
   end
 
+  # Renders plain text as HTML with the salon's phone number turned into a
+  # tel: link.
+  #
+  # FAQ answers are stored as plain strings because the same array feeds both
+  # the visible accordion and the FAQPage JSON-LD, and Google requires the
+  # structured data to match what's on the page. Baking an <a> into the string
+  # would push markup into the JSON-LD; adding it at render time keeps the text
+  # content identical in both places.
+  #
+  # The source text is escaped first, so only the link we build is ever HTML.
+  def linkify_phone(text)
+    escaped = ERB::Util.html_escape(text.to_s)
+    display = salon.phone_display.to_s
+    return escaped if display.blank?
+
+    link = link_to(display, "tel:#{salon.phone}",
+                   class: "font-medium text-terracotta-600 underline underline-offset-4 " \
+                          "transition-colors hover:text-terracotta-700")
+
+    escaped.gsub(ERB::Util.html_escape(display)) { link }.html_safe
+  end
+
   # Keyless Google Maps embed URL for the salon address (no API key required).
   def salon_map_embed_url
     query = "#{salon.street}, #{salon.city}, #{salon.region} #{salon.postal_code}"
