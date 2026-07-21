@@ -1,7 +1,8 @@
 # Reviews & Ratings — Integrity Rules
 
-**Status:** 🔴 **Action required from the owner.** The testimonials section
-currently renders **no review cards** by design. It needs real reviews.
+**Status:** 🟢 Four real Google reviews are live (owner-supplied 2026-07-21).
+Rating is the real 4.2 / 154. **Minor pending:** posting dates and confirmed
+star ratings were never captured — see "Known gaps" below.
 
 ---
 
@@ -37,13 +38,20 @@ rendered as 5★. Fixed to fill stars from the real value.
 1. **Never write a testimonial.** Not as a placeholder, not "for layout", not
    "we'll replace it later". Placeholder reviews are indistinguishable from real
    ones once shipped — that is exactly how these survived to production.
-2. **`Review::DEFAULTS` stays empty.** Enforced by a test in
-   `test/models/review_test.rb`. Anything in that constant is auto-seeded into
-   every environment, so it must never hold stand-in content.
-3. **Real reviews go in the database**, added verbatim via the MCP
-   `CreateReviewTool` — actual reviewer name, actual date, actual star rating,
-   text copied exactly. No paraphrasing, no "cleaning up" grammar, no trimming
-   to fit the card.
+2. **`Review::DEFAULTS` holds real reviews only**, quoted verbatim. Three tests
+   in `test/models/review_test.rb` guard it: the fabricated author names can
+   never return, every entry needs full attribution, and no quote may name a
+   service the salon doesn't offer.
+   > *This reverses an earlier decision to keep the constant permanently empty.
+   > That rule was written while the only known reviews were fake, and it had a
+   > real cost: reviews would have lived solely in the production database,
+   > absent from version control and lost on any reset — unlike every other
+   > content model. The actual hazard was never the constant, it was
+   > **fabricated content**. Real verbatim reviews in `DEFAULTS` are safe,
+   > reviewable in a diff, and resilient.*
+3. **Reducing a surname to an initial is the only permitted edit** ("Dorethea
+   Harvey" → "Dorethea H."). No paraphrasing, no grammar fixes, no trimming to
+   fit the card.
 4. **Never edit an existing review's text.** Altering a real customer's words is
    fabrication regardless of intent. Hide it with `SetReviewApprovedTool` if it
    must come down.
@@ -57,11 +65,40 @@ rendered as 5★. Fixed to fill stars from the real value.
 ## What the section renders now
 
 - **Aggregate panel** — real 4.2 rating, star fill derived from it, real count of
-  154, plus "Read Reviews on Google" / "Leave a Review" buttons. All genuine, so
-  the section still works with zero cards.
-- **Review cards** — nothing, until real reviews are added.
+  154, plus "Read Reviews on Google" / "Leave a Review" buttons.
+- **Four review cards** — Dorethea H., Allison S., Valerie C., Melissa K.
+  Chosen by the owner as the strongest of ten supplied. The mix is deliberate:
+  two long-tenure clients (20 years, 10 years), one first-time visitor, and one
+  naming a technician who actually works there (Michael).
 
-## To add the real ones
+## Known gaps in the current four
+
+Both are honest omissions, not oversights — **do not fill them by guessing.**
+
+- **No posting dates.** They weren't captured with the review text.
+  `relative_date` is left blank and the card hides it. Inventing plausible dates
+  is exactly what the fabricated set did.
+- **Star ratings are inferred**, not read off the profile. All four texts are
+  unambiguous praise, so `rating: 5` is a safe read, but it is a read. Correct
+  any that differ when someone next opens the dashboard.
+
+## Reviews supplied but not used
+
+Six more were provided and are fine to add later — but three name people who
+are **not on the current team** (`Ty`, `Mrs. Vann`, `Thai`). They may be former
+staff, family, or nicknames. Confirm with the owner before publishing those, or
+a visitor will ask for someone who isn't there:
+
+| Reviewer | Note |
+|---|---|
+| Heidi B. | Praises a full set plus fill-in — maps cleanly to real menu services. Best of the remaining six. |
+| Nina M. | Positive and generic; safe. |
+| Connie H. | Mentions buying a **gift certificate** — confirm the salon offers these. |
+| Amy T. | Names **"Ty" and "Mrs. Vann"** — not current team members. |
+| Leslie D. | Names **"Thai"** — not a current team member. |
+| Rosé | Single name, no surname to reduce. Generic text. |
+
+## To add more
 
 Google reviews can't be scraped programmatically — the Maps page is JS-rendered
 and blocks fetching, and there is no free API for arbitrary place reviews. So
