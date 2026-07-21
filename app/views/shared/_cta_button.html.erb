@@ -3,7 +3,8 @@
     - text: button label
     - href: target URL
   Optional locals:
-    - style: :solid, :outline, :light, :ghost (default :solid)
+    - style: :solid, :outline, :light, :ghost, :ghost_light (default :solid)
+             :ghost_light is the ghost variant for dark/terracotta backgrounds
     - size: :md, :sm, :lg (default :md)
     - icon: Heroicon/custom name (optional, alias: icon_name)
     - icon_classes: override icon sizing (defaults per size)
@@ -29,11 +30,22 @@
   lg: "px-8 py-4 text-base md:text-lg"
 } %>
 
+<%# ⚠️ A hover colour passed in `classes` will NOT reliably override the one a
+    style defines here. Tailwind resolves competing utilities by their order in
+    the generated stylesheet, not by their order in the class attribute — so
+    `classes: "hover:text-sage-100"` lost to ghost's `hover:text-terracotta-600`
+    and made the button vanish on a terracotta background. If a style doesn't
+    suit a surface, add a variant below rather than fighting it from the call
+    site. %>
 <% style_classes = {
   solid: "bg-terracotta-500 text-cream-50 border border-terracotta-500 hover:bg-terracotta-600 shadow-warm hover:shadow-warm-lg",
   outline: "border-2 border-terracotta-500 text-terracotta-600 hover:bg-terracotta-500 hover:text-cream-50",
   light: "bg-cream-50 text-terracotta-700 border border-transparent hover:bg-cream-100 shadow-warm hover:shadow-warm-md",
-  ghost: "text-warm-gray-600 underline underline-offset-4 decoration-peach-300 hover:text-terracotta-600 hover:decoration-terracotta-500"
+  ghost: "text-warm-gray-600 underline underline-offset-4 decoration-peach-300 hover:text-terracotta-600 hover:decoration-terracotta-500",
+  # ghost for dark/terracotta surfaces. Reads as plain text at rest (the
+  # underline is transparent) and reveals it on hover, so the affordance
+  # doesn't depend on colour alone.
+  ghost_light: "text-cream-50 underline underline-offset-4 decoration-transparent hover:text-white hover:decoration-cream-50"
 } %>
 
 <% icon_size = { sm: "w-4 h-4", md: "w-5 h-5", lg: "w-5 h-5" }[size] %>
