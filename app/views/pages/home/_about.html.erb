@@ -62,7 +62,11 @@
 
         <% stats = [
           { value: '20+', label: 'Years of Excellence', note: 'Serving Cramerton since 2003' },
-          { value: '80+', label: 'Years of Combined Experience', note: 'A close, family-run team' },
+          # 100+, not 80+: six technicians — Michael, Thai, Trang, Nhan and Lien
+          # at 20+ years each, Mui at 10+ — is 110 years minimum. Stated as 100+
+          # so it stays true if someone leaves. Recheck whenever
+          # TeamMember::DEFAULTS changes.
+          { value: '100+', label: 'Years of Combined Experience', note: 'Six technicians, most with 20+ years each' },
           { value: '★', label: 'Guest-Loved Service', note: 'Warm, unhurried, personal' },
           { value: 'NC', label: 'Market St, Cramerton', note: 'Just off downtown', icon_name: 'map-pin' }
         ] %>
