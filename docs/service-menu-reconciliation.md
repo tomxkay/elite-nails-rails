@@ -141,7 +141,7 @@ walk-in/phone until they opt in.
 |---|---|---|
 | **Thai** | 20+ years | Same range as Michael — acrylic sets, fills, gel |
 | **Trang** | 20+ years | The whole menu; specialises in **nail art** |
-| **Mui** | 10+ years | **Pedicures** — the deluxe in particular |
+| **Mui** | 10+ years | **Pedicures** (the deluxe in particular) and **waxing** |
 
 Six technicians now: Michael, Thai, Trang, Mui, Nhan, Lien. Only first names are
 displayed (2026-07-20 decision); surnames live in a comment in

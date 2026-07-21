@@ -28,7 +28,7 @@ class TeamMember < ApplicationRecord
   DEFAULTS = [
     {
       name: "Michael",
-      role: "Owner & Lead Technician",
+      role: "Senior Nail Technician",
       quote: "Every set should feel like it was made just for you.",
       bio: "Specializes in sculpted acrylic full sets and fills. Known for a gentle touch and a calming demeanor.",
       specialties: ["Acrylic Full Set", "Acrylic Fill", "Gel Manicure"],
@@ -53,15 +53,15 @@ class TeamMember < ApplicationRecord
     },
     {
       name: "Mui",
-      role: "Pedicure Specialist",
+      role: "Pedicure & Waxing Specialist",
       quote: "Sit back — this part is supposed to feel good.",
-      bio: "Over ten years of experience and our go-to for pedicures. Known for a thorough, unhurried deluxe pedicure that guests plan their week around.",
-      specialties: ["Deluxe Pedicure", "Gel Pedicure", "Manicure + Pedicure"],
+      bio: "Over ten years of experience and our go-to for pedicures and waxing. Known for a thorough, unhurried deluxe pedicure that guests plan their week around.",
+      specialties: ["Deluxe Pedicure", "Gel Pedicure", "Waxing"],
       position: 3
     },
     {
       name: "Nhan",
-      role: "Senior Technician",
+      role: "Senior Nail Technician",
       quote: "Color is where I get to play — let's find yours.",
       bio: "Loves creative color work and deluxe pedicures. Guests rave about her relaxing massages.",
       specialties: ["Deluxe Pedicure", "Gel Polish", "Dip Powder"],
@@ -69,7 +69,7 @@ class TeamMember < ApplicationRecord
     },
     {
       name: "Lien",
-      role: "Nail Technician",
+      role: "Senior Nail Technician",
       quote: "Clean shapes, strong nails, and a warm welcome every time.",
       bio: "Precise shaping and durable acrylic work with a friendly, welcoming vibe.",
       specialties: ["Acrylic Full Set", "Gel Manicure", "Natural Looks"],
