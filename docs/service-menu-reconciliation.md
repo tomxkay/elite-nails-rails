@@ -117,13 +117,32 @@ exposing that symmetry in the layout.
 
 ## Booking policy
 
-**Online (15 of 25 services):** manicures, pedicures, the combo, gel polish, dip
-powder, and all acrylic set/fill work. These are the longer, higher-value
-appointments where a reserved slot matters.
+**Online (9 of 25 services) — revised 2026-07-21.** Bookable is the intersection
+of two limits:
 
-**Walk-in only (10 services):** polish changes, nail art, acrylic removal, nail
-repair, nail trim, and all waxing. Short or add-on work that would clutter the
-booking wizard and fragment the schedule.
+1. **Long services only.** Short/add-on work stays walk-in so the wizard doesn't
+   fragment the schedule: polish changes, nail art, acrylic removal, trims,
+   repairs, waxing.
+2. **What the one opted-in technician performs.** Michael does **Manicures** and
+   **Acrylic, Dip & Extensions** only. Pedicures and polish-only services are
+   long enough to book but have nobody to work them, so they're phone/walk-in.
+
+| Category | Bookable |
+|---|---|
+| Manicures | 3 of 3 — Manicure, Gel Manicure, French Gel Manicure |
+| Acrylic, Dip & Extensions | 6 of 7 — both dips, both full sets, both fills (Acrylic Removal stays walk-in as add-on work) |
+| Pedicures · Polish & Color · Nail Care · Waxing | none |
+
+> ⚠️ **The `bookable` flag does not control /book.** The wizard gets its service
+> list from the **Square catalog**, not from `PricingItem`. Unsetting `bookable`
+> only removes the site's deep links — Square will keep offering a service until
+> the catalog is re-imported or Michael is unassigned from it. Re-import from
+> `bin/rails content:square_csv` (now 9 rows) after any change here.
+
+**When another technician opts in**, widen `BOOKABLE_CATEGORIES` in
+`test/models/pricing_item_test.rb`, set `bookable: true` on their `TeamMember`,
+add the relevant `PricingItem`s, assign them to the service variations in
+Square, then re-import the CSV.
 
 Waxing may move online later — deliberately excluded for now.
 

@@ -41,10 +41,16 @@ Design decisions should follow from this, not fight it:
    a first-class option. Don't build flows that make calling feel like the
    fallback for people who failed at the website.
 2. **Online booking stays opt-in per service and per technician.** Currently
-   only **Michael** is bookable online, and only 14 of 24 menu items are
-   `bookable: true` (see `docs/service-menu-reconciliation.md`). Short/add-on
-   work — polish changes, repairs, trims, waxing — is intentionally excluded so
-   the online calendar stays low-volume and predictable.
+   only **Michael** is bookable online, and only **9 of 25** menu items are
+   `bookable: true` (see `docs/service-menu-reconciliation.md`). Two filters
+   apply: short/add-on work is excluded so the calendar stays predictable, and
+   the list is narrowed again to what Michael actually performs — **Manicures**
+   and **Acrylic, Dip & Extensions**. Pedicures and polish-only services came
+   off the bookable list on 2026-07-21 for exactly this reason.
+
+   ⚠️ Remember that `bookable` only drives the site's links. **Square owns the
+   /book service list**, so narrowing this flag without re-importing the catalog
+   leaves the wizard selling services nobody can work.
 3. **Exposure is the pressure valve.** If the owner feels overwhelmed, the fix
    is operational, not a code change: narrow the bookable hours, reduce bookable
    services, or add buffer time in Square. That knob is more useful to him than
