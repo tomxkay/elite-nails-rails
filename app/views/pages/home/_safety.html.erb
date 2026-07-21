@@ -28,20 +28,20 @@
       </div>
       <div class="bg-gradient-to-br from-peach-100 via-cream-100 to-white rounded-2xl p-6 text-center border border-cream-200 shadow-warm-sm">
         <p class="text-terracotta-700 font-semibold mb-2">Family-owned in Cramerton</p>
-        <p class="text-sm text-warm-gray-700">Next to Market Street favorites — walk in or book online.</p>
+        <p class="text-sm text-warm-gray-700">Next to Market Street favorites — walk in, call, or book online.</p>
         <div class="mt-4 flex flex-col gap-2">
           <%= render 'shared/cta_button',
-                     text: 'Book Now',
+                     text: 'Call the Salon',
+                     href: "tel:#{salon.phone}",
+                     style: :outline,
+                     size: :md,
+                     icon: 'phone' %>
+          <%= render 'shared/cta_button',
+                     text: 'Book Online',
                      href: booking_link,
                      style: :solid,
                      size: :md,
                      icon: 'calendar-days' %>
-          <%= render 'shared/cta_button',
-                     text: 'Call the Salon',
-                     href: 'tel:+17048249032',
-                     style: :outline,
-                     size: :sm,
-                     icon: 'phone' %>
         </div>
       </div>
     </div>

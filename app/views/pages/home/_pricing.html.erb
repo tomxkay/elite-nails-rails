@@ -95,19 +95,21 @@
         <p class="text-warm-gray-900 font-semibold">Questions or custom requests?</p>
         <p class="text-warm-gray-700 text-sm">Call us or book online — we’re happy to recommend the right service.</p>
       </div>
-      <div class="flex items-center gap-3">
+      <%# Equal size, call first — matching the nav, sticky bar, and closing
+          banner. See docs/booking-adoption-notes.md. %>
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <%= render 'shared/cta_button',
+                   text: 'Call the Salon',
+                   href: "tel:#{salon.phone}",
+                   style: :outline,
+                   size: :md,
+                   icon: 'phone' %>
         <%= render 'shared/cta_button',
                    text: 'Book Online',
                    href: booking_link,
                    style: :solid,
                    size: :md,
                    icon: 'calendar-days' %>
-        <%= render 'shared/cta_button',
-                   text: 'Call the Salon',
-                   href: 'tel:+17048249032',
-                   style: :outline,
-                   size: :sm,
-                   icon: 'phone' %>
       </div>
     </div>
   </div>

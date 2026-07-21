@@ -39,9 +39,15 @@
           </p>
         </div>
 
-        <div class="mt-9">
+        <div class="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <%= render 'shared/cta_button',
-                     text: 'Schedule Your Visit',
+                     text: "Call #{salon.phone_display}",
+                     href: "tel:#{salon.phone}",
+                     style: :outline,
+                     size: :lg,
+                     icon: 'phone' %>
+          <%= render 'shared/cta_button',
+                     text: 'Book Online',
                      href: booking_link,
                      style: :solid,
                      size: :lg,
