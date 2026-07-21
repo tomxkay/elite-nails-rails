@@ -202,7 +202,14 @@
             </div>
             <div class="flex items-start justify-between gap-6 px-5 py-4">
               <dt class="text-sm text-warm-gray-600">Location</dt>
-              <dd class="text-right font-semibold text-warm-gray-800"><%= salon.street %><br><%= salon.city %>, <%= salon.region %> <%= salon.postal_code %></dd>
+              <%# Tappable directions: this renders right after a confirmed
+                  booking, when "how do I get there" is the next question. %>
+              <dd class="text-right font-semibold text-warm-gray-800">
+                <a href="<%= salon_map_url %>" target="_blank" rel="noopener"
+                   class="underline underline-offset-4 transition-colors hover:text-terracotta-700">
+                  <%= salon.street %><br><%= salon.city %>, <%= salon.region %> <%= salon.postal_code %>
+                </a>
+              </dd>
             </div>
           </dl>
 

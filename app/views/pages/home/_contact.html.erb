@@ -22,7 +22,7 @@
                 <%= salon.street %><br>
                 <%= salon.city %>, <%= salon.region %> <%= salon.postal_code %>
               </p>
-              <a href="https://maps.google.com/?q=<%= ERB::Util.url_encode("#{salon.street}, #{salon.city}, #{salon.region} #{salon.postal_code}") %>" target="_blank" rel="noopener" class="mt-2 inline-block text-terracotta-600 hover:text-terracotta-700 text-sm font-medium">
+              <a href="<%= salon_map_url %>" target="_blank" rel="noopener" class="mt-2 inline-block text-terracotta-600 hover:text-terracotta-700 text-sm font-medium">
                 Get Directions →
               </a>
             </div>
@@ -77,7 +77,7 @@
           <div class="pointer-events-none absolute bottom-4 left-4 right-4 flex justify-end">
             <%= render 'shared/cta_button',
                        text: 'Open in Google Maps',
-                       href: 'https://maps.google.com/?q=202+Market+St+F,+Cramerton,+NC+28032',
+                       href: salon_map_url,
                        target: '_blank',
                        rel: 'noopener',
                        style: :light,
