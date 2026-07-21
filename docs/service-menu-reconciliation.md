@@ -1,15 +1,45 @@
 # Service Menu — Real List
 
-**Status:** 🟢 Menu complete — prices, names, durations, descriptions, booking
-policy all set. **Pending:** which technician is bookable, Deluxe Pedicure
-description, then build. Nothing changed on site or Square yet.
+**Status:** 🟢 Menu live on the site. **Pending:** re-import the Square catalog
+from the current CSV (`bin/rails content:square_csv` → `tmp/square-services.csv`)
+so Square matches the 2026-07-21 revision below.
 
 Source: in-salon letter board photo (2026-07-20) + owner clarifications.
 Durations from industry research (see Sources) — starting estimates, tune once
 real bookings show actual times.
 
-> The values currently on the website and in Square are **placeholder data with
-> no authority**. This document replaces them wholesale.
+> ⚠️ **`PricingItem::DEFAULTS` is the source of truth, not this file.** The
+> tables below duplicate it for reasoning and history — they drift. When they
+> disagree with the model, the model wins. Verify with:
+> `bin/rails runner 'PricingItem.visible.ordered.each { |i| puts "#{i.name} #{i.price}" }'`
+
+---
+
+## Revision — 2026-07-21 (owner)
+
+| Change | From | To | Knock-on |
+|---|---|---|---|
+| Manicure | $30 | **$20** | Broke the Mani+Pedi combo math — see below |
+| Gel Manicure | $40 | **$35** | **Resolves** the French pricing inconsistency |
+| Manicure + Pedicure | $50 | **$45** | Was going to save $0 at $50; now saves $5 |
+| Nail Repair | $5 | **$5+** | Variable, matches Nail Art / Chin |
+| Chin wax | $30+ | **$15+** | Still above Lip $7 and Brow $10 |
+| Nail Trim | one row, $10+ | **split**: Fingers $7 / Toes $10 | Restores the board's original two lines |
+| Brow + Lip combo | $15 | **removed** | Waxing service-card copy updated too |
+| Dip Powder Full Set | — | **added, $55, 75m, bookable** | Dip over tips for length |
+
+**Two things worth remembering:**
+
+1. **Dropping Manicure to $20 silently broke the combo.** At $50 the bundle
+   equalled buying both separately, while its description still promised "$10
+   less." Any future change to Manicure or Pedicure must re-check
+   Manicure + Pedicure — the discount is a *derived* number, not an independent
+   one.
+2. **Two services are both named "Dip Powder"** (`Dip Powder` $40 and
+   `Dip Powder Full Set` $55). Owner chose to keep the shorter name rather than
+   rename to "Overlay". The **descriptions** carry the distinction — natural
+   nails vs. tips for length. Preserve that contrast if either is reworded, or
+   the menu becomes ambiguous.
 
 ---
 
@@ -20,8 +50,8 @@ real bookings show actual times.
   because customers ask for it by different names.)
 - **`FILL-IN 25` + `GEL-FILL 40`** → one service, **Acrylic Fill**: **$25
   regular / $40 gel**.
-- **`TOE NAILS CUT` + `NAILS CUT DOWN`** → combined into **Nail Trim, $10+**.
-- **Waxing** is three services plus a new **Brow + Lip** combo at $15.
+- **`TOE NAILS CUT` + `NAILS CUT DOWN`** → originally merged into one **Nail Trim, $10+** row; **split back apart 2026-07-21** into Fingers $7 / Toes $10, matching the board.
+- **Waxing** is three services: Eyebrow, Lip, Chin. (A Brow + Lip combo was added, then removed 2026-07-21.)
 - **Nail art is offered** — $5+ per nail by design.
 
 Acrylic work is always *regular vs gel*, at both set and fill stage. Worth
@@ -36,8 +66,8 @@ exposing that symmetry in the layout.
 ### Manicures
 | Service | Price | Time | | Description |
 |---|---|---|---|---|
-| Manicure | $30 | 30m | 📅 | Nail shaping, cuticle care, a relaxing hand massage, and your choice of classic polish. |
-| Gel Manicure | $40 | 45m | 📅 | A full manicure finished with gel polish — cured to a high shine that resists chips for up to three weeks. |
+| Manicure | $20 | 30m | 📅 | Nail shaping, cuticle care, a relaxing hand massage, and your choice of classic polish. |
+| Gel Manicure | $35 | 45m | 📅 | A full manicure finished with gel polish — cured to a high shine that resists chips for up to three weeks. |
 | French Gel Manicure | $40 | 60m | 📅 | Our gel manicure with the timeless white-tip French finish, hand-painted and cured to last. |
 
 ### Pedicures
@@ -46,7 +76,7 @@ exposing that symmetry in the layout.
 | Pedicure | $30 | 45m | 📅 | Nail shaping, cuticle care, a light callus buff, sugar scrub, massage, hot towel, and polish. |
 | Deluxe Pedicure | $40 | 60m | 📅 | Everything in the classic pedicure, plus callus treatment, paraffin wax, and an extended massage. |
 | Gel Pedicure | $50 | 60m | 📅 | A full pedicure finished with long-wearing gel polish that keeps its shine for weeks. |
-| Manicure + Pedicure | $50 | 75m | 📅 | Our classic manicure and pedicure together — and $10 less than booking them separately. |
+| Manicure + Pedicure | $45 | 75m | 📅 | Our classic manicure and pedicure together — and $5 less than booking them separately. |
 
 ### Polish & Color
 | Service | Price | Time | | Description |
@@ -60,32 +90,33 @@ exposing that symmetry in the layout.
 ### Acrylic, Dip & Extensions
 | Service | Price | Time | | Description |
 |---|---|---|---|---|
-| Dip Powder | $40 | 60m | 📅 | Color powder sealed layer by layer for a durable, lightweight finish that wears two to three weeks — no UV lamp needed. |
+| Dip Powder | $40 | 60m | 📅 | Color powder sealed layer by layer over your natural nails — durable, lightweight, and wears two to three weeks with no UV lamp. |
+| Dip Powder Full Set | $55 | 75m | 📅 | The same dip powder finish, built over tips to add length — shaped to whatever length you like. |
 | Acrylic Full Set | $40 regular | 75m | 📅 | Sculpted acrylic extensions shaped to your preferred length, finished with classic polish. |
 | Acrylic Full Set (Gel) | $55 | 90m | 📅 | The same sculpted set, finished with long-wearing gel polish. |
 | Acrylic Fill | $25 regular | 45m | 📅 | Rebalances your existing set as the natural nail grows out, refreshed with classic polish. |
 | Acrylic Fill (Gel) | $40 | 60m | 📅 | The same fill, refreshed with gel polish. |
 | Acrylic Removal | $15 | 30m | 🚶 | Gentle soak-off that lifts acrylic away without damaging the natural nail underneath. |
-| Nail Repair | $5 | 15m | 🚶 | Repair for a single cracked or broken nail. |
+| Nail Repair | $5+ | 15m | 🚶 | Repair for a cracked or broken nail, priced by the work involved. |
 
 ### Nail Care
 | Service | Price | Time | | Description |
 |---|---|---|---|---|
-| Nail Trim | $10+ | 15m | 🚶 | Trimming and shaping for fingers or toes. Toenail work is priced higher — it's more involved. |
+| Nail Trim (Fingers) | $7 | 10m | 🚶 | Trimming and shaping for fingernails, without polish. |
+| Nail Trim (Toes) | $10 | 15m | 🚶 | Trimming and shaping for toenails — thicker and more involved than fingernails. |
 
 ### Waxing — all walk-in for now
 | Service | Price | Time | | Description |
 |---|---|---|---|---|
 | Eyebrow | $10 | 15m | 🚶 | Shaping and cleanup to define your natural brow line. |
 | Lip | $7 | 10m | 🚶 | Quick, precise upper-lip waxing. |
-| Brow + Lip | $15 | 20m | 🚶 | Both together — $2 less than booking separately. |
-| Chin | $30+ | 30m | 🚶 | Priced by coverage and time; a denser area than brow or lip. |
+| Chin | $15+ | 30m | 🚶 | Priced by coverage and time; a denser area than brow or lip. |
 
 ---
 
 ## Booking policy
 
-**Online (14 of 24 services):** manicures, pedicures, the combo, gel polish, dip
+**Online (15 of 25 services):** manicures, pedicures, the combo, gel polish, dip
 powder, and all acrylic set/fill work. These are the longer, higher-value
 appointments where a reserved slot matters.
 
@@ -115,13 +146,14 @@ The originals referenced services that don't exist. Corrected:
 
 ## Pricing notes
 
-**French Gel Manicure is underpriced by $5 (decided 2026-07-20).** Standalone
-French Gel Polish ($30) costs $5 more than Gel Polish ($25), so by the menu's
-own logic the French manicure should be **$45**. Owner agrees but is keeping it
-at **$40 for now**. Revisit at the next price update — do not "fix" silently.
+**~~French Gel Manicure is underpriced by $5~~ — RESOLVED 2026-07-21.** The old
+problem: French Gel Polish ($30) was +$5 over Gel Polish ($25), but French Gel
+Manicure ($40) matched Gel Manicure ($40) instead of exceeding it. Dropping
+**Gel Manicure to $35** fixed it from the other direction — the French premium
+is now a consistent **+$5** in both places. Keep that gap if either price moves.
 
-**Chin wax is case-by-case**, not tiered. Display `$30+` (matching Nail Trim and
-Nail Art) with the coverage note visible — a bare `$30–40` beside a $10 brow
+**Chin wax is case-by-case**, not tiered. Display `$15+` (matching Nail Art and
+Nail Repair) with the coverage note visible — a bare range beside a $10 brow
 reads as an error.
 
 ## Naming convention
@@ -142,7 +174,8 @@ search engines. Rules:
 | `FILL-IN` | Acrylic Fill |
 | `GEL-FILL` | Acrylic Fill (Gel) |
 | `FAKE NAILS TAKE OFF` | Acrylic Removal |
-| `NAILS CUT DOWN` / `TOE NAILS CUT` | Nail Trim |
+| `NAILS CUT DOWN` | Nail Trim (Fingers) |
+| `TOE NAILS CUT` | Nail Trim (Toes) |
 | `FRENCH` (beside polish change) | French Polish Change |
 | `GEL FRENCH-MANICURE` | French Gel Manicure |
 
