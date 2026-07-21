@@ -24,15 +24,25 @@
       </ul>
     </nav>
     <div class="p-6 border-t border-cream-200 bg-cream-100">
-      <%= render 'shared/cta_button',
-                 text: 'Book Now',
-                 href: booking_link,
-                 style: :solid,
-                 size: :md,
-                 classes: 'w-full justify-center' %>
-      <p class="mt-4 text-center text-sm text-warm-gray-700">
-        <a href="tel:+17048249032" class="hover:text-terracotta-600 transition-colors">(704) 824-9032</a>
-      </p>
+      <%# Call is a button, not fine print — phone is the salon's primary way of
+          taking appointments. See docs/booking-adoption-notes.md. %>
+      <div class="space-y-3">
+        <%= render 'shared/cta_button',
+                   text: "Call #{salon.phone_display}",
+                   href: "tel:#{salon.phone}",
+                   style: :outline,
+                   size: :md,
+                   icon: 'phone',
+                   classes: 'w-full justify-center' %>
+        <%= render 'shared/cta_button',
+                   text: 'Book Online',
+                   href: booking_link,
+                   style: :solid,
+                   size: :md,
+                   icon: 'calendar-days',
+                   classes: 'w-full justify-center' %>
+      </div>
+      <p class="mt-4 text-center text-xs text-warm-gray-600">Walk-ins always welcome.</p>
     </div>
   </div>
 </div>

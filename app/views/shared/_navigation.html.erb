@@ -26,12 +26,23 @@
           <a href="<%= root_path(anchor: 'team') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#team">Team</a>
           <a href="<%= root_path(anchor: 'testimonials') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#testimonials">Reviews</a>
           <a href="<%= root_path(anchor: 'contact') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#contact">Contact</a>
-          <%= render 'shared/cta_button',
-                     text: 'Book Now',
-                     href: booking_link,
-                     style: :solid,
-                     size: :sm,
-                     classes: 'text-xs' %>
+          <%# Call and Book are one flex child so the nav's space-x-8 doesn't
+              split the pair. Phone first — it's the salon's primary channel. %>
+          <div class="flex items-center gap-2">
+            <%= render 'shared/cta_button',
+                       text: salon.phone_display,
+                       href: "tel:#{salon.phone}",
+                       style: :outline,
+                       size: :sm,
+                       icon: 'phone',
+                       classes: 'text-xs' %>
+            <%= render 'shared/cta_button',
+                       text: 'Book Now',
+                       href: booking_link,
+                       style: :solid,
+                       size: :sm,
+                       classes: 'text-xs' %>
+          </div>
         </div>
       </div>
 
@@ -47,12 +58,22 @@
                      image_classes: 'drop-shadow-[0_8px_18px_rgba(126,83,38,0.16)]',
                      collapsible_text: true %>
         </div>
-        <%= render 'shared/cta_button',
-                   text: 'Book',
-                   href: booking_link,
-                   style: :outline,
-                   size: :sm,
-                   classes: 'p-2 -mr-2 text-xs' %>
+        <%# Tap-to-call sits beside Book in the mobile header. Icon-only to fit
+            alongside the centered logo; the sticky bar carries the labelled
+            version. %>
+        <div class="flex items-center gap-1">
+          <a href="tel:<%= salon.phone %>"
+             class="p-2 text-terracotta-600 transition-colors hover:text-terracotta-700"
+             aria-label="Call Elite Nails at <%= salon.phone_display %>">
+            <%= icon 'phone', classes: 'w-5 h-5' %>
+          </a>
+          <%= render 'shared/cta_button',
+                     text: 'Book',
+                     href: booking_link,
+                     style: :outline,
+                     size: :sm,
+                     classes: 'p-2 -mr-2 text-xs' %>
+        </div>
       </div>
     </nav>
   </header>

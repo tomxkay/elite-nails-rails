@@ -1,13 +1,24 @@
+<%# Persistent mobile action bar.
+    Two doors, equal weight: the salon takes most appointments by phone, so
+    calling is a first-class action here rather than a fallback buried in the
+    contact section. This bar is on screen for the whole mobile visit, which
+    makes it the most important place for the phone number to exist.
+    See docs/booking-adoption-notes.md. %>
 <div class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[92vw] max-w-md lg:hidden z-40 drop-shadow-lg">
-  <div class="rounded-full bg-white/90 backdrop-blur-md border border-sage-100 px-4 py-3 flex items-center justify-between">
-    <div class="text-sm text-[#444]">
-      <span class="font-serif text-base text-sage-700 block">Ready to book?</span>
-      <span class="text-[#666]">Family-owned in Cramerton</span>
-    </div>
+  <div class="flex items-center gap-2 rounded-full border border-sage-100 bg-white/90 p-2 backdrop-blur-md">
     <%= render 'shared/cta_button',
-               text: 'Book Now',
+               text: 'Call',
+               href: "tel:#{salon.phone}",
+               style: :outline,
+               size: :sm,
+               icon: 'phone',
+               classes: 'flex-1' %>
+    <%= render 'shared/cta_button',
+               text: 'Book Online',
                href: booking_link,
                style: :solid,
-               size: :sm %>
+               size: :sm,
+               icon: 'calendar-days',
+               classes: 'flex-1' %>
   </div>
 </div>

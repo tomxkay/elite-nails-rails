@@ -48,6 +48,15 @@
                     classes: 'text-base px-6 py-3 border border-warm-gray-200/80 bg-white/70 backdrop-blur text-warm-gray-800 hover:text-terracotta-700 hover:border-terracotta-200 shadow-warm-sm' %>
       </div>
 
+      <%# Calling is the salon's primary channel, so it's offered right at the
+          top rather than only in the contact section. Kept as a text link so it
+          doesn't crowd the two-button hero. %>
+      <p class="flex flex-wrap items-center gap-2 text-warm-gray-700">
+        <%= icon 'phone', classes: 'h-4 w-4 text-terracotta-500', 'aria-hidden': true %>
+        <span>Prefer to call?</span>
+        <a href="tel:<%= salon.phone %>" class="font-medium text-terracotta-600 underline underline-offset-4 decoration-terracotta-300 transition-colors hover:text-terracotta-700"><%= salon.phone_display %></a>
+      </p>
+
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-3xl">
         <div class="rounded-2xl border border-warm-gray-200/80 bg-white/80 backdrop-blur px-5 py-6 shadow-warm-md">
           <p class="text-xs uppercase tracking-[0.18em] text-warm-gray-500">Signature Finishes</p>

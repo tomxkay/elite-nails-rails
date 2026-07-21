@@ -3,16 +3,27 @@
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
     <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl text-cream-50 mb-4 drop-shadow-lg">Ready to Be Pampered?</h2>
     <p class="text-cream-100 text-lg mb-8 max-w-2xl mx-auto">
-      Book your appointment today and experience the Elite Nails difference. Walk-ins are always welcome!
+      Give us a call or book online — whichever you prefer. Walk-ins are always welcome!
     </p>
+    <%# Call and Book carry equal visual weight here; directions drop to a text
+        link. See docs/booking-adoption-notes.md. %>
     <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
       <%= render 'shared/cta_button',
-                 text: 'Book Now',
+                 text: "Call #{salon.phone_display}",
+                 href: "tel:#{salon.phone}",
+                 style: :light,
+                 size: :lg,
+                 icon: 'phone',
+                 icon_classes: 'mr-1' %>
+      <%= render 'shared/cta_button',
+                 text: 'Book Online',
                  href: booking_link,
                  style: :light,
                  size: :lg,
                  icon: 'calendar-days',
                  icon_classes: 'mr-1' %>
+    </div>
+    <div class="mt-6">
       <%= render 'shared/cta_button',
                  text: 'Get Directions',
                  href: 'https://maps.google.com/?q=202+Market+St+F,+Cramerton,+NC+28032',
