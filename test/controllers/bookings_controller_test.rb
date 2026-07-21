@@ -63,6 +63,22 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
     assert_select "footer a[href='/#pricing']"
   end
 
+  # The salon takes most appointments by phone; this note is how the site says
+  # so on the booking surface itself. It is deliberate messaging, not decoration
+  # — see docs/booking-adoption-notes.md — so it gets a test of its own.
+  test "show explains the scope of online booking and offers the phone" do
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:services, SERVICES) do
+        SquareApi.stub(:bookable_staff, STAFF) do
+          get book_path
+        end
+      end
+    end
+    assert_response :success
+    assert_match "covers select services with select technicians", response.body
+    assert_select "a[href='tel:#{SiteSetting.current.phone}']"
+  end
+
   test "show honors availability preselection" do
     SquareApi.stub(:configured?, true) do
       SquareApi.stub(:services, SERVICES) do

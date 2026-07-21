@@ -10,23 +10,7 @@
                title: "Reserve Your Appointment",
                subtitle: "Pick a service and a time that suits you — we'll take care of the rest." %>
 
-    <%# Sets expectations about the limits of online booking. The salon takes
-        most appointments by phone; online covers select services with select
-        technicians (see docs/booking-adoption-notes.md). Stated as policy, not
-        as a disclaimer about the system being new — telling guests the booking
-        system is an experiment just makes them call to confirm it worked. %>
-    <div class="mt-8 rounded-2xl border border-cream-200 bg-white/70 px-5 py-4 text-sm text-warm-gray-700 shadow-warm-sm">
-      <p class="flex items-start gap-2.5">
-        <%= icon "information-circle", classes: "mt-0.5 h-4 w-4 shrink-0 text-terracotta-400", "aria-hidden": true %>
-        <span>
-          Online booking covers select services with select technicians. For
-          anything else — including polish changes, repairs, and waxing — or to
-          request a specific technician, just give us a call at
-          <a href="tel:<%= salon.phone %>" class="font-medium text-terracotta-600 underline underline-offset-4"><%= salon.phone_display %></a>.
-          Walk-ins are always welcome.
-        </span>
-      </p>
-    </div>
+    <%= render "shared/booking_scope_note" %>
 
     <% if @error %>
       <div class="mt-10 rounded-2xl border border-terracotta-200 bg-white p-6 text-center shadow-warm">

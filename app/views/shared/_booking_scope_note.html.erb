@@ -1,0 +1,27 @@
+<%# Sets expectations about the limits of online booking, on every surface that
+    offers it. The salon takes most appointments by phone; online covers select
+    services with select technicians (see docs/booking-adoption-notes.md).
+
+    Deliberately worded as policy, not as a disclaimer about the system being
+    new — telling guests a booking system is an experiment just prompts them to
+    call and confirm it worked, which is the opposite of the point. Keep this in
+    one place: it lives on both /book and the quick-availability dialog, and the
+    wording is the part that was actually tuned.
+
+    Optional local:
+      - classes: extra wrapper classes (spacing/padding per host surface)
+%>
+<% classes = local_assigns[:classes] %>
+
+<div class="<%= ["rounded-2xl border border-cream-200 bg-white/70 text-sm text-warm-gray-700 shadow-warm-sm", classes.presence || "mt-8 px-5 py-4"].join(" ") %>">
+  <p class="flex items-start gap-2.5">
+    <%= icon "information-circle", classes: "mt-0.5 h-4 w-4 shrink-0 text-terracotta-500", "aria-hidden": true %>
+    <span>
+      Online booking covers select services with select technicians. For
+      anything else — including polish changes, repairs, and waxing — or to
+      request a specific technician, just give us a call at
+      <a href="tel:<%= salon.phone %>" class="font-medium text-terracotta-600 underline underline-offset-4"><%= salon.phone_display %></a>.
+      Walk-ins are always welcome.
+    </span>
+  </p>
+</div>
