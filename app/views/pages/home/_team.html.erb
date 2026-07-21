@@ -8,12 +8,33 @@
                eyebrow: 'Meet Your Technicians',
                title: 'Friendly, Skilled, and Neighborly',
                subtitle: 'Small team, big heart. We listen first, recommend honestly, and care about every detail.' %>
+
+    <%# Who takes online bookings is derived from the `bookable` flag, never
+        hardcoded — technicians are expected to opt in over time and this line
+        has to stay true without anyone remembering to edit it. Hidden when
+        every tech is bookable (nothing to explain) or none are (the site has
+        no online booking to speak of). See docs/booking-adoption-notes.md. %>
+    <% team = TeamMember.for_display %>
+    <% online_names = team.select(&:bookable).map(&:name) %>
+    <% phone_names = team.reject(&:bookable).map(&:name) %>
+    <% if online_names.any? && phone_names.any? %>
+      <p class="mx-auto mt-6 flex max-w-2xl flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-sm text-warm-gray-600">
+        <%= icon 'phone', classes: 'h-4 w-4 text-terracotta-400', 'aria-hidden': true %>
+        <span>
+          <%= online_names.to_sentence %>
+          <%= online_names.one? ? 'takes' : 'take' %> online bookings. To book with
+          <%= phone_names.to_sentence(two_words_connector: ' or ', last_word_connector: ', or ') %>,
+          give us a call at
+          <a href="tel:<%= salon.phone %>" class="font-medium text-terracotta-600 underline underline-offset-4"><%= salon.phone_display %></a>.
+        </span>
+      </p>
+    <% end %>
   </div>
 
   <%# Content from the DB (TeamMember), with in-code DEFAULTS fallback.
       image_url stays nil until real photos land (renders the cutout placeholder). %>
   <div class="relative z-10 mt-8 divide-y divide-cream-200/70">
-    <% TeamMember.for_display.each_with_index do |member, i| %>
+    <% team.each_with_index do |member, i| %>
       <%= render 'shared/team_member',
                  name: member.name,
                  role: member.role,
