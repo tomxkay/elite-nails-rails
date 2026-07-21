@@ -37,6 +37,25 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_match "Done in our private waxing room", response.body
   end
 
+  # The footer carries the salon's NAP because that's where people look for it,
+  # and consistent name/address/phone across the page supports local search.
+  test "footer carries tappable contact details and hours" do
+    get root_url
+
+    assert_select "footer address a[href=?]", "tel:#{SiteSetting.current.phone}"
+    assert_select "footer address a[href*=?]", "maps.google"
+    assert_select "footer" do
+      assert_select "dt", minimum: 1, text: /Mon|Sat|Sun/
+    end
+    assert_match(/#{Date.current.year}/, response.body)
+  end
+
+  test "footer does not link the retired gallery section" do
+    get root_url
+
+    assert_select "footer a[href*=?]", "gallery", count: 0
+  end
+
   # Online booking covers one technician and a subset of the menu, so the FAQ
   # must not promise that booking ahead secures a particular technician — only a
   # phone call can. See docs/booking-adoption-notes.md.

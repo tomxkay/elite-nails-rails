@@ -1,10 +1,20 @@
 <!-- ===== FOOTER ===== -->
+<%# Carries the salon's NAP (name, address, phone) because footers are where
+    people look for it, and consistent NAP across the page helps local search.
+    Everything here comes from the SiteSetting / BusinessHour helpers — never
+    hardcode the address or number (see AGENTS.md). %>
 <footer class="bg-[#f5f5f5] border-t border-[#eee]">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12"> <!-- Logo & About -->
-      <div class="lg:col-span-1"> <%= render 'shared/logo', size: :footer %>
-        <p class="mt-4 text-[#666] text-sm leading-relaxed"> Providing luxury nail care services to Cramerton and the surrounding community since 2003. </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+
+      <!-- Logo & About -->
+      <div class="lg:col-span-1">
+        <%= render 'shared/logo', size: :footer %>
+        <p class="mt-4 text-[#666] text-sm leading-relaxed">
+          A family-owned nail salon serving Cramerton and the surrounding community since 2003.
+        </p>
       </div>
+
       <!-- Quick Links -->
       <div>
         <h4 class="font-serif text-lg text-[#444] mb-4">Quick Links</h4>
@@ -12,8 +22,58 @@
           <li><a href="<%= root_path(anchor: 'services') %>" class="text-[#666] hover:text-sage-600 transition-colors text-sm">Our Services</a></li>
           <li><a href="<%= root_path(anchor: 'pricing') %>" class="text-[#666] hover:text-sage-600 transition-colors text-sm">Pricing</a></li>
           <li><a href="<%= root_path(anchor: 'team') %>" class="text-[#666] hover:text-sage-600 transition-colors text-sm">Team</a></li>
+          <li><a href="<%= root_path(anchor: 'testimonials') %>" class="text-[#666] hover:text-sage-600 transition-colors text-sm">Reviews</a></li>
+          <li><a href="<%= root_path(anchor: 'faq') %>" class="text-[#666] hover:text-sage-600 transition-colors text-sm">FAQ</a></li>
+          <li><a href="<%= root_path(anchor: 'contact') %>" class="text-[#666] hover:text-sage-600 transition-colors text-sm">Contact</a></li>
         </ul>
       </div>
+
+      <!-- Contact -->
+      <div>
+        <h4 class="font-serif text-lg text-[#444] mb-4">Visit Us</h4>
+        <address class="not-italic space-y-3 text-sm">
+          <a href="<%= salon_map_url %>" target="_blank" rel="noopener"
+             class="flex items-start gap-2 text-[#666] transition-colors hover:text-sage-600">
+            <%= icon 'map-pin', classes: 'w-4 h-4 mt-0.5 shrink-0 text-terracotta-600' %>
+            <span><%= salon.street %><br><%= salon.city %>, <%= salon.region %> <%= salon.postal_code %></span>
+          </a>
+          <a href="tel:<%= salon.phone %>"
+             class="flex items-center gap-2 text-[#666] transition-colors hover:text-sage-600">
+            <%= icon 'phone', classes: 'w-4 h-4 shrink-0 text-terracotta-600' %>
+            <span><%= salon.phone_display %></span>
+          </a>
+        </address>
+        <p class="mt-4 text-xs text-[#888]">Call ahead or walk in — both welcome.</p>
+        <%= render 'shared/cta_button',
+                   text: 'Book Online',
+                   href: booking_link,
+                   style: :solid,
+                   size: :sm,
+                   icon: 'calendar-days',
+                   classes: 'mt-4' %>
+      </div>
+
+      <!-- Hours -->
+      <div>
+        <h4 class="font-serif text-lg text-[#444] mb-4">Hours</h4>
+        <dl class="space-y-2 text-sm">
+          <% BusinessHour.grouped_for_display.each do |label, hours| %>
+            <div class="flex items-baseline justify-between gap-4">
+              <dt class="text-[#666]"><%= label %></dt>
+              <dd class="<%= hours == 'Closed' ? 'text-terracotta-600 font-medium' : 'text-[#444]' %>"><%= hours %></dd>
+            </div>
+          <% end %>
+        </dl>
+      </div>
+    </div>
+
+    <div class="mt-12 border-t border-[#e5e5e5] pt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-xs text-[#888]">
+        &copy; <%= Date.current.year %> <%= salon.name %>. All rights reserved.
+      </p>
+      <p class="text-xs text-[#888]">
+        Family-owned in <%= salon.city %>, <%= salon.region %> since <%= salon.established %>.
+      </p>
     </div>
   </div>
 </footer>
