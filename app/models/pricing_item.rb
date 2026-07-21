@@ -22,9 +22,19 @@ class PricingItem < ApplicationRecord
   #
   # Sourced from the salon's in-house letter board + owner confirmation
   # (2026-07-20) — see docs/service-menu-reconciliation.md for the full
-  # reconciliation, durations, and the reasoning behind each name. `bookable`
-  # marks the longer services offered through /book; short/add-on work stays
-  # walk-in.
+  # reconciliation, durations, and the reasoning behind each name.
+  #
+  # `bookable` marks what /book offers. It is the intersection of two limits:
+  #   1. longer services only — short/add-on work stays walk-in so the wizard
+  #      doesn't fragment the schedule (Acrylic Removal, trims, repairs, waxing);
+  #   2. what the ONE opted-in technician performs — Michael does Manicures and
+  #      Acrylic, Dip & Extensions only, so pedicures and polish-only services
+  #      are phone/walk-in even though they're long enough to book.
+  #
+  # ⚠️ This flag only controls the site's links. /book gets its service list from
+  # the SQUARE CATALOG, so removing `bookable` here does NOT stop Square offering
+  # a service — the catalog must be re-imported, or Michael unassigned from it in
+  # Square. See docs/service-menu-reconciliation.md.
   #
   # The French premium is a consistent +$5 across the menu: Gel Manicure $35 →
   # French Gel Manicure $40, Gel Polish $25 → French Gel Polish $30.
@@ -36,18 +46,18 @@ class PricingItem < ApplicationRecord
     { category: "Manicures", name: "French Gel Manicure", price: "$40", position: 2, bookable: true, duration_minutes: 60,
       description: "Our gel manicure with the timeless white-tip French finish, hand-painted and cured to last." },
 
-    { category: "Pedicures", name: "Pedicure", price: "$30", position: 3, bookable: true, duration_minutes: 45,
+    { category: "Pedicures", name: "Pedicure", price: "$30", position: 3, duration_minutes: 45,
       description: "Nail shaping, cuticle care, a light callus buff, sugar scrub, massage, hot towel, and polish." },
-    { category: "Pedicures", name: "Deluxe Pedicure", price: "$40", position: 4, bookable: true, duration_minutes: 60,
+    { category: "Pedicures", name: "Deluxe Pedicure", price: "$40", position: 4, duration_minutes: 60,
       description: "Everything in the classic pedicure, plus callus treatment, paraffin wax, and an extended massage." },
-    { category: "Pedicures", name: "Gel Pedicure", price: "$50", position: 5, bookable: true, duration_minutes: 60,
+    { category: "Pedicures", name: "Gel Pedicure", price: "$50", position: 5, duration_minutes: 60,
       description: "A full pedicure finished with long-wearing gel polish that keeps its shine for weeks." },
-    { category: "Pedicures", name: "Manicure + Pedicure", price: "$45", position: 6, bookable: true, duration_minutes: 75,
+    { category: "Pedicures", name: "Manicure + Pedicure", price: "$45", position: 6, duration_minutes: 75,
       description: "Our classic manicure and pedicure together — and $5 less than booking them separately." },
 
-    { category: "Polish & Color", name: "Gel Polish", price: "$25", position: 7, bookable: true, duration_minutes: 30,
+    { category: "Polish & Color", name: "Gel Polish", price: "$25", position: 7, duration_minutes: 30,
       description: "Gel color applied to prepped nails — polish only, without the full manicure." },
-    { category: "Polish & Color", name: "French Gel Polish", price: "$30", position: 8, bookable: true, duration_minutes: 40,
+    { category: "Polish & Color", name: "French Gel Polish", price: "$30", position: 8, duration_minutes: 40,
       description: "Gel color with a hand-painted French tip — polish only, without the full manicure." },
     { category: "Polish & Color", name: "Polish Change", price: "$12", position: 9, duration_minutes: 15,
       description: "A quick change of classic polish on clean, prepped nails." },

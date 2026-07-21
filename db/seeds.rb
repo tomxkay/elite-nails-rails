@@ -20,8 +20,13 @@ retired_services.each { |s| s.update!(active: false) }
 puts "Seeded #{Service.visible.count} services (#{retired_services.size} retired)."
 
 # --- Pricing items ---
+# `bookable` is opt-in: DEFAULTS only ever sets it to true, so its ABSENCE has to
+# mean false. Without this baseline, dropping `bookable: true` from an entry
+# would leave the existing row untouched and the service would stay bookable —
+# update! writes only the keys it's given. Same trap as any other opt-in boolean.
 PricingItem::DEFAULTS.each do |attrs|
-  PricingItem.find_or_initialize_by(category: attrs[:category], name: attrs[:name]).update!(attrs)
+  PricingItem.find_or_initialize_by(category: attrs[:category], name: attrs[:name])
+             .update!({ bookable: false }.merge(attrs))
 end
 
 # Retire items that have left DEFAULTS (e.g. the placeholder menu replaced in
@@ -34,8 +39,10 @@ retired.each { |item| item.update!(active: false) }
 puts "Seeded #{PricingItem.visible.count} pricing items (#{retired.size} retired)."
 
 # --- Team members ---
+# Same opt-in boolean baseline as pricing items: removing `bookable: true` from
+# a member must actually un-book them.
 TeamMember::DEFAULTS.each do |attrs|
-  TeamMember.find_or_initialize_by(name: attrs[:name]).update!(attrs)
+  TeamMember.find_or_initialize_by(name: attrs[:name]).update!({ bookable: false }.merge(attrs))
 end
 
 # Same retire-don't-delete handling as pricing: renaming a member (e.g.
