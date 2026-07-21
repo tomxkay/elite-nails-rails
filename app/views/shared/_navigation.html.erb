@@ -7,10 +7,11 @@
       <div class="hidden xl:flex items-center justify-center relative min-h-14 py-2" data-navbar-target="navRow">
         <!-- Left Nav Links -->
         <div class="flex items-center space-x-8 absolute left-0">
-          <a href="<%= root_path %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#home">Home</a>
+          <a href="<%= root_path(anchor: 'about') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#about">About</a>
+          <a href="<%= root_path(anchor: 'story') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#story">Our Story</a>
           <a href="<%= root_path(anchor: 'services') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#services">Services</a>
           <a href="<%= root_path(anchor: 'pricing') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#pricing">Pricing</a>
-          <a href="<%= root_path(anchor: 'team') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#team">Team</a>
+          <a href="<%= root_path(anchor: 'testimonials') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#testimonials">Reviews</a>
         </div>
         <!-- Centered Logo -->
         <div class="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
@@ -22,8 +23,7 @@
         </div>
         <!-- Right Nav Links -->
         <div class="flex items-center space-x-8 absolute right-0">
-          <a href="<%= root_path(anchor: 'about') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#about">About</a>
-          <a href="<%= root_path(anchor: 'testimonials') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#testimonials">Reviews</a>
+          <a href="<%= root_path(anchor: 'team') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#team">Team</a>
           <a href="<%= root_path(anchor: 'contact') %>" class="nav-link text-sm font-medium text-[#444]/80 tracking-wide uppercase transition-colors duration-200 hover:text-sage-600" data-controller="smooth-scroll" data-action="click->smooth-scroll#scroll" data-smooth-scroll-target-value="#contact">Contact</a>
           <%# Call and Book are one flex child so the nav's space-x-8 doesn't
               split the pair. Phone first — it's the salon's primary channel. %>
