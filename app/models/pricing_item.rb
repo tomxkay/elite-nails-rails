@@ -62,13 +62,13 @@ class PricingItem < ApplicationRecord
       description: "The same fill, refreshed with gel polish." },
     { category: "Acrylic, Dip & Extensions", name: "Acrylic Removal", price: "$15", position: 18, duration_minutes: 30,
       description: "Gentle soak-off that lifts acrylic away without damaging the natural nail underneath." },
-    { category: "Acrylic, Dip & Extensions", name: "Nail Repair", price: "$5+", position: 19, duration_minutes: 15,
-      description: "Repair for a cracked or broken nail, priced by the work involved." },
 
-    { category: "Nail Care", name: "Nail Trim (Fingers)", price: "$7", position: 20, duration_minutes: 10,
+    { category: "Nail Care", name: "Nail Trim (Fingers)", price: "$7", position: 19, duration_minutes: 10,
       description: "Trimming and shaping for fingernails, without polish." },
-    { category: "Nail Care", name: "Nail Trim (Toes)", price: "$10", position: 21, duration_minutes: 15,
+    { category: "Nail Care", name: "Nail Trim (Toes)", price: "$10", position: 20, duration_minutes: 15,
       description: "Trimming and shaping for toenails — thicker and more involved than fingernails." },
+    { category: "Nail Care", name: "Nail Repair", price: "$5+", position: 21, duration_minutes: 15,
+      description: "Repair for a cracked or broken nail, priced by the work involved." },
 
     { category: "Waxing", name: "Eyebrow", price: "$10", position: 22, duration_minutes: 15,
       description: "Shaping and cleanup to define your natural brow line." },

@@ -27,6 +27,7 @@ real bookings show actual times.
 | Nail Trim | one row, $10+ | **split**: Fingers $7 / Toes $10 | Restores the board's original two lines |
 | Brow + Lip combo | $15 | **removed** | Waxing service-card copy updated too |
 | Dip Powder Full Set | — | **added, $55, 75m, bookable** | Dip over tips for length |
+| Nail Repair | in *Acrylic, Dip & Extensions* | **moved to *Nail Care*** | Matches the Nail Care card, which already promised "quick repairs" |
 
 **Two things worth remembering:**
 
@@ -97,13 +98,13 @@ exposing that symmetry in the layout.
 | Acrylic Fill | $25 regular | 45m | 📅 | Rebalances your existing set as the natural nail grows out, refreshed with classic polish. |
 | Acrylic Fill (Gel) | $40 | 60m | 📅 | The same fill, refreshed with gel polish. |
 | Acrylic Removal | $15 | 30m | 🚶 | Gentle soak-off that lifts acrylic away without damaging the natural nail underneath. |
-| Nail Repair | $5+ | 15m | 🚶 | Repair for a cracked or broken nail, priced by the work involved. |
 
 ### Nail Care
 | Service | Price | Time | | Description |
 |---|---|---|---|---|
 | Nail Trim (Fingers) | $7 | 10m | 🚶 | Trimming and shaping for fingernails, without polish. |
 | Nail Trim (Toes) | $10 | 15m | 🚶 | Trimming and shaping for toenails — thicker and more involved than fingernails. |
+| Nail Repair | $5+ | 15m | 🚶 | Repair for a cracked or broken nail, priced by the work involved. |
 
 ### Waxing — all walk-in for now
 | Service | Price | Time | | Description |
