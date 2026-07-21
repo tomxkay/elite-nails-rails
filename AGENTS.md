@@ -304,6 +304,41 @@ fly logs          # tail logs
 fly ssh console   # shell into a machine
 ```
 
+### ⚠️ Deploying content changes — `fly deploy` is NOT enough
+
+Boot runs `bin/docker-entrypoint` → `rails db:prepare`, which *"runs setup if the
+database does not exist, or runs **migrations** if it does."* Production's DB
+exists, so **a deploy runs migrations and never seeds.** Editing a model's
+`DEFAULTS` and deploying changes nothing on the live site. This has caught us
+repeatedly — it is the single most common mistake in this repo.
+
+After any `DEFAULTS` change, run the steps the change actually needs:
+
+```bash
+fly deploy                                                        # code + migrations
+
+# Menu content (Service / PricingItem / TeamMember) — TRUNCATEs and reseeds
+fly ssh console -C "bin/rails content:reset_menu FORCE=1"
+
+# Everything else: SiteSetting (NAP, rating), Review, Promotion, BusinessHour.
+# reset_menu deliberately skips these because they can hold owner-entered data.
+fly ssh console -C "bin/rails db:seed"
+
+# One-time removals the upserts above can't do (seeds never delete).
+fly ssh console -C "bin/rails content:remove_placeholder_content"
+```
+
+**Why the third step exists:** `db:seed` upserts, so it adds and updates but
+never removes. The fabricated reviews and retired promotions from the 2026-07-21
+audit have to be deleted/hidden by name —
+`content:remove_placeholder_content` does exactly that, is idempotent, and
+touches only an explicit allowlist so owner-created content survives.
+
+**Square is separate again.** `/book` reads its service list from the Square
+catalog, not from `PricingItem`. Narrowing `bookable` only changes the site's
+links — re-import `bin/rails content:square_csv` output in the Square dashboard,
+or the wizard keeps selling services nobody can work.
+
 Set production secrets with `fly secrets set …` (`RAILS_MASTER_KEY`, `BOOKING_URL`,
 `GOOGLE_REVIEWS_URL`, `MCP_AUTH_TOKEN`, `MCP_OWNER_PASSWORD`, Tigris `AWS_*`).
 The Dockerfile is managed by `dockerfile-rails` (`config/dockerfile.yml`).

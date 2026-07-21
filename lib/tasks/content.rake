@@ -33,6 +33,46 @@ namespace :content do
     puts "Menu content reset."
   end
 
+  # Named explicitly rather than "anything not in DEFAULTS" on purpose: a blanket
+  # prune would also delete owner-created content (a real promotion added via
+  # MCP, a real review). These are the exact rows the 2026-07-21 content audit
+  # identified as placeholder/fabricated. Safe to re-run; does nothing once clean.
+  FABRICATED_REVIEW_AUTHORS = [
+    "Sarah M.", "Jennifer L.", "Michelle R.", "Ana P.", "Karen T.", "Denise W."
+  ].freeze
+
+  RETIRED_PROMOTION_TITLES = [
+    "Birthday Treat",           # dropped from the menu 2026-07-21
+    "Tues–Thurs Gel Special",   # dropped from the menu 2026-07-21
+    "Summer Gel Pedicure Special" # test data, confirmed by the owner
+  ].freeze
+
+  desc "Remove placeholder content the 2026-07-21 audit found (fabricated reviews, " \
+       "retired promotions). Idempotent. Run AFTER db:seed on a deploy."
+  task remove_placeholder_content: :environment do
+    fabricated = Review.where(author_name: FABRICATED_REVIEW_AUTHORS)
+    if fabricated.exists?
+      puts "  deleting #{fabricated.count} fabricated review(s): #{fabricated.pluck(:author_name).join(', ')}"
+      fabricated.destroy_all
+    else
+      puts "  no fabricated reviews present"
+    end
+
+    # Hidden, not deleted — matches the no-hard-delete convention for content the
+    # owner may want back (a seasonal promotion could return next year).
+    retired = Promotion.where(title: RETIRED_PROMOTION_TITLES, active: true)
+    if retired.exists?
+      puts "  hiding #{retired.count} retired promotion(s): #{retired.pluck(:title).join(', ')}"
+      retired.each { |promotion| promotion.update!(active: false) }
+    else
+      puts "  no retired promotions active"
+    end
+
+    puts "  now visible: #{Review.visible.count} reviews, #{Promotion.visible.count} promotions"
+    puts "  rating: #{SiteSetting.current.aggregate_rating} / #{SiteSetting.current.review_count} reviews"
+    puts "Placeholder content cleanup complete."
+  end
+
   desc "Export services to CSV for Square's service-library import " \
        "(name, description, duration, price). ALL=1 includes walk-in-only " \
        "services; by default only bookable ones are exported."
