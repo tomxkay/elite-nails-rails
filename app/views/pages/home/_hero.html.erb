@@ -51,7 +51,7 @@
       <%# Calling is the salon's primary channel, so it's offered right at the
           top rather than only in the contact section. Kept as a text link so it
           doesn't crowd the two-button hero. %>
-      <p class="flex flex-wrap items-center gap-2 text-warm-gray-700">
+      <p class="hidden flex-wrap items-center gap-2 text-warm-gray-700 sm:flex">
         <%= icon 'phone', classes: 'h-4 w-4 text-terracotta-500', 'aria-hidden': true %>
         <span>Prefer to call?</span>
         <a href="tel:<%= salon.phone %>" class="font-medium text-terracotta-600 underline underline-offset-4 decoration-terracotta-300 transition-colors hover:text-terracotta-700"><%= salon.phone_display %></a>

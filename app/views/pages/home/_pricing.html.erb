@@ -9,11 +9,11 @@
                title: 'Pricing',
                subtitle: 'Clear, honest pricing — no surprises at the counter.' %>
 
-    <p class="mt-6 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-sm text-warm-gray-600">
-      <%= icon "calendar-days", classes: "h-4 w-4 text-terracotta-400", "aria-hidden": true %>
+    <p class="mt-6 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-sm font-medium text-warm-gray-700">
+      <%= icon "calendar-days", classes: "h-4 w-4 text-terracotta-600", "aria-hidden": true %>
       <span>Bookable online — everything else is walk-in or by phone.</span>
-      <span class="text-warm-gray-300" aria-hidden="true">·</span>
-      <%= icon "information-circle", classes: "h-4 w-4 text-warm-gray-400", "aria-hidden": true %>
+      <span class="text-warm-gray-500" aria-hidden="true">·</span>
+      <%= icon "information-circle", classes: "h-4 w-4 text-warm-gray-600", "aria-hidden": true %>
       <span>Tap for details.</span>
     </p>
 
@@ -36,7 +36,7 @@
               plain text otherwise; the description toggle is a SIBLING button,
               never nested inside the <a> — nesting interactive elements is
               invalid HTML and screen readers mis-announce it. %>
-          <ul class="mt-2 divide-y divide-cream-200 text-sm text-warm-gray-700">
+          <ul class="mt-2 divide-y divide-cream-200 text-sm text-warm-gray-800">
             <% items.each do |item| %>
               <% panel_id = "svc-desc-#{item.id || item.name.parameterize}" %>
               <li data-controller="disclosure">
@@ -46,21 +46,21 @@
                        class="group/row flex min-w-0 flex-1 items-center justify-between gap-3 transition-colors hover:text-terracotta-700"
                        aria-label="Book <%= item.name %>">
                       <span class="flex min-w-0 items-center gap-2">
-                        <span class="underline-offset-4 group-hover/row:underline"><%= item.name %></span>
-                        <%= icon "calendar-days", classes: "h-3.5 w-3.5 shrink-0 text-terracotta-400", "aria-hidden": true %>
+                        <span class="font-medium underline-offset-4 group-hover/row:underline"><%= item.name %></span>
+                        <%= icon "calendar-days", classes: "h-3.5 w-3.5 shrink-0 text-terracotta-600", "aria-hidden": true %>
                       </span>
-                      <span class="shrink-0 font-semibold text-terracotta-600"><%= item.price %></span>
+                      <span class="shrink-0 font-bold text-terracotta-700"><%= item.price %></span>
                     </a>
                   <% else %>
                     <div class="flex min-w-0 flex-1 items-center justify-between gap-3">
-                      <span class="min-w-0"><%= item.name %></span>
-                      <span class="shrink-0 font-semibold text-terracotta-600"><%= item.price %></span>
+                      <span class="min-w-0 font-medium"><%= item.name %></span>
+                      <span class="shrink-0 font-bold text-terracotta-700"><%= item.price %></span>
                     </div>
                   <% end %>
 
                   <% if item.description.present? %>
                     <button type="button"
-                            class="-m-2 shrink-0 rounded-full p-2 text-warm-gray-400 transition-colors hover:text-terracotta-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta-500"
+                            class="-m-2 shrink-0 rounded-full p-2 text-warm-gray-600 transition-colors hover:text-terracotta-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta-500"
                             data-disclosure-target="button"
                             data-action="disclosure#toggle"
                             aria-expanded="false"
@@ -74,10 +74,10 @@
                 <% if item.description.present? %>
                   <div id="<%= panel_id %>" class="disclosure-panel" data-open="false" data-disclosure-target="panel">
                     <div>
-                      <p class="pb-3 pr-8 leading-relaxed text-warm-gray-600">
+                      <p class="pb-3 pr-8 leading-relaxed text-warm-gray-700">
                         <%= item.description %>
                         <% if item.duration_minutes.present? %>
-                          <span class="mt-1 block text-xs uppercase tracking-[0.14em] text-warm-gray-400">About <%= item.duration_minutes %> min</span>
+                          <span class="mt-1 block text-xs font-semibold uppercase tracking-[0.14em] text-warm-gray-600">About <%= item.duration_minutes %> min</span>
                         <% end %>
                       </p>
                     </div>

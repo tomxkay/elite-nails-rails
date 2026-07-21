@@ -35,6 +35,9 @@ application.register("navbar", NavbarController)
 import MobileMenuController from "./mobile_menu_controller"
 application.register("mobile-menu", MobileMenuController)
 
+import MobileCtaController from "./mobile_cta_controller"
+application.register("mobile-cta", MobileCtaController)
+
 import BookingController from "./booking_controller"
 application.register("booking", BookingController)
 

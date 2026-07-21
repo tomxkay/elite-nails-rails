@@ -1,14 +1,13 @@
-<%# Team member — editorial alternating full-height row
+<%# Compact team member card.
   Locals:
     - name: string (required)
     - role: string (required)
     - bio: string
-    - quote: string (optional) — a personal line in the family's voice
+    - quote: string (optional)
     - specialties: array of strings (optional)
-    - bookable: boolean — takes online bookings via /book. Others are phone /
-      walk-in only, so they get a call CTA instead of a dead booking link.
-    - image_url: string (optional) — a background-removed (cutout) portrait
-    - index: integer (0-based) — drives numbering + zig-zag side
+    - bookable: boolean
+    - image_url: string (optional)
+    - index: integer (0-based)
 %>
 <% name = local_assigns[:name] %>
 <% role = local_assigns[:role] %>
@@ -18,104 +17,77 @@
 <% bookable = local_assigns[:bookable] %>
 <% image_url = local_assigns[:image_url] %>
 <% index = local_assigns[:index] || 0 %>
-<% reversed = index.odd? %>
 <% number = format("%02d", index + 1) %>
 <% first_name = name.to_s.split.first %>
 <% initial = first_name.to_s[0] %>
 
-<article class="relative flex items-center min-h-[80vh] py-16 lg:py-24">
-  <div class="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10">
-    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-
-      <%# ===== Portrait column (cutout on an ambient backdrop, no frame) ===== %>
-      <div class="relative flex justify-center <%= 'lg:order-2' if reversed %>"
-           data-controller="scroll-reveal"
-           data-scroll-reveal-animation-value="<%= reversed ? 'fadeInRight' : 'fadeInLeft' %>">
-
-        <%# soft color blob behind the figure %>
-        <div class="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden="true">
-          <div class="h-[78%] w-[78%] rounded-full blur-2xl <%= reversed ? 'portrait-backdrop-sage' : 'portrait-backdrop-terra' %>"></div>
+<article class="card-surface-warm flex h-full flex-col rounded-2xl border border-cream-200/80 p-5 shadow-warm-sm"
+         data-controller="scroll-reveal"
+         data-scroll-reveal-animation-value="fadeInUp"
+         data-scroll-reveal-delay-value="<%= (index % 3) * 0.08 %>">
+  <div class="flex items-start gap-4">
+    <div class="relative h-28 w-24 shrink-0 overflow-hidden rounded-t-full rounded-b-2xl bg-gradient-to-b from-peach-100 via-cream-100 to-sage-100 ring-1 ring-cream-200">
+      <% if image_url.present? %>
+        <img src="<%= image_url %>"
+             alt="<%= name %>, <%= role %>"
+             class="h-full w-full object-cover"
+             loading="lazy" />
+      <% else %>
+        <div class="flex h-full w-full items-end justify-center">
+          <%= icon "user", variant: :solid, classes: "h-20 w-20 -mb-3 text-terracotta-200" %>
         </div>
+        <span class="absolute left-1/2 top-4 -translate-x-1/2 whitespace-nowrap text-[0.48rem] uppercase tracking-[0.18em] text-terracotta-600/70">Photo soon</span>
+      <% end %>
+    </div>
 
-        <%# oversized initial watermark %>
-        <span class="pointer-events-none absolute select-none font-serif leading-none text-[13rem] lg:text-[20rem] text-warm-gray-900/[0.04]" aria-hidden="true"><%= initial %></span>
-
-        <div class="relative">
-          <% if image_url.present? %>
-            <img src="<%= image_url %>"
-                 alt="<%= name %>, <%= role %>"
-                 class="relative z-10 max-h-[70vh] w-auto object-contain drop-shadow-[0_35px_60px_rgba(104,72,57,0.35)]"
-                 loading="lazy" />
-          <% else %>
-            <%# Placeholder standing in for an edited, background-removed portrait %>
-            <div class="relative z-10 flex h-[56vh] w-[clamp(15rem,32vw,21rem)] items-end justify-center overflow-hidden rounded-t-[999px] rounded-b-[2.5rem] bg-gradient-to-b from-peach-100 via-cream-100 to-sage-100 ring-1 ring-cream-200 shadow-warm-lg">
-              <%= icon "user", variant: :solid, classes: "h-2/3 w-2/3 -mb-8 text-terracotta-200" %>
-              <span class="absolute top-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-[0.62rem] uppercase tracking-[0.22em] text-terracotta-500/70">Photo coming soon</span>
-            </div>
-          <% end %>
-
-          <%# ground shadow so the cutout sits in the space %>
-          <div class="portrait-ground pointer-events-none absolute -bottom-4 left-1/2 h-14 w-[72%] -translate-x-1/2 blur-md" aria-hidden="true"></div>
-        </div>
+    <div class="min-w-0 flex-1">
+      <div class="flex items-center gap-3">
+        <span class="font-serif text-2xl leading-none text-terracotta-300"><%= number %></span>
+        <span class="h-px flex-1 bg-gradient-to-r from-terracotta-200 to-transparent"></span>
       </div>
-
-      <%# ===== Content column ===== %>
-      <div class="<%= reversed ? 'lg:order-1 lg:pr-8' : 'lg:pl-8' %>"
-           data-controller="scroll-reveal"
-           data-scroll-reveal-animation-value="<%= reversed ? 'fadeInLeft' : 'fadeInRight' %>"
-           data-scroll-reveal-delay-value="0.15">
-
-        <div class="flex items-center gap-4">
-          <span class="font-serif text-5xl text-terracotta-200"><%= number %></span>
-          <span class="h-px w-16 bg-gradient-to-r from-terracotta-300 to-transparent"></span>
-          <span class="text-xs uppercase tracking-[0.24em] text-warm-gray-500">Elite Nails Team</span>
-        </div>
-
-        <h3 class="mt-5 font-serif text-4xl leading-tight text-warm-gray-900 lg:text-5xl"><%= name %></h3>
-        <p class="mt-2 text-sm font-semibold uppercase tracking-[0.16em] text-terracotta-600"><%= role %></p>
-
-        <% if quote.present? %>
-          <p class="mt-6 font-script text-2xl leading-snug text-warm-gray-700 lg:text-3xl">&ldquo;<%= quote %>&rdquo;</p>
-        <% end %>
-
-        <% if bio.present? %>
-          <p class="mt-5 max-w-xl leading-relaxed text-warm-gray-700"><%= bio %></p>
-        <% end %>
-
-        <% if specialties.any? %>
-          <div class="mt-6 flex flex-wrap gap-2">
-            <% specialties.each do |spec| %>
-              <span class="rounded-full border border-cream-200 bg-white/70 px-3 py-1 text-xs font-semibold text-terracotta-700 shadow-warm-sm backdrop-blur"><%= spec %></span>
-            <% end %>
-          </div>
-        <% end %>
-
-        <% if first_name.present? %>
-          <div class="mt-8">
-            <% if bookable %>
-              <%= render "shared/cta_button",
-                         text: "Book with #{first_name}",
-                         href: booking_link,
-                         style: :outline,
-                         size: :md,
-                         icon: "calendar-days" %>
-            <% else %>
-              <%# Not on online booking yet — offer the phone instead of a link
-                  that would land on someone else's calendar. %>
-              <div class="flex flex-wrap items-center gap-3">
-                <%= render "shared/cta_button",
-                           text: "Call to book with #{first_name}",
-                           href: "tel:#{salon.phone}",
-                           style: :outline,
-                           size: :md,
-                           icon: "phone" %>
-                <span class="text-xs uppercase tracking-[0.16em] text-warm-gray-500">Phone &amp; walk-in</span>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-
+      <h3 class="mt-3 font-serif text-3xl leading-tight text-warm-gray-900"><%= name %></h3>
+      <p class="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-terracotta-700"><%= role %></p>
     </div>
   </div>
+
+  <% if quote.present? %>
+    <p class="mt-5 font-script text-xl leading-snug text-warm-gray-800">&ldquo;<%= quote %>&rdquo;</p>
+  <% end %>
+
+  <% if bio.present? %>
+    <p class="mt-3 line-clamp-4 text-sm leading-relaxed text-warm-gray-700"><%= bio %></p>
+  <% end %>
+
+  <% if specialties.any? %>
+    <div class="mt-5 flex flex-wrap gap-2">
+      <% specialties.first(4).each do |spec| %>
+        <span class="rounded-full border border-cream-200 bg-white/75 px-3 py-1 text-xs font-semibold text-terracotta-700 shadow-warm-sm backdrop-blur"><%= spec %></span>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if first_name.present? %>
+    <div class="mt-auto pt-6">
+      <% if bookable %>
+        <%= render "shared/cta_button",
+                   text: "Book with #{first_name}",
+                   href: booking_link,
+                   style: :outline,
+                   size: :sm,
+                   icon: "calendar-days",
+                   classes: "w-full justify-center" %>
+      <% else %>
+        <div class="flex flex-col gap-2">
+          <%= render "shared/cta_button",
+                     text: "Call for #{first_name}",
+                     href: "tel:#{salon.phone}",
+                     style: :outline,
+                     size: :sm,
+                     icon: "phone",
+                     classes: "w-full justify-center" %>
+          <span class="text-center text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-warm-gray-600">Phone &amp; walk-in</span>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 </article>

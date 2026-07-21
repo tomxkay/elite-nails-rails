@@ -316,6 +316,7 @@ pending items:
 | `analytics-plan.md` | Implemented (Ahoy + `GetAnalyticsSummaryTool`); reference for KPI definitions. |
 | `cms-ai-roadmap.md` | Milestone 2 vision doc; largely delivered (DB content + MCP tools). |
 | `connecting-to-production-db.md` | Reference — how to reach Fly Postgres via `fly proxy`. |
+| `team-section-design-reference.md` | Reference — original full-height editorial team section is tagged as `design/team-section-editorial-rows` at commit `c2561db`; use when revisiting team layout direction. |
 | `service-menu-reconciliation.md` | 🔴 **Active.** Live site + Square catalog carry placeholder services; only 2 of 12 match the salon's real board. Includes 3 live overcharges. **Pending:** owner descriptions/durations, then fix Square → then site via MCP tools. |
 | `booking-adoption-notes.md` | 🟡 **Active — read before changing booking UX.** Phone is the salon's *primary* channel; online booking is a deliberately narrow soft launch (1 tech, 14 of 24 services). Explains the business context and why CTAs are worded the way they are. |
 

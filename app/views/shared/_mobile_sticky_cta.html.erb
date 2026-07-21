@@ -4,7 +4,8 @@
     contact section. This bar is on screen for the whole mobile visit, which
     makes it the most important place for the phone number to exist.
     See docs/booking-adoption-notes.md. %>
-<div class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[92vw] max-w-md lg:hidden z-40 drop-shadow-lg">
+<div class="fixed bottom-3 left-1/2 z-40 w-[92vw] max-w-md -translate-x-1/2 translate-y-4 opacity-0 drop-shadow-lg transition duration-300 pointer-events-none lg:hidden"
+     data-controller="mobile-cta">
   <div class="flex items-center gap-2 rounded-full border border-sage-100 bg-white/90 p-2 backdrop-blur-md">
     <%= render 'shared/cta_button',
                text: 'Call',
