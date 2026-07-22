@@ -69,12 +69,77 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :success
     assert_match "Gel Manicure", response.body
-    assert_match "Michael K", response.body
+    assert_match "Michael", response.body
+    assert_match "Senior Nail Technician", response.body
+    assert_match "Acrylic Full Set", response.body
+    # Native radios drive the technician picker (arrow-key/keyboard a11y for
+    # free). With a single bookable tech the "Anyone available" option is hidden
+    # — it would just duplicate that one person — and the tech is default-checked.
+    assert_select "fieldset input[type='radio'][data-booking-target='staffRadio']", count: 1
+    assert_select "input[type='radio'][value='TM1'][checked]"
+    assert_no_match "Anyone available", response.body
     assert_select "main.page-with-fixed-header-offset"
     assert_select "header a[href='#home']", count: 0
     assert_select "header a[href='/#services']"
     assert_select "header a[href='/']"
     assert_select "footer a[href='/#pricing']"
+  end
+
+  test "show decorates bookable square staff with matching local team content" do
+    TeamMember.create!(
+      name: "Michael",
+      role: "Acrylic Lead",
+      bio: "Known for clean sculpted sets.",
+      specialties: [ "Sculpted Acrylic", "Gel Color" ],
+      image: "header-logo.png",
+      bookable: true
+    )
+
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:services, SERVICES) do
+        SquareApi.stub(:bookable_staff, STAFF) do
+          get book_path
+        end
+      end
+    end
+
+    assert_response :success
+    assert_match "Acrylic Lead", response.body
+    assert_match "Known for clean sculpted sets.", response.body
+    assert_match "Sculpted Acrylic", response.body
+    assert_select "label img[alt='Michael']"
+  end
+
+  test "show shows the Anyone-available option only when more than one tech is bookable" do
+    two = [ { id: "TM1", name: "Michael" }, { id: "TM2", name: "Thai" } ]
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:services, SERVICES) do
+        SquareApi.stub(:bookable_staff, two) do
+          get book_path
+        end
+      end
+    end
+    assert_response :success
+    assert_match "Anyone available", response.body
+    # Anyone is the default with 2+ techs; neither person is preselected.
+    assert_select "input[type='radio'][value=''][checked]"
+    assert_select "fieldset input[type='radio'][data-booking-target='staffRadio']", count: 3
+  end
+
+  test "show renders unmatched square staff without local profile details" do
+    staff = [ { id: "TM9", name: "New Tech" } ]
+
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:services, SERVICES) do
+        SquareApi.stub(:bookable_staff, staff) do
+          get book_path
+        end
+      end
+    end
+
+    assert_response :success
+    assert_match "New Tech", response.body
+    assert_select "input[type='radio'][value='TM9'][data-booking-target='staffRadio']"
   end
 
   # The salon takes most appointments by phone; this note is how the site says
@@ -103,7 +168,7 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :success
     assert_select "input[data-booking-target='service'][checked]"
-    assert_select "option[value='TM1'][selected]"
+    assert_select "input[type='radio'][value='TM1'][checked]"
     assert_select "input[data-booking-target='date'][value=?]", (Date.current + 2).iso8601
   end
 

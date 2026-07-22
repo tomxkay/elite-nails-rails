@@ -26,7 +26,7 @@ class BookingsController < ApplicationController
     # Staff list is optional ("Anyone available" works without it) — e.g. it
     # 401s until the Square account finishes Appointments onboarding.
     @staff = begin
-      SquareApi.bookable_staff
+      enrich_bookable_staff(SquareApi.bookable_staff)
     rescue SquareApi::Error
       []
     end
@@ -239,6 +239,47 @@ class BookingsController < ApplicationController
       match = lookup[normalize_service_name(service[:name])]
       match ? service.merge(description: match.description) : service
     end
+  end
+
+  # Square decides which team members can be booked online. TeamMember only
+  # decorates those rows with local profile content for the booking UI.
+  def enrich_bookable_staff(staff)
+    local_team = TeamMember.for_display
+    by_name = local_team.index_by { |member| normalize_staff_name(member.name) }
+    by_first_name = local_team.group_by { |member| first_staff_name(member.name) }
+
+    staff.map do |member|
+      local = matching_team_member(member[:name], by_name, by_first_name)
+      display_name = local&.name.presence || member[:name]
+
+      member.merge(
+        square_name: member[:name],
+        name: display_name,
+        role: local&.role,
+        bio: local&.bio,
+        quote: local&.quote,
+        specialties: local&.specialties || [],
+        image: local&.image
+      )
+    end
+  end
+
+  def matching_team_member(square_name, by_name, by_first_name)
+    normalized = normalize_staff_name(square_name)
+    by_name[normalized] || first_name_match(square_name, by_first_name)
+  end
+
+  def first_name_match(square_name, by_first_name)
+    matches = Array(by_first_name[first_staff_name(square_name)])
+    matches.one? ? matches.first : nil
+  end
+
+  def normalize_staff_name(name)
+    name.to_s.downcase.gsub(/[^a-z0-9\s]/, " ").squish
+  end
+
+  def first_staff_name(name)
+    normalize_staff_name(name).split.first
   end
 
   def cached_bookable_staff

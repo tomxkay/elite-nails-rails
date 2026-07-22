@@ -6,13 +6,14 @@ import { trackEvent } from "../analytics"
 // booking. Server endpoints live in BookingsController.
 export default class extends Controller {
   static targets = [
-    "service", "staff", "date", "slots", "slotsHint",
+    "service", "staffRadio", "date", "slots", "slotsHint",
     "form", "name", "phone", "email", "note", "honeypot",
     "summary", "error", "submitBtn", "wizard", "confirmation",
     "confirmationHeading", "confirmationService", "confirmationDate",
     "confirmationTechnicianRow", "confirmationTechnician",
     "nextOpening", "nextOpeningText",
-    "serviceFilter", "serviceFilterEmpty"
+    "serviceFilter", "serviceFilterEmpty",
+    "staffNextOpening"
   ]
 
   static values = {
@@ -34,6 +35,19 @@ export default class extends Controller {
   serviceChanged() {
     trackEvent("service_selected", { service: this.selectedService?.name })
     this.loadSlots()
+  }
+
+  // Picking a technician only re-filters the slot grid. The per-card "next
+  // opening" figures don't depend on which card is selected, so skip refetching
+  // them here.
+  selectStaff() {
+    this.loadSlots({ refreshStaffOpenings: false })
+  }
+
+  // The currently chosen technician id ("" = Anyone), read from the checked
+  // native radio.
+  get selectedStaffId() {
+    return this.staffRadioTargets.find((radio) => radio.checked)?.value || ""
   }
 
   // Hides service options whose name doesn't contain the query. The checked
@@ -59,25 +73,27 @@ export default class extends Controller {
     return { id: radio.value, version: radio.dataset.version, name: radio.dataset.name }
   }
 
-  async loadSlots() {
+  async loadSlots({ refreshStaffOpenings = true } = {}) {
     const service = this.selectedService
     this.selectSlot(null)
     this.toggleNextOpening(false)
     if (!service) {
       this.slotsHintTarget.textContent = "Select a service above to see open times."
       this.slotsTarget.innerHTML = ""
+      this.resetStaffNextOpenings()
       return
     }
 
     this.slotsHintTarget.textContent = "Checking open times…"
     this.slotsTarget.innerHTML = ""
+    if (refreshStaffOpenings) this.updateStaffNextOpenings(service)
 
     const params = new URLSearchParams({
       service_id: service.id,
       service_version: service.version || "",
       date: this.dateTarget.value
     })
-    if (this.staffTarget.value) params.set("team_member_id", this.staffTarget.value)
+    if (this.selectedStaffId) params.set("team_member_id", this.selectedStaffId)
 
     try {
       const response = await fetch(`${this.availabilityUrlValue}?${params}`, {
@@ -261,6 +277,15 @@ export default class extends Controller {
   }
 
   async fetchNextSlot(serviceId, fromDate = null) {
+    const data = await this.fetchNextAvailability(serviceId, fromDate)
+    if (!data) return null
+
+    const teamId = this.selectedStaffId
+    if (teamId) return (data.technicians || []).find((tech) => tech.id === teamId)?.next_slot || null
+    return data.anyone_next_slot || null
+  }
+
+  async fetchNextAvailability(serviceId, fromDate = null) {
     const params = new URLSearchParams({ service_id: serviceId, days: "14" })
     if (fromDate) params.set("date", fromDate)
 
@@ -268,13 +293,44 @@ export default class extends Controller {
       const response = await fetch(`${this.nextUrlValue}?${params}`, { headers: { Accept: "application/json" } })
       const data = await response.json()
       if (!response.ok) return null
-
-      const teamId = this.staffTarget.value
-      if (teamId) return (data.technicians || []).find((tech) => tech.id === teamId)?.next_slot || null
-      return data.anyone_next_slot || null
+      return data
     } catch {
       return null
     }
+  }
+
+  async updateStaffNextOpenings(service = this.selectedService) {
+    if (!this.hasStaffNextOpeningTarget || !service || !this.nextUrlValue) return
+    const date = this.dateTarget.value
+
+    this.staffNextOpeningTargets.forEach((target) => {
+      target.textContent = "Checking next opening…"
+    })
+
+    const data = await this.fetchNextAvailability(service.id, date)
+    if (this.selectedService?.id !== service.id || this.dateTarget.value !== date) return
+    if (!data) {
+      this.staffNextOpeningTargets.forEach((target) => {
+        target.textContent = "Openings unavailable — choose a day below"
+      })
+      return
+    }
+
+    const byTechnician = new Map((data.technicians || []).map((tech) => [tech.id, tech.next_slot]))
+    this.staffNextOpeningTargets.forEach((target) => {
+      const staffId = target.dataset.staffId || ""
+      const slot = staffId ? byTechnician.get(staffId) : data.anyone_next_slot
+      target.textContent = slot
+        ? `Next opening: ${this.formatDay(slot.start_at)} at ${this.formatTime(slot.start_at)}`
+        : "No opening in the next 14 days"
+    })
+  }
+
+  resetStaffNextOpenings() {
+    if (!this.hasStaffNextOpeningTarget) return
+    this.staffNextOpeningTargets.forEach((target) => {
+      target.textContent = "Select a service to check openings"
+    })
   }
 
   toggleNextOpening(show) {
@@ -292,8 +348,8 @@ export default class extends Controller {
   technicianNameFor(slot) {
     if (!slot?.team_member_id) return ""
 
-    const option = Array.from(this.staffTarget.options).find((candidate) => candidate.value === slot.team_member_id)
-    return option?.textContent.trim() || ""
+    const radio = this.staffRadioTargets.find((candidate) => candidate.value === slot.team_member_id)
+    return radio?.dataset.staffName?.trim() || ""
   }
 
   newIdempotencyKey() {

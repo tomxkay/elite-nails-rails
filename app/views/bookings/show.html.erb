@@ -108,17 +108,91 @@
         <!-- Step 2: Tech + day -->
         <section class="rounded-3xl bg-white p-6 sm:p-8 shadow-warm border border-cream-200">
           <h2 class="font-serif text-xl text-warm-gray-800 mb-4"><span class="text-terracotta-500 mr-2">2.</span>Pick your technician &amp; day</h2>
-          <div class="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label for="booking-staff" class="mb-1 block text-sm font-medium text-warm-gray-700">Technician</label>
-              <select id="booking-staff" data-booking-target="staff" data-action="booking#loadSlots"
-                      class="w-full rounded-xl border border-cream-200 bg-white px-3 py-2.5 text-warm-gray-800">
-                <option value="">Anyone available</option>
-                <% @staff.each do |member| %>
-                  <option value="<%= member[:id] %>" <%= "selected" if @preselected_team_member_id == member[:id].to_s %>><%= member[:name] %></option>
+          <div class="space-y-5">
+            <%# Technician picker: native radios inside labels (not ARIA buttons)
+                so arrow-key navigation, roving focus, and form semantics come
+                for free. The visible card is the input's `peer` sibling, styled
+                with peer-checked/peer-focus-visible — selection needs no JS. The
+                "Anyone available" option is hidden when there's a single
+                bookable tech, since it would just duplicate that one person. %>
+            <% show_anyone = @staff.size != 1 %>
+            <% preselected = @preselected_team_member_id %>
+            <fieldset>
+              <legend class="sr-only">Technician</legend>
+              <div class="grid gap-3">
+                <% if show_anyone %>
+                  <label class="block cursor-pointer">
+                    <input type="radio" name="booking_staff" value="" class="sr-only peer"
+                           data-booking-target="staffRadio" data-staff-name="Anyone available"
+                           data-action="booking#selectStaff" <%= "checked" if preselected.blank? %>>
+                    <span class="flex items-start gap-4 rounded-2xl border border-cream-200 bg-cream-50/50 p-4 transition-all hover:border-peach-300 hover:bg-cream-100 peer-checked:border-terracotta-500 peer-checked:bg-cream-100 peer-checked:ring-2 peer-checked:ring-terracotta-100 peer-focus-visible:ring-2 peer-focus-visible:ring-terracotta-400 peer-focus-visible:ring-offset-2">
+                      <span class="flex h-20 w-16 shrink-0 items-center justify-center rounded-t-full rounded-b-2xl bg-white text-sage-600 ring-1 ring-cream-200">
+                        <%= icon "user-group", classes: "h-8 w-8" %>
+                      </span>
+                      <span class="min-w-0 flex-1">
+                        <span class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                          <span class="font-serif text-2xl leading-tight text-warm-gray-900">Anyone available</span>
+                          <span class="text-xs font-semibold uppercase tracking-[0.14em] text-sage-700">Best chance</span>
+                        </span>
+                        <span class="mt-1 block text-sm leading-relaxed text-warm-gray-700">
+                          We'll book the first available technician for your service and day.
+                        </span>
+                        <span data-booking-target="staffNextOpening" data-staff-id=""
+                              class="mt-2 block text-xs font-semibold uppercase tracking-[0.14em] text-warm-gray-600">
+                          Select a service to check openings
+                        </span>
+                      </span>
+                    </span>
+                  </label>
                 <% end %>
-              </select>
-            </div>
+
+                <% @staff.each do |member| %>
+                  <% checked = preselected == member[:id].to_s || (!show_anyone && preselected.blank?) %>
+                  <label class="block cursor-pointer">
+                    <input type="radio" name="booking_staff" value="<%= member[:id] %>" class="sr-only peer"
+                           data-booking-target="staffRadio" data-staff-name="<%= member[:name] %>"
+                           data-action="booking#selectStaff" <%= "checked" if checked %>>
+                    <span class="flex items-start gap-4 rounded-2xl border border-cream-200 bg-white p-4 transition-all hover:border-peach-300 hover:bg-cream-50 peer-checked:border-terracotta-500 peer-checked:bg-cream-100 peer-checked:ring-2 peer-checked:ring-terracotta-100 peer-focus-visible:ring-2 peer-focus-visible:ring-terracotta-400 peer-focus-visible:ring-offset-2">
+                      <span class="relative h-20 w-16 shrink-0 overflow-hidden rounded-t-full rounded-b-2xl bg-gradient-to-b from-peach-100 via-cream-100 to-sage-100 ring-1 ring-cream-200">
+                        <% if member[:image].present? %>
+                          <img src="<%= asset_path(member[:image]) %>"
+                               alt="<%= member[:name] %>"
+                               class="h-full w-full object-cover"
+                               loading="lazy">
+                        <% else %>
+                          <span class="flex h-full w-full items-end justify-center">
+                            <%= icon "user", variant: :solid, classes: "h-14 w-14 -mb-2 text-terracotta-200" %>
+                          </span>
+                        <% end %>
+                      </span>
+                      <span class="min-w-0 flex-1">
+                        <span class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                          <span class="font-serif text-2xl leading-tight text-warm-gray-900"><%= member[:name] %></span>
+                          <% if member[:role].present? %>
+                            <span class="text-xs font-semibold uppercase tracking-[0.14em] text-terracotta-700"><%= member[:role] %></span>
+                          <% end %>
+                        </span>
+                        <% if member[:bio].present? %>
+                          <span class="mt-1 block line-clamp-2 text-sm leading-relaxed text-warm-gray-700"><%= member[:bio] %></span>
+                        <% end %>
+                        <% if member[:specialties].present? %>
+                          <span class="mt-3 flex flex-wrap gap-2">
+                            <% member[:specialties].first(3).each do |specialty| %>
+                              <span class="rounded-full border border-cream-200 bg-cream-50 px-2.5 py-1 text-[0.7rem] font-semibold text-terracotta-700"><%= specialty %></span>
+                            <% end %>
+                          </span>
+                        <% end %>
+                        <span data-booking-target="staffNextOpening" data-staff-id="<%= member[:id] %>"
+                              class="mt-3 block text-xs font-semibold uppercase tracking-[0.14em] text-warm-gray-600">
+                          Select a service to check openings
+                        </span>
+                      </span>
+                    </span>
+                  </label>
+                <% end %>
+              </div>
+            </fieldset>
+
             <div>
               <label for="booking-date" class="mb-1 block text-sm font-medium text-warm-gray-700">Day</label>
               <input id="booking-date" type="date" data-booking-target="date" data-action="booking#loadSlots"
