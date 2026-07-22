@@ -88,5 +88,36 @@
         <% end %>
       </div>
     <% end %>
+
+    <%# Feedback invitation. Deliberately routes two ways: happy guests to a
+        public Google review, anyone with a concern to a direct phone call —
+        so issues get resolved privately instead of landing as public 1-stars.
+        Frames the rating as a work-in-progress the salon is committed to. %>
+    <div class="mt-14 rounded-3xl border border-cream-200 bg-cream-50/85 px-8 py-10 text-center shadow-warm-sm backdrop-blur"
+         data-controller="scroll-reveal" data-scroll-reveal-animation-value="fadeInUp">
+      <h3 class="font-serif text-2xl text-warm-gray-900 sm:text-3xl">We're always striving to do better</h3>
+      <p class="mx-auto mt-4 max-w-2xl leading-relaxed text-warm-gray-700">
+        Every appointment is a chance to earn your trust. If we've taken good care of you,
+        a quick review on Google means the world to a small family salon. And if there's
+        anything we could do better, we truly want to hear it — give us a call and we'll
+        make it right.
+      </p>
+      <div class="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <%= render 'shared/cta_button',
+                   text: 'Leave a Review',
+                   href: google_reviews_link,
+                   target: '_blank',
+                   rel: 'noopener',
+                   style: :solid,
+                   size: :md,
+                   icon: 'pencil-square' %>
+        <%= render 'shared/cta_button',
+                   text: "Share Feedback — #{salon.phone_display}",
+                   href: "tel:#{salon.phone}",
+                   style: :outline,
+                   size: :md,
+                   icon: 'phone' %>
+      </div>
+    </div>
   </div>
 </section>
