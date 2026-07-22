@@ -87,7 +87,8 @@ honest and doesn't undermine the bookings we do want.
 - **Do other technicians opt in?** Gated on the owner's comfort and on whether
   the first weeks produce real bookings without disruption. Adding a tech is
   Square-side (assign them to service variations) plus flipping `bookable` on
-  their `TeamMember` record.
+  their `TeamMember` record — **and** the availability code change flagged below
+  (see "Before a SECOND technician becomes bookable").
 - **Should more services become bookable?** Same gate. Revisit once there's real
   booking volume to reason about.
 - **Notification workflow** — the owner's concern is really about *awareness*,
@@ -98,6 +99,50 @@ honest and doesn't undermine the bookings we do want.
 - **Kill switch** — if adoption fails, `booking_link` degrades cleanly:
   unset the Square credentials and every CTA falls back to `BOOKING_URL`, then
   to `tel:`. No code changes needed to retreat.
+
+## ⚠️ Before a SECOND technician becomes bookable — required code change
+
+The quick-availability dialog (`/book/availability/next`, `BookingsController#
+next_availability`) reports **per-technician** "next opening" correctly **only
+while exactly one technician is bookable**. Adding a second bookable tech
+*without* the fix below will make the dialog misreport availability. `next_slot`
+per tech will be wrong; only the "Anyone available" aggregate stays correct.
+
+**Why it breaks.** Today the controller runs one broad Square availability query
+per service, then splits the returned slots by their `team_member_id`. Square,
+however, tags each open slot to **one** technician ("first available"), and the
+query returns a row per bookable staff member regardless of the service. So with
+two+ bookable techs:
+
+- **Different services** (Thai does Gel, Michael doesn't): the tech who doesn't
+  perform the selected service still gets a row reading *"No opening in the next
+  14 days"* — implying they offer it but are booked out, when they don't offer
+  it at all. (`quick_availability_controller.js#resultRow` renders every
+  technician the endpoint returns.)
+- **Shared service** (both do Gel Manicure): a noon slot both could work is
+  tagged by Square to just one of them. The other's earliest *own-tagged* slot
+  looks later (e.g. 1pm) than their true availability (noon). Pruning can't fix
+  this — both techs legitimately belong. This is the same slot-tagging quirk
+  that caused the 2026-07-21 "phantom 10am" bug, but between two real techs.
+
+**The fix.** Query Square **once per bookable technician** with
+`team_member_id_filter: { any: [tech_id] }` (SquareApi.availability already
+accepts a single `team_member_id`; extend or loop it), instead of one broad
+query split after the fact. Then:
+- each tech's `next_slot` is their *true* earliest for that service;
+- a tech not assigned to the service returns zero slots → **omit the row** rather
+  than show a false "no opening";
+- `anyone_next_slot` = the min across the per-tech results (one consistent
+  source), so it stays correct too.
+
+Cost is N Square calls per lookup (one per bookable tech), which is fine at this
+volume and already cached (30s/5min in the controller). Estimated ~30 min + the
+existing `bookings_controller_test.rb` availability tests extended for two techs.
+
+**Until then:** with one bookable tech (Michael), the current logic is correct —
+his tagged slots are the only ones, so there's nothing to mis-split. This note
+exists so the change lands *with* the second tech, not after a user reports bad
+times.
 
 ## Related
 

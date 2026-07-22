@@ -111,6 +111,11 @@ class BookingsController < ApplicationController
     # bookable. "Anyone available" must only reflect staff who actually take
     # online bookings, or it advertises a time nobody can serve (e.g. a 10am
     # from a non-bookable tech when the only bookable tech opens at noon).
+    #
+    # ⚠️ The per-technician split below is correct only while ONE tech is
+    # bookable. With two+, Square's one-tech-per-slot tagging makes per-tech
+    # `next_slot` unreliable — query per tech instead. See the "Before a SECOND
+    # technician becomes bookable" section in docs/booking-adoption-notes.md.
     bookable_slots = slots_for_staff(slots, staff)
     slots_by_staff = bookable_slots.group_by { |slot| slot[:team_member_id].to_s }
     technicians = staff.map do |member|

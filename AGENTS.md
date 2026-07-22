@@ -371,7 +371,7 @@ pending items:
 | `connecting-to-production-db.md` | Reference — how to reach Fly Postgres via `fly proxy`. |
 | `team-section-design-reference.md` | Reference — original full-height editorial team section is tagged as `design/team-section-editorial-rows` at commit `c2561db`; use when revisiting team layout direction. |
 | `service-menu-reconciliation.md` | 🔴 **Active.** Live site + Square catalog carry placeholder services; only 2 of 12 match the salon's real board. Includes 3 live overcharges. **Pending:** owner descriptions/durations, then fix Square → then site via MCP tools. |
-| `booking-adoption-notes.md` | 🟡 **Active — read before changing booking UX.** Phone is the salon's *primary* channel; online booking is a deliberately narrow soft launch (1 tech, 9 of 25 services). Explains the business context and why CTAs are worded the way they are. |
+| `booking-adoption-notes.md` | 🟡 **Active — read before changing booking UX.** Phone is the salon's *primary* channel; online booking is a deliberately narrow soft launch (1 tech, 9 of 25 services). Explains the business context and why CTAs are worded the way they are. ⚠️ Also flags a **required availability code change before a 2nd technician becomes bookable**. |
 | `reviews-and-ratings.md` | 🟢 Six fabricated testimonials and an invented 4.9 rating were removed 2026-07-21 and replaced with **four real owner-supplied Google reviews**; rating corrected to 4.2/154. **Never write testimonials** — `Review::DEFAULTS` takes real, verbatim reviews only (three guard tests). Six more reviews are queued in the doc; three name non-current staff and need owner confirmation. |
 
 ### ⏸️ Pending owner confirmation — gel / dip / acrylic / nail-art menu (2026-07-20)
