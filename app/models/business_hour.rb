@@ -8,12 +8,12 @@ class BusinessHour < ApplicationRecord
 
   # In-code backup / canonical seed source.
   DEFAULTS = [
-    { wday: 1, opens: "10:00", closes: "19:00", closed: false },
-    { wday: 2, opens: "10:00", closes: "19:00", closed: false },
-    { wday: 3, opens: "10:00", closes: "19:00", closed: false },
-    { wday: 4, opens: "10:00", closes: "19:00", closed: false },
-    { wday: 5, opens: "10:00", closes: "19:00", closed: false },
-    { wday: 6, opens: "09:00", closes: "18:00", closed: false },
+    { wday: 1, opens: "10:00", closes: "18:00", closed: false },
+    { wday: 2, opens: "10:00", closes: "18:00", closed: false },
+    { wday: 3, opens: "10:00", closes: "18:00", closed: false },
+    { wday: 4, opens: "10:00", closes: "18:00", closed: false },
+    { wday: 5, opens: "10:00", closes: "18:00", closed: false },
+    { wday: 6, opens: "09:00", closes: "17:00", closed: false },
     { wday: 0, opens: nil, closes: nil, closed: true }
   ].freeze
 
@@ -34,14 +34,14 @@ class BusinessHour < ApplicationRecord
     DAY_NAMES[wday]
   end
 
-  # "10:00 AM – 7:00 PM" or "Closed".
+  # "10:00 AM – 6:00 PM" or "Closed".
   def display_hours
     return "Closed" if closed? || opens.blank? || closes.blank?
     "#{format_time(opens)} – #{format_time(closes)}"
   end
 
   # Consecutive days sharing identical hours, grouped into display rows:
-  #   [["Monday – Friday", "10:00 AM – 7:00 PM"], ["Saturday", "9:00 AM – 6:00 PM"], ["Sunday", "Closed"]]
+  #   [["Monday – Friday", "10:00 AM – 6:00 PM"], ["Saturday", "9:00 AM – 5:00 PM"], ["Sunday", "Closed"]]
   def self.grouped_for_display
     for_display.slice_when { |a, b| a.display_hours != b.display_hours }.map do |group|
       label = group.size == 1 ? group.first.day_name : "#{group.first.day_name} – #{group.last.day_name}"

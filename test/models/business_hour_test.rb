@@ -11,8 +11,8 @@ class BusinessHourTest < ActiveSupport::TestCase
     assert_equal 0, BusinessHour.count
 
     grouped = BusinessHour.grouped_for_display
-    assert_equal ["Monday – Friday", "10:00 AM – 7:00 PM"], grouped[0]
-    assert_equal ["Saturday", "9:00 AM – 6:00 PM"], grouped[1]
+    assert_equal ["Monday – Friday", "10:00 AM – 6:00 PM"], grouped[0]
+    assert_equal ["Saturday", "9:00 AM – 5:00 PM"], grouped[1]
     assert_equal ["Sunday", "Closed"], grouped[2]
   end
 
