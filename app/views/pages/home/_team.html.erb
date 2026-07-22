@@ -33,21 +33,24 @@
 
   <%# Content from the DB (TeamMember), with in-code DEFAULTS fallback.
       image_url stays nil until real photos land (renders the cutout placeholder). %>
+  <%# No inner scroll container: the cards flow with the page. A capped,
+      overflow-y-auto wrapper used to live here for the old one-viewport-per-
+      member design, but on touchscreens it created a nested scroll region that
+      fought the page scroll (ambiguous swipe target at the edges). With compact
+      cards the grid is short enough to just stack. %>
   <div class="relative z-10 mx-auto mt-10 max-w-7xl px-4 pb-20 sm:px-6 lg:px-8 lg:pb-24">
-    <div class="max-h-[46rem] overflow-y-auto pr-1 lg:max-h-none lg:overflow-visible lg:pr-0">
-      <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        <% team.each_with_index do |member, i| %>
-          <%= render 'shared/team_member',
-                     name: member.name,
-                     role: member.role,
-                     bio: member.bio,
-                     quote: member.quote,
-                     specialties: member.specialties,
-                     bookable: member.bookable,
-                     image_url: (asset_path(member.image) if member.image.present?),
-                     index: i %>
-        <% end %>
-      </div>
+    <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+      <% team.each_with_index do |member, i| %>
+        <%= render 'shared/team_member',
+                   name: member.name,
+                   role: member.role,
+                   bio: member.bio,
+                   quote: member.quote,
+                   specialties: member.specialties,
+                   bookable: member.bookable,
+                   image_url: (asset_path(member.image) if member.image.present?),
+                   index: i %>
+      <% end %>
     </div>
   </div>
 </section>
