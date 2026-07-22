@@ -1,0 +1,59 @@
+<%# Owner-only confirmation for the analytics opt-out toggle. Self-contained
+    (rendered with layout: false) so it needs no nav/footer/assets. %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title><%= @opted_out ? "Analytics off" : "Analytics on" %> · Elite Nails</title>
+  <style>
+    :root { color-scheme: light; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f7f2ec; color: #3f3a34; padding: 1.5rem;
+    }
+    .card {
+      max-width: 30rem; width: 100%; background: #fff; border: 1px solid #e9e0d4;
+      border-radius: 1.25rem; padding: 2rem 1.75rem; box-shadow: 0 20px 50px -30px rgba(104,72,57,.5);
+      text-align: center;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: .5rem; font-size: .75rem;
+      text-transform: uppercase; letter-spacing: .14em; font-weight: 600;
+      padding: .35rem .75rem; border-radius: 999px; margin-bottom: 1rem;
+    }
+    .on  { background: #eaf3ec; color: #3f7a52; }
+    .off { background: #f6e7e1; color: #a8604e; }
+    .dot { width: .5rem; height: .5rem; border-radius: 999px; background: currentColor; }
+    h1 { font-size: 1.35rem; margin: 0 0 .5rem; }
+    p  { margin: 0 0 1rem; line-height: 1.55; color: #6b645b; font-size: .95rem; }
+    a.action {
+      display: inline-block; margin-top: .25rem; font-weight: 600; font-size: .9rem;
+      color: #a8604e; text-decoration: underline; text-underline-offset: 3px;
+    }
+    .home { display: block; margin-top: 1.25rem; font-size: .85rem; color: #9a9188; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <% if @opted_out %>
+      <span class="badge off"><span class="dot"></span>Tracking off</span>
+      <h1>You're excluded from analytics</h1>
+      <p>
+        Visits and clicks from <strong>this browser</strong> won't be counted.
+        The setting is saved as a cookie, so it sticks across restarts — but it's
+        per browser and per device, so repeat it on each one you use.
+      </p>
+      <a class="action" href="<%= analytics_opt_in_path %>">Turn tracking back on</a>
+    <% else %>
+      <span class="badge on"><span class="dot"></span>Tracking on</span>
+      <h1>Analytics re-enabled</h1>
+      <p>This browser is being counted again, like any regular visitor.</p>
+      <a class="action" href="<%= analytics_opt_out_path %>">Exclude this browser again</a>
+    <% end %>
+    <a class="home" href="<%= root_path %>">← Back to the site</a>
+  </main>
+</body>
+</html>

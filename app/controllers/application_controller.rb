@@ -18,17 +18,34 @@ class ApplicationController < ActionController::Base
   end
 
   # Only count real, human, successful page loads — not JSON/XML endpoints,
-  # non-GET requests, redirects/errors, Turbo prefetches, or Do-Not-Track users.
+  # non-GET requests, redirects/errors, Turbo prefetches, or opted-out visitors.
   def trackable_pageview?
     request.get? &&
       request.format.html? &&
       response.successful? &&
       !turbo_prefetch? &&
-      !do_not_track?
+      !skip_analytics?
   end
 
   def turbo_prefetch?
     request.headers["Sec-Purpose"].to_s.include?("prefetch")
+  end
+
+  # Cookie set by AnalyticsController#opt_out — how the salon excludes its own
+  # browsers from the stats. See docs/analytics-plan.md.
+  ANALYTICS_OPT_OUT_COOKIE = :analytics_opt_out
+
+  # The single analytics kill switch, shared by every tracking path (page views
+  # here, click events in EventsController, booking events in BookingsController):
+  # honor Do-Not-Track / Global Privacy Control, and honor the salon's own
+  # opt-out cookie.
+  def skip_analytics?
+    do_not_track? || analytics_opted_out?
+  end
+  helper_method :skip_analytics?
+
+  def analytics_opted_out?
+    cookies[ANALYTICS_OPT_OUT_COOKIE] == "1"
   end
 
   def do_not_track?

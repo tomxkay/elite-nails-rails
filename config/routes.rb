@@ -50,6 +50,11 @@ Rails.application.routes.draw do
   # First-party analytics: client-reported KPI events (see docs/analytics-plan.md).
   post "/events", to: "events#create"
 
+  # Owner analytics opt-out toggle. Visit once per browser to exclude your own
+  # visits from the stats; /analytics/opt-in re-enables tracking.
+  get "/analytics/opt-out", to: "analytics#opt_out", as: :analytics_opt_out
+  get "/analytics/opt-in",  to: "analytics#opt_in",  as: :analytics_opt_in
+
   # Defines the root path route ("/")
   root "pages#home"
 end

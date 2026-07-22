@@ -23,7 +23,7 @@ class EventsController < ApplicationController
 
   # POST /events  { name: "...", properties: { ... } }
   def create
-    return head :no_content if do_not_track?
+    return head :no_content if skip_analytics?
     return head :unprocessable_entity unless ALLOWED_EVENTS.include?(params[:name].to_s)
 
     ahoy.track(params[:name].to_s, event_properties)

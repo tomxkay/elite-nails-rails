@@ -383,6 +383,8 @@ class BookingsController < ApplicationController
   # Record a funnel event via Ahoy. Properties only — never customer PII (name,
   # phone, email values). Analytics must never break a booking.
   def track_event(name, **properties)
+    return if skip_analytics?
+
     ahoy.track(name, properties)
   rescue StandardError => e
     Rails.logger.warn("[Analytics] #{name} tracking failed: #{e.class}: #{e.message}")

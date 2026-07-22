@@ -45,6 +45,14 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_response :no_content
   end
 
+  test "records nothing from a browser that opted out" do
+    get analytics_opt_out_path # sets the opt-out cookie on this session
+    assert_no_difference -> { Ahoy::Event.count } do
+      post "/events", params: { name: "phone_click" }, as: :json, headers: { "User-Agent" => UA }
+    end
+    assert_response :no_content
+  end
+
   test "is rate limited after the per-IP cap" do
     with_counting_cache do
       120.times do

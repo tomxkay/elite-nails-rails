@@ -133,3 +133,18 @@ Small, self-contained PR:
   `McpController::TOOL_CLASS_NAMES`) — exposes `Analytics::Summary#overview` for a
   `days` window so the owner can get KPIs / a dashboard by asking Claude, no
   console needed.
+
+### Owner opt-out (2026-07-22)
+Now that the site is live, the salon's own visits shouldn't skew the stats.
+- **Toggle:** visit **`/analytics/opt-out`** once per browser/device to stop
+  being counted; **`/analytics/opt-in`** to resume. Persistent first-party
+  cookie (`analytics_opt_out`, ~20-year, httponly) — survives restarts, but is
+  per browser + per device and forward-only (never scrubs past rows).
+- **Where it's enforced:** `ApplicationController#skip_analytics?` combines the
+  cookie with Do-Not-Track / Global-Privacy-Control and gates **all three**
+  tracking paths — page views (`trackable_pageview?`), client events
+  (`EventsController#create`), and booking events
+  (`BookingsController#track_event`).
+- **Fresh start:** production Ahoy tables were truncated 2026-07-22
+  (`TRUNCATE ahoy_events, ahoy_visits RESTART IDENTITY CASCADE`) before real
+  traffic. Re-run that to reset again.
