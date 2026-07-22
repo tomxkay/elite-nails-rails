@@ -20,7 +20,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
       "Breathable polishes" => "the salon does not stock breathable polish",
       "Private seating" => "there is no private seating on the salon floor",
       "hospital-grade" => "a specific regulatory product claim the owner has not confirmed",
-      "spa treatments" => "no spa treatment has ever been on the menu"
+      "spa treatments" => "no spa treatment has ever been on the menu",
+      "spa pedicure" => "the menu has Pedicure and Deluxe Pedicure, never a 'spa pedicure'"
     }.each do |claim, reason|
       assert_no_match(/#{Regexp.escape(claim)}/i, response.body,
         "Removed claim is back on the home page: #{claim.inspect} — #{reason}. " \
