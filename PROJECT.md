@@ -9,7 +9,7 @@ _Last updated: 2026-07-18_
 ## The Client
 
 - **Elite Nails** — a **family-owned and operated** nail salon in Cramerton, NC
-  (202 Market St F · (704) 824-9032 · est. 2002).
+  (202 Market St F · (704) 824-9032 · est. 2003).
 - The owners are **not tech-savvy**. A website is a resource they have **not yet
   tapped** to drive business.
 - This is their first real digital presence. They rely today on walk-ins, phone,
@@ -140,7 +140,7 @@ To be answered with the client. Grouped by theme; update inline as we learn more
 
 ### The people & story (for a personal About/Team)
 - Who are the owners/family? Names, relationship, who founded it and why?
-- The real story of the salon — how it started in 2002, what makes it special,
+- The real story of the salon — how it started in 2003, what makes it special,
   the family's connection to Cramerton?
 - Each technician: real name, years of experience, specialties, personality,
   a favorite service, a fun fact? (Current names: Michael K, Nhan Ka, Lien Ka —
@@ -267,10 +267,10 @@ To be answered with the client. Grouped by theme; update inline as we learn more
   one system: ambient backdrops (grid lines + soft orbs), oversized serif/script
   watermarks, script-font pull-quotes, and generous ~85vh rhythm. **About** now
   leads with a large serif headline (italic terracotta accent) and an editorial
-  2×2 stats panel (big serif numerals) with a faint "2002" watermark. **Story**
+  2×2 stats panel (big serif numerals) with a faint "2003" watermark. **Story**
   presents the salon photo in the **same arched, blended frame as the team
   portraits** (terracotta ambient blob + `portrait-ground` shadow), with an "est."
-  watermark, a script pull-quote, the family narrative, a "Since 2002" caption
+  watermark, a script pull-quote, the family narrative, a "Since 2003" caption
   badge, and a script signature line. Removed the old aggressive negative-margin
   overlap for a cleaner scroll-rich flow. Files:
   `app/views/pages/home/_about.html.erb`, `app/views/pages/home/_story.html.erb`.

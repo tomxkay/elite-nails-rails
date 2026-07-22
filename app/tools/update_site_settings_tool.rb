@@ -24,7 +24,7 @@ class UpdateSiteSettingsTool < ApplicationTool
     optional(:latitude).filled(:float)
     optional(:longitude).filled(:float)
     optional(:price_range).filled(:string).description("e.g. '$$'")
-    optional(:established).filled(:integer).description("Founding year, e.g. 2002")
+    optional(:established).filled(:integer).description("Founding year, e.g. 2003")
     optional(:aggregate_rating).filled(:float).description("Average review rating, e.g. 4.9")
     optional(:review_count).filled(:integer).description("Total number of reviews")
   end

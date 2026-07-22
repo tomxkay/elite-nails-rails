@@ -1,7 +1,7 @@
 # Elite Nails
 
 Marketing website for **Elite Nails**, a family-owned nail salon in Cramerton, NC
-(est. 2002). A single-page, server-rendered Rails 8 site that gives the salon a
+(est. 2003). A single-page, server-rendered Rails 8 site that gives the salon a
 digital presence and drives clients to book appointments.
 
 > For a deeper architecture and feature map, see [`AGENTS.md`](AGENTS.md).

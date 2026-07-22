@@ -6,7 +6,7 @@ Dev reference for AI agents and contributors working on this codebase.
 
 **Elite Nails** is a single-page marketing website for a family-owned nail salon
 in **Cramerton, NC** (202 Market St F, Cramerton, NC 28032 · (704) 824-9032 ·
-est. 2002). It is a brochure/landing site — there is **no user auth, no database
+est. 2003). It is a brochure/landing site — there is **no user auth, no database
 models, and no forms**. Its single job is to present the salon and drive
 appointment bookings to an external **Square Appointments** URL (with a `tel:`
 phone fallback).
@@ -119,9 +119,9 @@ in-code `DEFAULTS` fallback — **edit the DB, not the partial**:
 
 | Partial          | id             | Content |
 |------------------|----------------|---------|
-| `_hero`          | `#home`        | Headline, dual CTAs + phone link, stat cards, hero imagery, "est. 2002" |
+| `_hero`          | `#home`        | Headline, dual CTAs + phone link, stat cards, hero imagery, "est. 2003" |
 | `_about`         | `#about`       | "Welcome to Elite Nails" intro, Call/Book CTA pair |
-| `_story`         | `#story`       | Family-owned since 2002, serving Cramerton/Belmont/Gaston County |
+| `_story`         | `#story`       | Family-owned since 2003, serving Cramerton/Belmont/Gaston County |
 | `_services`      | `#services`    | 6 category cards *(DB: `Service`)*, one per `PricingItem` category |
 | `_pricing`       | `#pricing`     | 6 categories with prices, durations, and tap-to-expand descriptions *(DB: `PricingItem`)* |
 | `_promotions`    | `#specials`    | Featured offer + coupon-style specials *(DB: `Promotion`)* |
