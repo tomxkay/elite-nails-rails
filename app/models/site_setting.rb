@@ -16,7 +16,7 @@ class SiteSetting < ApplicationRecord
     latitude: 35.2387,
     longitude: -81.0737,
     price_range: "$$",
-    established: 2003,
+    established: 2002,
     # Real figures from the salon's Google Business Profile (owner-confirmed
     # 2026-07-21). These previously held an invented 4.9 / 120 — never put a
     # number here that isn't on the actual profile: it feeds the LocalBusiness

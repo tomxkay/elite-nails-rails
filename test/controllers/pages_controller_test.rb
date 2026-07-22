@@ -31,7 +31,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   test "home page shows the verified hero claims" do
     get root_url
 
-    assert_match "Since 2003", response.body
+    assert_match "Since 2002", response.body
     assert_match "Call ahead", response.body
     assert_match "Private Waxing Room", response.body
     assert_match "Done in our private waxing room", response.body
