@@ -54,7 +54,7 @@ class BookingsController < ApplicationController
       end_at: window_end.utc,
       team_member_id: params[:team_member_id].presence
     )
-    render json: { slots: slots }
+    render json: { slots: only_bookable_slots(slots) }
   rescue ActionController::ParameterMissing
     render json: { error: "Pick a service first" }, status: :unprocessable_entity
   rescue SquareApi::Error => e
@@ -106,7 +106,13 @@ class BookingsController < ApplicationController
     end
 
     staff = cached_bookable_staff
-    slots_by_staff = slots.select { |slot| slot[:team_member_id].present? }.group_by { |slot| slot[:team_member_id].to_s }
+    # Square's availability search returns slots for every team member ASSIGNED
+    # to the service variation — including ones whose booking profile isn't
+    # bookable. "Anyone available" must only reflect staff who actually take
+    # online bookings, or it advertises a time nobody can serve (e.g. a 10am
+    # from a non-bookable tech when the only bookable tech opens at noon).
+    bookable_slots = slots_for_staff(slots, staff)
+    slots_by_staff = bookable_slots.group_by { |slot| slot[:team_member_id].to_s }
     technicians = staff.map do |member|
       slot = earliest_slot(slots_by_staff[member[:id].to_s])
       {
@@ -118,7 +124,7 @@ class BookingsController < ApplicationController
 
     render json: {
       technicians: technicians,
-      anyone_next_slot: serialize_availability_slot(earliest_slot(slots)),
+      anyone_next_slot: serialize_availability_slot(earliest_slot(bookable_slots)),
       start_date: date.iso8601,
       days: days
     }
@@ -131,6 +137,18 @@ class BookingsController < ApplicationController
   # POST /book
   def create
     idempotency_key = params.require(:idempotency_key)
+    team_member_id = params.require(:team_member_id).to_s
+    # Server-side guard: the client picks a slot from availability, but never
+    # trust it to only send bookable techs. Square's create_booking will happily
+    # book a team member who's assigned to the service but not bookable online,
+    # so reject anyone outside the bookable set here. Skipped only when the set
+    # can't be determined (Square staff lookup failed), where Square remains the
+    # backstop.
+    unless team_member_bookable?(team_member_id)
+      return render json: { ok: false, error: "That technician isn't available for online booking. Please pick another time." },
+                    status: :unprocessable_entity
+    end
+
     track_event("booking_submitted", service_id: params[:service_id])
     customer = SquareApi.upsert_customer(
       given_name: params.require(:name),
@@ -142,7 +160,7 @@ class BookingsController < ApplicationController
       start_at: params.require(:start_at),
       service_variation_id: params.require(:service_id),
       service_variation_version: params.require(:service_version),
-      team_member_id: params.require(:team_member_id),
+      team_member_id: team_member_id,
       idempotency_key: idempotency_key,
       note: params[:note].presence
     )
@@ -224,6 +242,31 @@ class BookingsController < ApplicationController
     end
   rescue SquareApi::Error
     []
+  end
+
+  # Square team-member ids that take online bookings (booking-profile bookable).
+  def bookable_staff_ids
+    @bookable_staff_ids ||= cached_bookable_staff.map { |member| member[:id].to_s }.to_set
+  end
+
+  # Keep only slots served by a bookable technician. Slots for staff merely
+  # assigned to the service (not bookable online) are dropped. `staff` is passed
+  # in where already loaded to avoid a second lookup.
+  def slots_for_staff(slots, staff = nil)
+    ids = staff ? staff.map { |m| m[:id].to_s }.to_set : bookable_staff_ids
+    Array(slots).select { |slot| ids.include?(slot[:team_member_id].to_s) }
+  end
+
+  def only_bookable_slots(slots)
+    slots_for_staff(slots)
+  end
+
+  # True if the tech takes online bookings. When the bookable set is unknown
+  # (Square staff lookup failed → empty), don't block booking — Square is the
+  # backstop — so this returns true rather than rejecting everyone.
+  def team_member_bookable?(team_member_id)
+    ids = bookable_staff_ids
+    ids.empty? || ids.include?(team_member_id.to_s)
   end
 
   def earliest_slot(slots)

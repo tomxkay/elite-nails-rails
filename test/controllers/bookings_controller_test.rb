@@ -11,6 +11,20 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
   BROWSER_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " \
                "(KHTML, like Gecko) Chrome/120.0 Safari/537.36".freeze
 
+  # Default the bookable roster to Michael (TM1) for the whole suite. The
+  # booking guard consults SquareApi.bookable_staff, and without this it would
+  # make a real HTTP call in tests that don't stub it — breaking the "no HTTP
+  # leaves the suite" invariant above. Individual tests still override with
+  # SquareApi.stub(:bookable_staff, ...) to exercise other rosters.
+  setup do
+    @original_bookable_staff = SquareApi.method(:bookable_staff)
+    SquareApi.define_singleton_method(:bookable_staff) { STAFF }
+  end
+
+  teardown do
+    SquareApi.define_singleton_method(:bookable_staff, @original_bookable_staff)
+  end
+
   test "show backfills a missing Square description from the site menu" do
     PricingItem.create!(category: "Manicures", name: "Gel Manicure", price: "$40",
                         description: "Cured to a high shine that resists chips.")
@@ -164,11 +178,26 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "availability returns slots as json" do
-    SquareApi.stub(:availability, SLOTS) do
-      get "/book/availability", params: { service_id: "VAR1", date: "2026-07-20" }
+    SquareApi.stub(:bookable_staff, STAFF) do
+      SquareApi.stub(:availability, SLOTS) do
+        get "/book/availability", params: { service_id: "VAR1", date: "2026-07-20" }
+      end
     end
     assert_response :success
     assert_equal "2026-07-20T14:00:00Z", JSON.parse(response.body).dig("slots", 0, "start_at")
+  end
+
+  test "availability drops slots for technicians who aren't bookable online" do
+    # Square returns a slot for TM9, who is assigned to the service but is not a
+    # bookable staff member. It must not reach the wizard.
+    mixed = SLOTS + [ { start_at: "2026-07-20T13:00:00Z", team_member_id: "TM9", service_variation_version: 7 } ]
+    SquareApi.stub(:bookable_staff, STAFF) do
+      SquareApi.stub(:availability, mixed) do
+        get "/book/availability", params: { service_id: "VAR1", date: "2026-07-20" }
+      end
+    end
+    returned = JSON.parse(response.body)["slots"]
+    assert_equal [ "TM1" ], returned.map { |s| s["team_member_id"] }.uniq
   end
 
   test "availability without a service is a 422" do
@@ -220,6 +249,34 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal date.in_time_zone.change(hour: 11).iso8601, body.dig("anyone_next_slot", "start_at")
   end
 
+  # The reported bug: only Michael (TM1) is bookable, his first opening is noon,
+  # but Square also returns a 10am from TM2 (assigned to the service, not
+  # bookable). "Anyone available" must show noon, not the 10am nobody can serve.
+  test "next availability's anyone slot ignores non-bookable technicians" do
+    date = Date.current + 1
+    ten_am = date.in_time_zone.change(hour: 10).iso8601
+    noon   = date.in_time_zone.change(hour: 12).iso8601
+    slots = [
+      { start_at: ten_am, team_member_id: "TM2", service_variation_version: 7 }, # not bookable
+      { start_at: noon,   team_member_id: "TM1", service_variation_version: 7 }  # Michael
+    ]
+    only_michael = [ { id: "TM1", name: "Michael" } ]
+
+    SquareApi.stub(:configured?, true) do
+      SquareApi.stub(:availability, slots) do
+        SquareApi.stub(:bookable_staff, only_michael) do
+          get "/book/availability/next", params: { service_id: "VAR1", date: date.iso8601 }
+        end
+      end
+    end
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal 1, body["technicians"].size
+    assert_equal noon, body.dig("technicians", 0, "next_slot", "start_at")
+    assert_equal noon, body.dig("anyone_next_slot", "start_at"),
+      "Anyone-available must be the earliest BOOKABLE slot, not the 10am from a non-bookable tech"
+  end
+
   test "next availability rejects an invalid date" do
     SquareApi.stub(:configured?, true) do
       get "/book/availability/next", params: { service_id: "VAR1", date: "not-a-date" }
@@ -243,6 +300,36 @@ class BookingsControllerTest < ActionDispatch::IntegrationTest
     assert body["ok"]
     assert_equal "BK1", body.dig("booking", "id")
     assert_equal "booking-attempt-1", captured[:idempotency_key]
+  end
+
+  test "create refuses a technician who isn't bookable online" do
+    called = false
+    SquareApi.stub(:bookable_staff, [ { id: "TM1", name: "Michael" } ]) do
+      SquareApi.stub(:upsert_customer, ->(**) { called = true; { "id" => "CUST1" } }) do
+        post book_path, params: {
+          service_id: "VAR1", service_version: 7, start_at: "2026-07-20T14:00:00Z",
+          team_member_id: "TM9", idempotency_key: "booking-attempt-x", name: "Sarah", phone: "7045551234"
+        }, as: :json
+      end
+    end
+    assert_response :unprocessable_entity
+    assert_not called, "must reject before creating a customer or booking"
+    assert_match(/online booking/i, JSON.parse(response.body)["error"])
+  end
+
+  test "create allows a bookable technician" do
+    SquareApi.stub(:bookable_staff, [ { id: "TM1", name: "Michael" } ]) do
+      SquareApi.stub(:upsert_customer, { "id" => "CUST1" }) do
+        SquareApi.stub(:create_booking, { "id" => "BK1", "start_at" => "2026-07-20T14:00:00Z", "status" => "ACCEPTED" }) do
+          post book_path, params: {
+            service_id: "VAR1", service_version: 7, start_at: "2026-07-20T14:00:00Z",
+            team_member_id: "TM1", idempotency_key: "booking-attempt-ok", name: "Sarah", phone: "7045551234"
+          }, as: :json
+        end
+      end
+    end
+    assert_response :success
+    assert JSON.parse(response.body)["ok"]
   end
 
   test "create surfaces square errors as 422 with a message" do
