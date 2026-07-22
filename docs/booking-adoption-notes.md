@@ -100,6 +100,47 @@ honest and doesn't undermine the bookings we do want.
   unset the Square credentials and every CTA falls back to `BOOKING_URL`, then
   to `tel:`. No code changes needed to retreat.
 
+## Manual acceptance ("request to book") — option + required code change
+
+**What it is.** Square Appointments can be set (Dashboard → Appointments →
+Settings → Booking) to one of:
+
+- **Automatically accept** — current setup. A customer's booking is instantly
+  live; `CreateBooking` returns status `ACCEPTED`.
+- **Request to book / manually accept** — the booking is created `PENDING` and a
+  staff member must **Accept or Decline** it before it's real.
+
+**Why it's worth considering.** It's a direct answer to the owner's core worry —
+*"I can't watch an incoming schedule and work at the same time."* With manual
+acceptance, **nothing hits the calendar without a human OK**: each online booking
+becomes a request he approves when he has a moment. That's an easier sell than
+auto-booking for someone nervous about losing control. Trade-off: more friction
+(the guest isn't instantly confirmed), and **someone must actually act on pending
+requests** or they go stale — which leans on the *Notification workflow* item
+above.
+
+**⚠️ Plan caveat.** Unconfirmed whether "request to book" is available on the
+**free** Appointments plan or needs a paid tier. The salon is on free. Check the
+dashboard toggle is actually selectable before planning around it.
+
+**⚠️ Required code change before enabling.** The confirmation screen currently
+**ignores the booking status** and hardcodes **"Appointment confirmed"**
+(`app/views/bookings/show.html.erb`, `confirmationHeading`;
+`app/javascript/controllers/booking_controller.js` never reads
+`data.booking.status`). If Square is switched to request-to-book *without* a code
+change, a guest submits a request and the site still tells them **"Appointment
+confirmed"** — a real misrepresentation, since it's only `PENDING` and can be
+declined.
+
+The fix (~20 min): branch the confirmation on `booking.status` (already returned
+by `BookingsController#create`):
+- `PENDING`  → "Appointment requested — we'll confirm shortly" + a line that
+  they'll hear back, and don't imply it's locked in.
+- `ACCEPTED` → "Appointment confirmed" (current copy).
+
+Reflecting the real status is arguably worth doing **even on auto-accept** —
+hardcoding "confirmed" is only correct by accident of the current Square setting.
+
 ## ⚠️ Before a SECOND technician becomes bookable — required code change
 
 The quick-availability dialog (`/book/availability/next`, `BookingsController#
