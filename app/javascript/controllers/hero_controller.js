@@ -1,106 +1,66 @@
 import { Controller } from "@hotwired/stimulus"
 import { gsap } from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 // Connects to data-controller="hero"
+//
+// Entrance philosophy: a gentle SETTLE, never a reveal-from-nothing. The text
+// the visitor came to read — headline, subtitle, CTAs — is animated by position
+// only (a few px rise), never faded from opacity 0, so it is fully legible on
+// the very first painted frame. Only decorative/visual elements (the photo,
+// accents) get an opacity fade, since those aren't content to read. The whole
+// sequence lands in ~0.7s instead of the old ~2s, and reduced-motion skips it
+// entirely (elements are already in their final, visible state in the DOM).
 export default class extends Controller {
   static targets = ["branch", "image", "hand", "heading", "subtitle", "cta", "availability", "scroll"]
 
   connect() {
-    // Create entrance timeline
-    this.createEntranceTimeline()
+    this.prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false
+    // Nothing in the DOM starts hidden, so honoring reduced motion is just:
+    // do nothing. The content is already where it should be.
+    if (this.prefersReducedMotion) return
 
-    // Parallax disabled per design request
+    this.createEntranceTimeline()
   }
 
   disconnect() {
-    if (this.timeline) {
-      this.timeline.kill()
-    }
-    if (this.parallaxTrigger) {
-      this.parallaxTrigger.kill()
-    }
+    this.timeline?.kill()
   }
 
   createEntranceTimeline() {
-    this.timeline = gsap.timeline({
-      defaults: {
-        ease: "power2.out"
-      }
-    })
+    this.timeline = gsap.timeline({ defaults: { ease: "power3.out" } })
 
-    // Decorative branches (if present)
+    // Decorative accents may fade — they're background flourish, not content.
     if (this.hasBranchTarget) {
-      this.branchTargets.forEach(branch => {
-        this.timeline.from(branch, {
-          opacity: 0,
-          scale: 0.8,
-          rotation: -10,
-          duration: 1
-        }, 0)
-      })
+      this.timeline.from(this.branchTargets, {
+        autoAlpha: 0, scale: 0.9, duration: 0.7, stagger: 0.05
+      }, 0)
     }
 
-    // Hero image container (if present)
+    // Photo: a soft zoom-fade reads well and isn't text the visitor is parsing.
     if (this.hasImageTarget) {
       this.timeline.from(this.imageTarget, {
-        opacity: 0,
-        scale: 0.9,
-        duration: 1.2
-      }, 0.3)
+        autoAlpha: 0, scale: 1.04, duration: 0.6
+      }, 0)
     }
 
-    // Floating hand accent
     if (this.hasHandTarget) {
       this.timeline.from(this.handTarget, {
-        opacity: 0,
-        y: 120,
-        duration: 1.1
-      }, ">")
+        autoAlpha: 0, y: 40, duration: 0.7
+      }, 0.1)
     }
 
-    // Main headline
-    if (this.hasHeadingTarget) {
-      this.timeline.from(this.headingTarget, {
-        opacity: 0,
-        y: -20,
-        duration: 1
-      }, 0.6)
+    // Text + CTAs: POSITION ONLY, no opacity — legible at the first frame. A
+    // small rise with a light stagger gives it life without hiding anything.
+    const rising = []
+    if (this.hasHeadingTarget) rising.push(this.headingTarget)
+    if (this.hasSubtitleTarget) rising.push(this.subtitleTarget)
+    if (this.hasCtaTarget) rising.push(...this.ctaTargets)
+    if (this.hasScrollTarget) rising.push(this.scrollTarget)
+
+    if (rising.length) {
+      this.timeline.from(rising, {
+        y: 14, duration: 0.5, stagger: 0.06
+      }, 0.05)
     }
-
-    // Subtitle
-    if (this.hasSubtitleTarget) {
-      this.timeline.from(this.subtitleTarget, {
-        opacity: 0,
-        y: 20,
-        duration: 0.8
-      }, 0.9)
-    }
-
-    // CTA buttons
-    if (this.hasCtaTarget) {
-      this.ctaTargets.forEach((cta, index) => {
-        const isAvailability = this.hasAvailabilityTarget && cta === this.availabilityTarget
-
-        this.timeline.from(cta, {
-          opacity: 0,
-          y: isAvailability ? 0 : 20,
-          scale: isAvailability ? 1 : 0.95,
-          duration: 0.6
-        }, 1.2 + (index * 0.1))
-      })
-    }
-
-    // Scroll indicator
-    if (this.hasScrollTarget) {
-      this.timeline.from(this.scrollTarget, {
-        opacity: 0,
-        y: -10,
-        duration: 0.8
-      }, 1.5)
-    }
-
   }
-
-  createParallaxEffects() {}
 }
