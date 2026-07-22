@@ -58,10 +58,15 @@
         to a booking that doesn't exist. Pricing is the honest next step; every
         bookable row there deep-links to a specific service. %>
     <div class="border-t border-cream-200 pt-4 flex items-center gap-4">
+      <%# native scroll: the GSAP path silently fails on mobile touch (autoKill
+          mis-fires), so this uses the same document-scroll path as the nav.
+          The pricing-category flash still runs — the controller triggers it in
+          both paths now. %>
       <a href="#pricing"
          class="inline-flex items-center gap-2 font-semibold text-terracotta-600 transition-colors duration-300 hover:text-terracotta-700"
          data-controller="smooth-scroll"
          data-action="click->smooth-scroll#scroll"
+         data-smooth-scroll-native-value="true"
          data-pricing-category="<%= pricing_category %>">
         <span class="text-sm uppercase tracking-[0.14em]">View Pricing</span>
         <svg class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -48,7 +48,10 @@ export default class extends Controller {
       // Give the mobile drawer time to release its body scroll lock before
       // asking Safari to animate the document's scroll root.
       requestAnimationFrame(() => {
-        window.setTimeout(() => this.scrollDocument(targetPosition), 0)
+        window.setTimeout(() => {
+          this.scrollDocument(targetPosition)
+          this.highlightPricingCategory(pricingCategory, targetSelector)
+        }, 0)
       })
 
       this.updateHash(targetSelector)
@@ -65,30 +68,32 @@ export default class extends Controller {
       ease: "power2.inOut",
       onComplete: () => {
         this.updateHash(targetSelector)
-
-        // Trigger highlight on matching pricing card
-        if (pricingCategory && targetSelector === "#pricing") {
-          // Small delay to ensure scroll is fully settled
-          setTimeout(() => {
-            const pricingCard = document.querySelector(
-              `[data-pricing-highlight-category-value="${pricingCategory}"]`
-            )
-
-            if (pricingCard) {
-              // Get the Stimulus controller instance and call highlight method
-              const controller = this.application.getControllerForElementAndIdentifier(
-                pricingCard,
-                "pricing-highlight"
-              )
-
-              if (controller && typeof controller.highlight === 'function') {
-                controller.highlight()
-              }
-            }
-          }, 100)
-        }
+        this.highlightPricingCategory(pricingCategory, targetSelector)
       }
     })
+  }
+
+  // Flash the pricing card for the chosen category. Shared by both scroll paths
+  // so the native (mobile-safe) path keeps the effect the GSAP path had — the
+  // service-card "View Pricing" links depend on it.
+  highlightPricingCategory(pricingCategory, targetSelector) {
+    if (!pricingCategory || targetSelector !== "#pricing") return
+
+    // Small delay so the highlight starts once the scroll has settled.
+    setTimeout(() => {
+      const pricingCard = document.querySelector(
+        `[data-pricing-highlight-category-value="${pricingCategory}"]`
+      )
+      if (!pricingCard) return
+
+      const controller = this.application.getControllerForElementAndIdentifier(
+        pricingCard,
+        "pricing-highlight"
+      )
+      if (controller && typeof controller.highlight === "function") {
+        controller.highlight()
+      }
+    }, 100)
   }
 
   get prefersReducedMotion() {
