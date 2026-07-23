@@ -238,17 +238,6 @@ section[id] {
   scroll-margin-top: var(--fixed-header-offset);
 }
 
-/* Keep variable promotion copy from expanding the fixed mobile header. */
-@media (max-width: 599px) {
-  .promotion-mobile-headline {
-    display: -webkit-box;
-    max-height: 2.75rem;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
-}
-
 .nav-link {
   position: relative;
 }
@@ -332,6 +321,28 @@ section[id] {
 
   .page-with-fixed-header-offset {
     padding-top: calc(var(--fixed-header-offset) + 2.5rem);
+  }
+}
+
+@media (max-width: 767px) {
+  html {
+    --fixed-header-offset: 5.75rem;
+  }
+
+  .hero-with-promo-offset {
+    padding-top: calc(var(--fixed-header-offset) + 0.5rem);
+  }
+
+  .page-with-fixed-header-offset {
+    padding-top: calc(var(--fixed-header-offset) + 0.5rem);
+  }
+
+  .promotion-mobile-headline {
+    display: -webkit-box;
+    max-height: 1.4rem;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
   }
 }
 

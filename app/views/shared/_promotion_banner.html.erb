@@ -12,28 +12,25 @@
 
   <div class="relative overflow-hidden border-b border-cream-200/80 bg-[linear-gradient(90deg,rgba(254,249,245,0.86),rgba(253,243,235,0.9),rgba(244,246,244,0.82))] backdrop-blur-xl">
     <div class="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-terracotta-300/60 to-transparent" aria-hidden="true"></div>
-    <div class="mx-auto flex max-w-7xl flex-col gap-1.5 px-4 py-2 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:gap-2 lg:px-8 lg:py-2.5">
+    <div class="mx-auto flex max-w-7xl flex-col gap-1.5 px-4 py-1 sm:px-6 md:py-2 lg:flex-row lg:items-center lg:justify-between lg:gap-2 lg:px-8 lg:py-2.5">
       <div class="flex w-full min-w-0 items-start gap-3 lg:w-auto lg:items-center">
-        <span class="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-terracotta-700 text-cream-50 shadow-warm-sm lg:mt-0">
-          <%= icon 'sparkles', classes: 'h-4 w-4' %>
+        <span class="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-terracotta-700 text-cream-50 shadow-warm-sm md:h-8 md:w-8 lg:mt-0">
+          <%= icon 'sparkles', classes: 'h-3 w-3 md:h-4 md:w-4' %>
         </span>
         <p class="min-w-0 text-sm leading-snug text-warm-gray-800">
-          <span class="sr-only min-[600px]:hidden">Current Special: </span>
-          <span class="hidden font-semibold uppercase tracking-[0.16em] text-terracotta-700 min-[600px]:inline">Current Special</span>
-          <span class="mx-2 hidden text-terracotta-300 min-[600px]:inline">/</span>
-          <span class="block font-serif text-lg leading-tight text-warm-gray-900 min-[600px]:inline"><span class="hidden min-[600px]:inline"><%= promotion_headline %></span><span class="promotion-mobile-headline block min-[600px]:hidden"><%= mobile_headline %></span></span>
+          <span class="sr-only md:hidden">Current Special: </span>
+          <span class="hidden font-semibold uppercase tracking-[0.16em] text-terracotta-700 md:inline">Current Special</span>
+          <span class="mx-2 hidden text-terracotta-300 md:inline">/</span>
+          <span class="block font-serif text-base leading-tight text-warm-gray-900 md:inline md:text-lg"><span class="hidden md:inline"><%= promotion_headline %></span><span class="promotion-mobile-headline block md:hidden"><%= mobile_headline %></span></span>
           <% if promotion.badge.present? %>
-            <span class="ml-0 mt-1 hidden rounded-full border border-terracotta-200 bg-white/55 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-terracotta-700 min-[600px]:ml-2 min-[600px]:mt-0 min-[600px]:inline-flex"><%= promotion.badge %></span>
+            <span class="ml-2 mt-0 hidden rounded-full border border-terracotta-200 bg-white/55 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-terracotta-700 md:inline-flex"><%= promotion.badge %></span>
           <% end %>
         </p>
       </div>
 
-      <div class="flex w-full items-center justify-between gap-3 pl-11 min-[600px]:flex-wrap min-[600px]:gap-x-4 min-[600px]:gap-y-1 lg:w-auto lg:flex-nowrap lg:pl-0">
-        <% if promotion.badge.present? %>
-          <span class="max-w-[44%] truncate rounded-full border border-terracotta-200 bg-white/55 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-terracotta-700 min-[600px]:hidden"><%= promotion.badge %></span>
-        <% end %>
+      <div class="hidden w-full items-center justify-between gap-3 pl-11 md:flex md:flex-wrap md:gap-x-4 md:gap-y-1 lg:w-auto lg:flex-nowrap lg:pl-0">
         <% if promotion.fine_print.present? %>
-          <span class="hidden text-xs leading-snug text-warm-gray-600 min-[600px]:inline"><%= promotion.fine_print %></span>
+          <span class="text-xs leading-snug text-warm-gray-600"><%= promotion.fine_print %></span>
         <% end %>
         <%= link_to promotion_href,
                     class: "inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold uppercase tracking-[0.16em] text-terracotta-700 transition-colors hover:text-terracotta-900",
