@@ -11,7 +11,7 @@ import { gsap } from "gsap"
 // sequence lands in ~0.7s instead of the old ~2s, and reduced-motion skips it
 // entirely (elements are already in their final, visible state in the DOM).
 export default class extends Controller {
-  static targets = ["branch", "image", "hand", "heading", "subtitle", "cta", "availability", "scroll"]
+  static targets = ["branch", "image", "heading", "subtitle", "cta", "availability", "scroll"]
 
   connect() {
     this.prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false
@@ -41,12 +41,6 @@ export default class extends Controller {
       this.timeline.from(this.imageTarget, {
         autoAlpha: 0, scale: 1.04, duration: 0.6
       }, 0)
-    }
-
-    if (this.hasHandTarget) {
-      this.timeline.from(this.handTarget, {
-        autoAlpha: 0, y: 40, duration: 0.7
-      }, 0.1)
     }
 
     // Text + CTAs: POSITION ONLY, no opacity — legible at the first frame. A

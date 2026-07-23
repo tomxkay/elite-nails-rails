@@ -11,9 +11,17 @@
   <div class="absolute inset-0 hero-grid-lines pointer-events-none"></div>
   <div class="absolute left-4 top-4 h-72 w-72 rounded-full hero-orb-terra blur-3xl"></div>
   <div class="absolute right-6 top-10 h-80 w-80 rounded-full hero-orb-sage blur-3xl"></div>
+  <%= image_tag "nail-polish-drip-gold.png",
+                alt: "",
+                class: "hero-polish-drip",
+                aria: { hidden: true } %>
+  <%= image_tag "hero-model-left.png",
+                alt: "",
+                class: "hero-model-right",
+                aria: { hidden: true } %>
 
   <div class="hero-with-promo-offset relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 grid lg:grid-cols-[1.05fr_0.95fr] items-center gap-14">
-    <div class="space-y-8">
+    <div class="hero-copy space-y-8">
       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-terracotta-200/60 bg-white/80 backdrop-blur text-terracotta-700 uppercase tracking-[0.22em] text-[0.7rem] font-semibold shadow-warm-sm" data-hero-target="cta">
         <span class="h-2 w-2 rounded-full bg-terracotta-500 shadow-warm-sm"></span>
         Cramerton's neighborhood nail salon since 2003
@@ -82,27 +90,9 @@
       </div>
     </div>
 
-    <div class="relative" data-hero-target="image">
-      <div class="absolute right-4 top-4 px-4 py-2 rounded-full border border-terracotta-200/80 bg-white/85 backdrop-blur shadow-warm-sm hidden sm:flex items-center gap-2 text-terracotta-700 uppercase tracking-[0.22em] text-[0.7rem] z-20">
-        <span class="h-1.5 w-1.5 rounded-full bg-terracotta-500 shadow-warm-sm"></span>
-        est. 2003
-      </div>
-      <div class="relative overflow-hidden rounded-[28px] shadow-[0_30px_80px_-40px_rgba(104,72,57,0.6)] ring-1 ring-cream-200 bg-warm-gray-900/5">
-        <%= image_tag "hero-768.webp",
-                      alt: "Elite Nails Salon interior",
-                      class: "w-full h-full object-cover brightness-95 contrast-105",
-                      loading: "eager",
-                      fetchpriority: "high",
-                      decoding: "async",
-                      width: 1536,
-                      height: 1024,
-                      srcset: "#{asset_path('hero-768.webp')} 768w, #{asset_path('hero-1536.webp')} 1536w",
-                      sizes: "(min-width: 1024px) 45vw, 100vw" %>
-        <div class="absolute inset-0 hero-photo-overlay pointer-events-none"></div>
-      </div>
-
+    <div class="hero-availability-wrap relative z-30 flex items-end justify-start">
       <button type="button"
-              class="hero-availability-card hero-availability-pulse relative z-40 block mt-4 w-full max-w-sm mx-auto text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-terracotta-500 focus-visible:ring-offset-2 md:absolute md:-bottom-10 md:left-1/2 md:mt-0 md:mx-0 md:w-[280px] lg:left-10"
+              class="hero-availability-card hero-availability-pulse relative z-40 block w-full max-w-sm mx-auto text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-terracotta-500 focus-visible:ring-offset-2 md:w-[280px] lg:mx-0"
               data-hero-target="cta availability"
               data-quick-availability-target="trigger"
               data-action="click->quick-availability#open"
@@ -136,14 +126,4 @@
     </a>
   </div>
 
-  <div class="pointer-events-none hidden md:block absolute bottom-0 right-20 translate-y-[12%] translate-x-[8%] z-10" aria-hidden="true" data-hero-target="hand">
-    <div class="relative">
-      <div class="absolute -top-6 -left-6 h-24 w-24 rounded-full hero-orb-terra blur-3xl opacity-70"></div>
-      <%= image_tag "nails-hand.webp",
-                    alt: "Polished hand with manicure",
-                    class: "relative max-w-none object-contain drop-shadow-[0_25px_80px_-40px_rgba(104,72,57,0.55)]",
-                    loading: "lazy",
-                    decoding: "async" %>
-    </div>
-  </div>
 </section>
