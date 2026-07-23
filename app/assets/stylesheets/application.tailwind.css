@@ -203,10 +203,11 @@
 .hero-model-right {
   position: absolute;
   top: 0;
-  right: -25rem;
+  bottom: 0;
+  right: -38rem;
   z-index: 2;
   width: auto;
-  height: 100vh;
+  height: 100%;
   max-width: none;
   opacity: 0.42;
   pointer-events: none;
